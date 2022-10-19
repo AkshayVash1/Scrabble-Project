@@ -70,6 +70,10 @@ public class Player {
         {
             this.hand.addTiles(t);
         }
+        else if ((rc = (this.hand.getHandSize() == Hand.MAX_HAND_SIZE)) == false)
+        {
+            System.out.print("Unexpected Hand size: " + this.hand.getHandSize());
+        }
 
         return rc;
     }
