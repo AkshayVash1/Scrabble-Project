@@ -33,8 +33,9 @@ public class Hand {
         int num = 1;
         for (Tile t : this.hand)
         {
-            System.out.println("TILE"+ num++ +": POINT:"+t.getValue()+" LETTER:"+ t.getLetter());
+            System.out.print(t.getLetter() + "" + t.getValue() + " ");
         }
+        System.out.println();
     }
 
     /**
@@ -53,6 +54,10 @@ public class Hand {
         {
             System.out.println("FAILED, PASSED IN ARRAY IS EMPTY");
         }
+        else if (( rc = this.hand.containsAll(removeTiles)) == false)
+        {
+            System.out.println("NOT ALL REQUESTED REMOVE TILES IN HAND");
+        }
         else
         {
             for (Tile t : removeTiles) {
@@ -63,13 +68,6 @@ public class Hand {
                         remCount++;
                     }
                 }
-            }
-
-            if ((rc = (removeTiles.size() == remCount)) == false)
-            {
-                System.out.println("NOT ALL REQUESTED REMOVE TILES IN HAND");
-                this.hand.clear();
-                this.hand.addAll(mock);
             }
         }
 
@@ -95,5 +93,14 @@ public class Hand {
         }
 
         return rc;
+    }
+
+    /**
+     * Adds a set of Tile objects to the Hand Arraylist.
+     * @return Integer indicating the size of hand ArrayList.
+     * */
+    public int getHandSize()
+    {
+        return this.hand.size();
     }
 }

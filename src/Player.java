@@ -40,6 +40,10 @@ public class Player {
         {
             System.out.println("Couldn't remove tiles from hand");
         }
+        else if ((rc = (this.hand.getHandSize() == Hand.MAX_HAND_SIZE)) == false)
+        {
+            System.out.print("Unexpected Hand size: " + this.hand.getHandSize());
+        }
 
         return rc;
     }
