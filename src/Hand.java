@@ -30,10 +30,9 @@ public class Hand {
      * */
     public void displayHand()
     {
-        int num = 1;
         for (Tile t : this.hand)
         {
-            System.out.print(t.getLetter() + "" + t.getValue() + " ");
+            System.out.print(t + " ");
         }
         System.out.println();
     }
@@ -102,5 +101,13 @@ public class Hand {
     public int getHandSize()
     {
         return this.hand.size();
+    }
+
+    /**
+     * Getter that returns the ArrayList of Tile objects for hand.
+     * @return ArrayList<Tile> hand.
+     * */
+    public ArrayList<Tile> getHand() {
+        return this.hand;
     }
 }
