@@ -46,17 +46,15 @@ public class Square {
         DW(2, "\u001B[35m"),    // Double Word, multiplies by 2, color purple
         TW(3, "\u001B[31m");    // Triple Word, multiplies by 3, color red
 
-
         private final int value;
         private final String color;
 
         Multiplier(int value, String color) {
-
             this.value = value;
             this.color = color;
         }
-        
 
+        public int getValue() {return value; }
         public String getColor() {return color;}
 
     }
