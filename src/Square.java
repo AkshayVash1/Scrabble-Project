@@ -21,6 +21,7 @@ public class Square {
     public int getColAsInt(char c) {
 
         switch (c) {
+            // todo find better way to accept lower and upper case
             case 'A' | 'a': return Column.A.getColumnDigit();
             case 'B' | 'b': return Column.B.getColumnDigit();
             case 'C' | 'c': return Column.C.getColumnDigit();
