@@ -31,7 +31,7 @@ public class Board {
 
 
     private void printColorLegend() {
-        final String COLOR_RESET = "\u001B[0m";      // todo move declaration?
+        final String COLOR_RESET = "\u001B[0m";     // color code for resetting text color to original
         System.out.println("\n" + "Color Legend");
         System.out.println(Square.Multiplier.DL.getColor() + "DL: Double Letter Score" + COLOR_RESET);
         System.out.println(Square.Multiplier.TL.getColor() + "TL: Triple Letter Score" + COLOR_RESET);
@@ -45,36 +45,37 @@ public class Board {
     //      fix formatting
     //      make column labels letters
     public void printBoard() {
-        String dashedLine = "---------------------------------------------------------------------------------------------------";
+        String dashedLine = "";
+        final String TEXT_GREEN = "\u001B[32m";     // green color code for green board labels
+        final String COLOR_RESET = "\u001B[0m";     // color code for resetting text color
 
+        for (int i = 0; i < 20; i++) {
+            dashedLine+= "-----";
+        }
+
+        // iterating through nested loop of rows and columns
         for (int row = 0; row < squares.length; row++) {
             System.out.println(dashedLine);
             for (int col = 0; col < squares[row].length; col++) {
 
-                // print row labels
-
-                final String TEXT_GREEN = "\u001B[32m";
-                final String COLOR_RESET = "\u001B[0m";      // todo move declaration. make enum?
-
-                if ((row == 0) && (col == 0)) {
-                    System.out.printf("   |  ");
-                }
                 // print board's column labels
-                else if ((row == 0) && (col > 0) && (col < squares.length)) {
-                    System.out.printf(TEXT_GREEN + "%s", ("" + col) + COLOR_RESET);
-                    if (col != 15) {
-                        System.out.printf("  |  ");
+                if ((row == 0) && (col > 0) && (col < squares.length)) {
+                    // skips printing column label for column 0
+                    if (col == 0) {
+                        System.out.printf("%5s", "|");
                     }
+                    System.out.printf(TEXT_GREEN + "%5s", col);
+                    System.out.printf(COLOR_RESET + "|");
                 }
                 // print board's row labels
-                else if ((col == 0) && (row > 0) && (row < squares.length)) {
-                    System.out.printf(TEXT_GREEN + "%s", (" " + row) + COLOR_RESET + "  |  ");
+                else if ((col == 0)&& (row < squares.length)) {
+                    System.out.printf(TEXT_GREEN + "%4s", row);
+                    System.out.printf(COLOR_RESET + "|");
                 }
                 else {
-                    System.out.printf("%s", squares[row][col]);
-                    System.out.print("  |  ");
+                    System.out.printf("%5s", squares[row][col]);
+                    System.out.print("|");
                 }
-
             }
             System.out.println();
         }
@@ -98,15 +99,6 @@ public class Board {
 
         Board board = new Board();
         board.printBoard();
-
-/*        String s2 = "A7";
-
-        char c = s2.charAt(0);
-
-        if (!Character.isDigit(c)) {
-            System.out.println("digit: "  );
-        }*/
-
     }
 
     //todo implement
