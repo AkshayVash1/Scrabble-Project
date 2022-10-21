@@ -56,20 +56,20 @@ public class Square {
 
         public int getValue() {return value; }
         public String getColor() {return color;}
-
     }
 
 
     private int row;
     private int col;
-    private String multiplier;
-    private String colorCode; // todo think if want to keep
+    private String multiplier;// todo think if want to keep
+
 
     /**
      * constructor 1
      * creates a Square when both row column are passed separately as int values
      */
     public Square(Integer row, Integer col) {
+        // todo errors for unacceptable inputs
         this.row = row;
         this.col = col;
     }
@@ -100,7 +100,6 @@ public class Square {
             this.row = (int) rowChar;
         }
 
-
     }
 
     //todo implement
@@ -108,12 +107,9 @@ public class Square {
         return false;
    }
 
-    // todo getDirection method
+    // todo getDirection method?
 
     // todo implement
     private Boolean isPremium(Square square) { return false; }
-
-
-
 
 }
