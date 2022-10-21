@@ -45,11 +45,11 @@ public class Board {
     //      fix formatting
     //      make column labels letters
     public void printBoard() {
-        String dashedLine = "";
+        String dashedLine = "-";
         final String TEXT_GREEN = "\u001B[32m";     // green color code for green board labels
         final String COLOR_RESET = "\u001B[0m";     // color code for resetting text color
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 19; i++) {
             dashedLine+= "-----";
         }
 
@@ -59,16 +59,18 @@ public class Board {
             for (int col = 0; col < squares[row].length; col++) {
 
                 // print board's column labels
-                if ((row == 0) && (col > 0) && (col < squares.length)) {
-                    // skips printing column label for column 0
+                if ((row == 0) && (col < squares.length)) {
+                    // skip printing column label for column 0
                     if (col == 0) {
-                        System.out.printf("%5s", "|");
+                        System.out.printf("|" +"%5s", "|");
+                        col++;  //todo check if causes problems later
                     }
                     System.out.printf(TEXT_GREEN + "%5s", col);
                     System.out.printf(COLOR_RESET + "|");
                 }
                 // print board's row labels
-                else if ((col == 0)&& (row < squares.length)) {
+                else if ((col == 0) && (row > 0) && (row < squares.length)) {
+                    System.out.printf("|");
                     System.out.printf(TEXT_GREEN + "%4s", row);
                     System.out.printf(COLOR_RESET + "|");
                 }
