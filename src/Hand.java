@@ -39,10 +39,10 @@ public class Hand {
 
     /**
      * Removes a subset of Tile objects from the Hand Arraylist.
-     * @param removeTiles ArrayList of Tile elements to be removed from hand
+     * @param removeTiles ArrayList of Character element to remove the corresponding Tiles
      * @return boolean Return true if successfully removed Tile objects, else return false.
      * */
-    public boolean removeTiles(ArrayList<Tile> removeTiles)
+    public boolean removeTiles(ArrayList<Character> removeTiles)
     {
         boolean rc = true;
         int remCount = 0;
@@ -59,9 +59,9 @@ public class Hand {
         }
         else
         {
-            for (Tile t : removeTiles) {
+            for (Character c : removeTiles) {
                 for (Tile l : mock) {
-                    if (l.equals(t))
+                    if (c.equals(l.getLetter()))
                     {
                         this.hand.remove(l);
                         remCount++;

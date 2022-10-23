@@ -24,11 +24,11 @@ public class Player {
     /**
      * Emulates the exchanging of Tiles by removing the Tile objects from hand and replacing with new TIle objects
      * passed into the method.
-     * @param removeTiles The subset of Tile objects to be removed from Hand
+     * @param removeTiles The subset of Tile objects to be removed from Hand (based off the characters)
      * @param addTiles The set of Tile objects to be added to the Hand
      * @return boolean Return true is successfully exchanged Tiles, else return false.
      * */
-    public boolean exchange(ArrayList<Tile> addTiles, ArrayList<Tile> removeTiles)
+    public boolean exchange(ArrayList<Tile> addTiles, ArrayList<Character> removeTiles)
     {
         boolean rc = true;
 
