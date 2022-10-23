@@ -74,4 +74,13 @@ public class Player {
     {
         this.points += addedPoints;
     }
+
+    /**
+     * Getter to get current state of the Player's hand
+     * @return the current Hand of player
+     * */
+    public Hand getPlayerHand ()
+    {
+        return this.hand;
+    }
 }
