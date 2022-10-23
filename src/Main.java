@@ -15,7 +15,8 @@ public class Main {
         Tile t9 = new Tile("I", 1);
         Tile t10 = new Tile("J", 1);
 
-        Hand h1 = new Hand();
+        Bag bag = new Bag();
+
         ArrayList<Tile> tileList = new ArrayList<>();
         tileList.add(t1);
         tileList.add(t2);
@@ -24,14 +25,6 @@ public class Main {
         tileList.add(t5);
         tileList.add(t6);
         tileList.add(t7);
-        h1.addTiles(tileList);
-
-        InHand inHand = new InHand("CAD", h1);
-
-        h1.displayHand();
-        //System.out.println(inHand.wordInHand());
-       // h1.removeTiles(inHand.wordToList());
-       // h1.displayHand();
 
         ArrayList<Tile> t = new ArrayList<>();
         t.add(t8);
@@ -39,7 +32,17 @@ public class Main {
         t.add(t10);
 
         Player player = new Player();
-        //System.out.println(player.exchange(t, inHand.wordToList()));
-        //h1.displayHand();
+        player.initializePlayerHand(tileList);
+
+        InHand inHand = new InHand("CAD", player.getHand());
+        System.out.println(inHand.wordInHand());
+        player.displayHand();
+        bag.placeTiles(player.exchange(t, inHand.wordToList()));
+        player.displayHand();
+        player.shuffle();
+
+
+       // System.out.println(player.exchange(t, inHand.wordToList()));
+        //player.displayHand();
     }
 }
