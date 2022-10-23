@@ -46,6 +46,21 @@ public class Player {
         return this.hand.getRecentlyRemoved();
     }
 
+    public boolean initializePlayerHand(ArrayList<Tile> t1)
+    {
+        boolean rc = true;
+
+        if ((rc = (t1.size() == Hand.MAX_HAND_SIZE)) == false) {
+            System.out.println("Need to Initialize with 7 tiles");
+        }
+        else
+        {
+            this.hand.addTiles(t1);
+        }
+
+        return rc;
+    }
+
     /**
      * Rearranges object tiles in Hand.
      * @return void
