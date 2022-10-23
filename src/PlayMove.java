@@ -1,55 +1,30 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayMove {
 
     private String wordAttempt;
     private String placementAttempt;
+    private InHand inHand;
+    private Command command;
     private Board board;
+    private Hand hand;
+    private boolean direction;
 
-    public PlayMove(String wordAttempt, String placementAttempt, Board board)
+    public PlayMove(String wordAttempt, String placementAttempt, Hand hand, Board board)
     {
+        this.hand = hand;
+        this.board = board;
         this.wordAttempt = wordAttempt;
         this.placementAttempt = placementAttempt;
-        this.board = board;
+        //this.command = new Command(this.wordAttempt, this.placementAttempt);
+        this.inHand = new InHand(wordAttempt, hand);
     }
 
-    public String getWordAttempt()
+    public boolean placeHorizontally()
     {
-        return this.wordAttempt;
-    }
-
-    public String getPlacementAttempt()
-    {
-        return this.placementAttempt;
-    }
-
-    public boolean getPlacementDirection()
-    {
-        boolean rc = false;
-
-        if ((rc = Character.isDigit(this.placementAttempt.charAt(0)) == true))
-        {
-            rc = this.placeHorizontally();
-        }
-        else if ((rc = Character.isDigit(this.placementAttempt.charAt(1)) == true))
-        {
-            rc = this.placeVertically();
-        }
-
-        return rc;
-    }
-
-    public boolean hasPlacementAttempt()
-    {
-        return (this.placementAttempt != null);
-    }
-
-    public boolean hasWordAttempt()
-    {
-        return (this.wordAttempt != null);
-    }
-
-    /*Requires Board Implementation to continue */
-    private boolean placeHorizontally()
-    {
+        //When direction is implemented, pass in this.command.getPlacementDirection
+        //this.board.placeTiles(this.placementAttempt);
         return true;
     }
 
