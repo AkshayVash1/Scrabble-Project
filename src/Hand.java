@@ -6,6 +6,7 @@ public class Hand {
     public final static int MAX_HAND_SIZE = 7;
 
     private ArrayList<Tile> hand;
+    private ArrayList<Tile> recentlyRemoved;
 
     /**
      * Public constructor for class Hand. Use to initialize a hand of size MAX_HAND_SIZE (7)*
@@ -13,6 +14,7 @@ public class Hand {
     public Hand()
     {
         this.hand = new ArrayList<>(MAX_HAND_SIZE);
+        this.recentlyRemoved = new ArrayList<>();
     }
 
     /**
@@ -46,6 +48,9 @@ public class Hand {
     {
         boolean rc = true;
         int remCount = 0;
+
+        this.recentlyRemoved.clear();
+
         ArrayList<Tile> mock = new ArrayList<>();
         mock.addAll(this.hand);
 
@@ -64,6 +69,7 @@ public class Hand {
                     if (c.equals(l.getLetter()))
                     {
                         this.hand.remove(l);
+                        this.recentlyRemoved.add(l);
                         remCount++;
                     }
                 }
@@ -71,6 +77,15 @@ public class Hand {
         }
 
         return rc;
+    }
+
+    /**
+     * Returns a set of the recently removed Tiles in order to be added back to the bag.
+     * @return the set of recently removed Tiles as a Tile ArrayList
+     * */
+    public ArrayList<Tile> getRecentlyRemoved()
+    {
+        return this.recentlyRemoved;
     }
 
     /**

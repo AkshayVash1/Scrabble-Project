@@ -28,24 +28,22 @@ public class Player {
      * @param addTiles The set of Tile objects to be added to the Hand
      * @return boolean Return true is successfully exchanged Tiles, else return false.
      * */
-    public boolean exchange(ArrayList<Tile> addTiles, ArrayList<Character> removeTiles)
+    public ArrayList<Tile> exchange(ArrayList<Tile> addTiles, ArrayList<Character> removeTiles)
     {
-        boolean rc = true;
-
-        if ((rc = this.hand.addTiles(addTiles)) == false)
+        if ((this.hand.addTiles(addTiles)) == false)
         {
             System.out.println("Couldn't add Tiles to hand");
         }
-        else if ((rc = this.hand.removeTiles(removeTiles)) == false)
+        else if ((this.hand.removeTiles(removeTiles)) == false)
         {
             System.out.println("Couldn't remove tiles from hand");
         }
-        else if ((rc = (this.hand.getHandSize() == Hand.MAX_HAND_SIZE)) == false)
+        else if ((this.hand.getHandSize() == Hand.MAX_HAND_SIZE) == false)
         {
             System.out.print("Unexpected Hand size: " + this.hand.getHandSize());
         }
 
-        return rc;
+        return this.hand.getRecentlyRemoved();
     }
 
     /**
