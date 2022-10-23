@@ -47,6 +47,34 @@ public class Player {
     }
 
     /**
+     * Initializes the Player's hand with 7 tiles
+     * @param t ArrayList of Tiles to initialize Player's hand with.
+     * @return boolean returns true if the size of the ArrayList is 7
+     * */
+    public boolean initializePlayerHand(ArrayList<Tile> t)
+    {
+        boolean rc = true;
+
+        if ((rc = (t.size() == Hand.MAX_HAND_SIZE)) == false) {
+            System.out.println("Need to Initialize with 7 tiles");
+        }
+        else
+        {
+            this.hand.addTiles(t);
+        }
+
+        return rc;
+    }
+
+    /**
+     * Displays the Player's hand
+     * */
+    public void displayHand()
+    {
+        this.hand.displayHand();
+    }
+
+    /**
      * Rearranges object tiles in Hand.
      * @return void
      * */
@@ -77,7 +105,7 @@ public class Player {
      * Getter to get current state of the Player's hand
      * @return the current Hand of player
      * */
-    public Hand getPlayerHand ()
+    public Hand getHand ()
     {
         return this.hand;
     }
