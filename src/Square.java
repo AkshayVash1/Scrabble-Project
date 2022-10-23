@@ -1,51 +1,16 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
+
 public class Square {
 
-    public enum Column {
-        A(1), B(2), C(3),
-        D(4), E(5), F(6),
-        G(7), H(8), I(9),
-        J(10), K(11), L(12),
-        M(13), N(14), O(15);
-
-        final int ColumnDigit;
-
-        Column(int ColumnDigit) {
-            this.ColumnDigit = ColumnDigit;
-        }
-
-        public int getColumnDigit() {
-            return ColumnDigit;
-        }
-    }
-
-    public int getColAsInt(char c) {
-
-        switch (c) {
-            // todo find better way to accept lower and upper case
-            case 'A' | 'a': return Column.A.getColumnDigit();
-            case 'B' | 'b': return Column.B.getColumnDigit();
-            case 'C' | 'c': return Column.C.getColumnDigit();
-            case 'D' | 'd': return Column.D.getColumnDigit();
-            case 'E' | 'e': return Column.E.getColumnDigit();
-            case 'F' | 'f': return Column.F.getColumnDigit();
-            case 'G' | 'g': return Column.G.getColumnDigit();
-            case 'H' | 'h': return Column.H.getColumnDigit();
-            case 'I' | 'i': return Column.I.getColumnDigit();
-            case 'J' | 'j': return Column.J.getColumnDigit();
-            case 'K' | 'k': return Column.K.getColumnDigit();
-            case 'L' | 'l': return Column.L.getColumnDigit();
-            case 'M' | 'm': return Column.M.getColumnDigit();
-            case 'N' | 'n': return Column.N.getColumnDigit();
-            case 'O' | 'o': return Column.O.getColumnDigit();
-            default: throw new IllegalArgumentException("There is no such column!");
-        }
-    }
-
     public enum Multiplier {
-        DL(2, "\u001B[36m"),    // Double Letter, multiplies by 2, color cyan
-        TL(3, "\u001B[34m"),    // Triple Letter, multiplies by 3, color blue
-        DW(2, "\u001B[35m"),    // Double Word, multiplies by 2, color purple
-        TW(3, "\u001B[31m");    // Triple Word, multiplies by 3, color red
+        DL(2, "\033[46m"),    // Double Letter, multiplies by 2, color cyan
+        TL(3, "\033[44m"),    // Triple Letter, multiplies by 3, color blue
+        DW(2, "\033[45m"),    // Double Word, multiplies by 2, color purple
+        TW(3, "\033[41m"),    // Triple Word, multiplies by 3, color red
+        NONE(1, "\u001B[37m");
 
         private final int value;
         private final String color;
@@ -59,11 +24,10 @@ public class Square {
         public String getColor() {return color;}
     }
 
-
     private int row;
     private int col;
-    private String multiplier;// todo think if want to keep
-
+    private Multiplier multiplier;
+    public static HashMap<Integer,String> columns;
 
     /**
      * constructor 1
@@ -73,7 +37,62 @@ public class Square {
         // todo errors for unacceptable inputs
         this.row = row;
         this.col = col;
+        columns = new HashMap<>();
+        initializeColumns();
+        assignMultiplier();
     }
+
+    private void initializeColumns() {
+        //todo error checking
+        columns.put(1,"A"); columns.put(2,"B"); columns.put(3,"C");
+        columns.put(4,"D"); columns.put(5,"E"); columns.put(6,"F");
+        columns.put(7,"G"); columns.put(8,"H"); columns.put(9,"I");
+        columns.put(10,"J"); columns.put(11,"K"); columns.put(12,"L");
+        columns.put(13,"M"); columns.put(14,"N"); columns.put(15,"O");
+    }
+
+
+    // return's square's coordinates as a string of a row as a number and column as a letter
+    public String getStringCoordinates() {
+        String stringCoordinates = "" + row + columns.get(col);
+        return stringCoordinates;
+    }
+
+    public Multiplier getMultiplier() {
+        return this.multiplier;
+    }
+
+
+    private void assignMultiplier() {
+        String coordinates = "" + row + columns.get(col);
+
+        ArrayList<String> DL_coordsList = new ArrayList<>(Arrays.asList(
+                new String[]{"1D","1L","3G","3I","4A","4H","4O","7C","7G","7I","7M","8D","8L"
+                        ,"9C","9G","9I","9M","12A","12H","12O","13G","13I","15D","15L"}));
+        ArrayList<String> TL_coordsList = new ArrayList<>(Arrays.asList(
+                new String[]{"2F","2J","6B","6F","6J","6N","10B","10F","10J","10N","14F","14J"}));
+        ArrayList<String> DW_coordsList = new ArrayList<>(Arrays.asList(
+                new String[]{"2B","2N","3C","3M","4D","4L","5E","5K","8H","11E","11K","12D","12L","13C","13M","14B","14N"}));
+        ArrayList<String> TW_coordsList = new ArrayList<>(Arrays.asList(
+                new String[]{"1A","1H","1O","8A","8O","15A","15H","15O"}));
+
+        if (DL_coordsList.contains(coordinates)) {
+            this.multiplier = Multiplier.DL;
+        }
+        else if (TL_coordsList.contains(coordinates)) {
+            this.multiplier = Multiplier.TL;
+        }
+        else if (DW_coordsList.contains(coordinates)) {
+            this.multiplier = Multiplier.DW;
+        }
+        else if (TW_coordsList.contains(coordinates)) {
+            this.multiplier = Multiplier.TW;
+        }
+        else {
+            this.multiplier = Multiplier.NONE;
+        }
+    }
+
 
     /**
      * constructor 2
@@ -83,7 +102,7 @@ public class Square {
      * handles column both as a letter or a digit
      *
      */
-    public Square(String coordinates) {
+/*    public Square(String coordinates) {
         coordinates.trim(); // trim in case spaces are passed by mistake
 
         char rowChar = coordinates.charAt(0);
@@ -101,16 +120,7 @@ public class Square {
             this.row = (int) rowChar;
         }
 
-    }
+    }*/
 
-    //todo implement
-   private Boolean isPremium(Square this) {
-        return false;
-   }
-
-    // todo getDirection method?
-
-    // todo implement
-    private Boolean isPremium(Square square) { return false; }
 
 }
