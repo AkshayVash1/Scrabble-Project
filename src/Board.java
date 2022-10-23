@@ -1,82 +1,84 @@
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
+/**
+ * Board is a 16*16 table. row and column 0 contain labels. the other 15*15 Cells each include a Square and a Tile.
+ * Each Square has a corresponding multiplier type. Each tile has a letter that will be printed on Board.
+ * Tiles are placed on Squares, which are placed on the Cells of the board.
+ */
 public class Board {
 
-    private String[][] squares;                 // Stores letters of tiles
-    private HashMap<Square, Tile> tiles;        // Maps Tiles to specific Squares
-    private HashMap<Square, String> multipliers;// Maps Multiplier enum types to premium Squares
+    private String[][] cells;                   // Stores letters of tiles
+    private HashMap<Square, Tile> tiles;        // Maps Tiles to corresponding Squares based on matching coordinates
+    private HashMap<String, Square> squares;    // Maps Squares to their corresponding coordinates
+
+    final String COLOR_RESET = "\u001B[0m"; // for resetting the color of print statements
+
 
     public Board() {
-        this.squares = new String[16][16];     // first row and col are for grid labels
+        this.cells = new String[16][16];     // first row and col are for grid labels. the other 15*15 are for placing Squares and Tiles
         this.tiles = new HashMap<>();
-        this.multipliers = new HashMap<>();
-        initializeBoard();      // fill the squares with empty tiles
-        initializeMultipliers();// map multipliers to corresponding premium squares
+        this.squares = new HashMap<>();
+        initializeBoard();                   // assign a Square and a Tile to each cell
     }
 
 
-    // Fill the squares with empty tiles
+    // Place a Square on each cell and then place a Tile on the Square.
     private void initializeBoard() {
         Tile emptyTile = new Tile("*", 0);
-
-        for (int row = 0; row < squares.length; row++) {
-            for (int col = 0; col < squares[row].length; col++) {
-                Square tempSquare = new Square(row,col);
-                tiles.put(tempSquare, emptyTile);
-                squares[row][col] = (tiles.get(tempSquare).getLetter());
+        Square thisSquare;
+        for (int row = 0; row < cells.length; row++) {
+            for (int col = 0; col < cells[row].length; col++) {
+                // Each placement has a corresponding Tile and a Square
+                thisSquare = new Square(row,col);
+                tiles.put(thisSquare, emptyTile);   // put an empty tile on thisSquare
+                String coordinates = thisSquare.getStringCoordinates();
+                squares.put(coordinates, thisSquare);   // put thisSquare on the placement corresponding to coordinates (this placement)
+                cells[row][col] = (tiles.get(thisSquare).getLetter());     // store the letter of the tile in this placement
             }
         }
     }
 
 
-    private void printColorLegend() {
-        final String COLOR_RESET = "\u001B[0m";     // color code for resetting text color to original
-        System.out.println("\n" + "Color Legend");
-        System.out.println(Square.Multiplier.DL.getColor() + "DL: Double Letter Score" + COLOR_RESET);
-        System.out.println(Square.Multiplier.TL.getColor() + "TL: Triple Letter Score" + COLOR_RESET);
-        System.out.println(Square.Multiplier.DW.getColor() + "DW: Double Word Score" + COLOR_RESET);
-        System.out.println(Square.Multiplier.TW.getColor() + "TW: Triple Word Score" + COLOR_RESET + "\n");
-
-
-    }
-
-    // todo print premium squares with color
-    //      fix formatting
-    //      make column labels letters
+    // prints the state of the board
     public void printBoard() {
         String dashedLine = "-";
-        final String TEXT_GREEN = "\u001B[32m";     // green color code for green board labels
-        final String COLOR_RESET = "\u001B[0m";     // color code for resetting text color
+        final String YELLOW_BOLD_BRIGHT = "\033[1;93m";     // yellow color code for board labels
 
+        // make a string dashedLine
         for (int i = 0; i < 19; i++) {
             dashedLine+= "-----";
         }
 
         // iterating through nested loop of rows and columns
-        for (int row = 0; row < squares.length; row++) {
+        for (int row = 0; row < cells.length; row++) {
             System.out.println(dashedLine);
-            for (int col = 0; col < squares[row].length; col++) {
+            for (int col = 0; col < cells[row].length; col++) {
 
-                // print board's column labels
-                if ((row == 0) && (col < squares.length)) {
+                // print board's column labels as letters
+                if ((row == 0) && (col < cells.length)) {
                     // skip printing column label for column 0
                     if (col == 0) {
                         System.out.printf("|" +"%5s", "|");
                         col++;  //todo check if causes problems later
                     }
-                    System.out.printf(TEXT_GREEN + "%5s", col);
+                    String colAsLetter = Square.columns.get(col);
+                    System.out.printf(YELLOW_BOLD_BRIGHT + "%5s", colAsLetter);
                     System.out.printf(COLOR_RESET + "|");
                 }
-                // print board's row labels
-                else if ((col == 0) && (row > 0) && (row < squares.length)) {
+                // print board's row labels as numbers
+                else if ((col == 0) && (row > 0) && (row < cells.length)) {
                     System.out.printf("|");
-                    System.out.printf(TEXT_GREEN + "%4s", row);
+                    System.out.printf(YELLOW_BOLD_BRIGHT + "%4s", row);
                     System.out.printf(COLOR_RESET + "|");
                 }
                 else {
-                    System.out.printf("%5s", squares[row][col]);
-                    System.out.print("|");
+                    // print Squares in corresponding color
+                    String coordinates = "" + row + Square.columns.get(col);
+                    Square thisSquare = squares.get(coordinates);
+
+                    String squareColor = thisSquare.getMultiplier().getColor();
+                    System.out.printf(squareColor + "%5s", cells[row][col]);
+                    System.out.print(COLOR_RESET + "|");
                 }
             }
             System.out.println();
@@ -85,23 +87,26 @@ public class Board {
         printColorLegend();
     }
 
-    //todo assign premium squares
-    private void initializeMultipliers() {}
 
-    // todo finish
-    // returns true if a square has the empty tile (square hasn't been played yet)
-    private boolean isBlank(int row, int col){
-        if(squares[row][col].equals("*")) {
-            return true;
-        }
-        return false;
+    // prints a color legend after the board to indicate the cell background color associated with premium squares
+    private void printColorLegend() {
+        final String COLOR_RESET = "\u001B[0m";     // color code for resetting text color to original
+        System.out.println("\n" + "Color Legend");
+        System.out.println(Square.Multiplier.DL.getColor() + "DL: Double Letter Score" + COLOR_RESET);
+        System.out.println(Square.Multiplier.TL.getColor() + "TL: Triple Letter Score" + COLOR_RESET);
+        System.out.println(Square.Multiplier.DW.getColor() + "DW: Double Word Score" + COLOR_RESET);
+        System.out.println(Square.Multiplier.TW.getColor() + "TW: Triple Word Score" + COLOR_RESET + "\n");
     }
+
 
     public static void main(String[] args) {
-
         Board board = new Board();
         board.printBoard();
+
     }
+
+
+
 
     //todo implement
     // places tiles on the board when Player plays
@@ -116,5 +121,14 @@ public class Board {
     // returns a list of all vertical words to be checked by WordReader
     //public List<String> getVerticalWords() {}
 
+    /*    // todo finish
+    // returns true if a square has the empty tile (square hasn't been played yet)
+    private boolean isBlank(int row, int col){
+        final String PURPLE_BACKGROUND = "\033[45m"; // PURPLE
+        if(cells[row][col].equals(PURPLE_BACKGROUND + "*" + COLOR_RESET)) {
+            return true;
+        }
+        return false;
+    }*/
 
 }
