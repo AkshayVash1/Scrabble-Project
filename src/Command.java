@@ -25,7 +25,6 @@ public class Command {
         return this.action;
     }
 
-    //For now return True for horizontal, false for vertical
     public boolean getPlacementDirection() {
         /* Portion may be removed if exception handling already handled by other class */
         if (this.placementAttempt != null && this.wordAttempt != null &&

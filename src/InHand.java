@@ -19,11 +19,11 @@ public class InHand {
 
         int initialSize = mockHand.size();
 
-        for (char c : this.wordAttempt.toCharArray())
+        for (Character c : this.wordAttempt.toCharArray())
         {
             for (Tile t : mockHand)
             {
-                if (t.getLetter() == c)
+                if (c.equals(t.getLetter().charAt(Hand.PARSE_CHAR_AT_ZERO)))
                 {
                     mockHand.remove(t);
                     break;
@@ -34,9 +34,9 @@ public class InHand {
         return (mockHand.size() == (initialSize - this.wordAttempt.length()));
     }
 
-    public List<Character> wordToList()
+    public ArrayList<Character> wordToList()
     {
-        List<Character> wordAttemptList = new ArrayList<>();
+        ArrayList<Character> wordAttemptList = new ArrayList<>();
         for (Character c : this.wordAttempt.toCharArray()) { wordAttemptList.add(c); }
 
         return wordAttemptList;

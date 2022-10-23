@@ -30,13 +30,13 @@ public class Player {
      * */
     public ArrayList<Tile> exchange(ArrayList<Tile> addTiles, ArrayList<Character> removeTiles)
     {
-        if ((this.hand.addTiles(addTiles)) == false)
-        {
-            System.out.println("Couldn't add Tiles to hand");
-        }
-        else if ((this.hand.removeTiles(removeTiles)) == false)
+        if ((this.hand.removeTiles(removeTiles)) == false)
         {
             System.out.println("Couldn't remove tiles from hand");
+        }
+        else if ((this.hand.addTiles(addTiles)) == false)
+        {
+            System.out.println("Couldn't add Tiles to hand");
         }
         else if ((this.hand.getHandSize() == Hand.MAX_HAND_SIZE) == false)
         {
