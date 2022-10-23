@@ -4,6 +4,7 @@ import java.util.Collections;
 public class Hand {
 
     public final static int MAX_HAND_SIZE = 7;
+    public final static int PARSE_CHAR_AT_ZERO = 0;
 
     private ArrayList<Tile> hand;
     private ArrayList<Tile> recentlyRemoved;
@@ -58,15 +59,11 @@ public class Hand {
         {
             System.out.println("FAILED, PASSED IN ARRAY IS EMPTY");
         }
-        else if (( rc = this.hand.containsAll(removeTiles)) == false)
-        {
-            System.out.println("NOT ALL REQUESTED REMOVE TILES IN HAND");
-        }
         else
         {
             for (Character c : removeTiles) {
                 for (Tile l : mock) {
-                    if (c.equals(l.getLetter()))
+                    if (c.equals(l.getLetter().charAt(PARSE_CHAR_AT_ZERO)))
                     {
                         this.hand.remove(l);
                         this.recentlyRemoved.add(l);
@@ -99,7 +96,7 @@ public class Hand {
 
         if ((rc = (this.hand.size() + addTiles.size() == MAX_HAND_SIZE)) == false)
         {
-            System.out.println("MISMATCH WITH ADDING TILES");
+            System.out.println("MISMATCH WITH ADDING TILES" + this.hand.size() + " " + addTiles.size());
         }
         else
         {
