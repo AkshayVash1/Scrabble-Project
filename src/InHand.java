@@ -1,19 +1,16 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class InHand {
 
     private String wordAttempt;
-    private List<Character> wordAttemptChar;
-    private List<Tile> tileList;
     private Hand hand;
 
     public InHand(String wordAttempt, Hand hand)
     {
         this.wordAttempt = wordAttempt;
         this.hand = hand;
-        this.wordAttemptChar = new ArrayList<>();
-        this.tileList = new ArrayList<>();
     }
 
     public boolean wordInHand()
@@ -22,7 +19,7 @@ public class InHand {
 
         int initialSize = mockHand.size();
 
-        for (char c : this.wordAttemptChar)
+        for (char c : this.wordAttempt.toCharArray())
         {
             for (Tile t : mockHand)
             {
@@ -37,14 +34,11 @@ public class InHand {
         return (mockHand.size() == (initialSize - this.wordAttempt.length()));
     }
 
-    public List<Tile> wordToTileList()
+    public List<Character> wordToList()
     {
-        for (char c : this.wordAttempt.toCharArray())
-        {
-            Tile t = new Tile(c, 1);
-            tileList.add(t);
-        }
+        List<Character> wordAttemptList = new ArrayList<>();
+        for (Character c : this.wordAttempt.toCharArray()) { wordAttemptList.add(c); }
 
-        return this.tileList;
+        return wordAttemptList;
     }
 }
