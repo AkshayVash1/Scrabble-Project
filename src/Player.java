@@ -6,15 +6,18 @@ public class Player {
 
     private Hand hand;
     private int points;
+    private int playerNumber;
 
     /**
      * Constructor to initialize player points to 0 when player is created. Constructor to initialize
      * hand.
+     * @param playerNumber
      * */
-    public Player ()
+    public Player (int playerNumber)
     {
         this.points = MIN_POINTS;
         hand = new Hand();
+        this.playerNumber = playerNumber;
     }
 
     /*Note: Exchange can be called either for play or for exchange.
@@ -47,7 +50,8 @@ public class Player {
     }
 
     /**
-     * If the play is deemed illegal, roll back by adding the recently removed Tiles to the hand.
+     * If the play is deemed illegal, roll back by adding the recently removed Tiles to the hand and
+     * removing recently added.
      * */
     public void rollBack()
     {
@@ -123,5 +127,13 @@ public class Player {
     public Hand getHand ()
     {
         return this.hand;
+    }
+
+    /**
+     * Getter to get the number of the player
+     * @return the number of the player
+     * */
+    public int getPlayerNumber() {
+        return playerNumber;
     }
 }
