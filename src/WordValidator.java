@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class WordValidator {
     final Map<Integer, String> wordsMap = new HashMap<>();
-    private static final String FILE = "C:\\Users\\Haghighi\\Desktop\\SYSC3110\\Scrabble Project\\Milestone 1\\Scrabble\\src\\words.txt";
+    private static final String FILE = "src\\words.txt";
 
     public WordValidator(ArrayList<String> wordsToValidate) {
         try {

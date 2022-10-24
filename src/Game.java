@@ -13,11 +13,11 @@ public class Game {
 
     public Game() {}
 
-    public void createPlayers(String input) {
+    private void createPlayers(String input) {
         int value = Integer.parseInt(input);
 
         for (int i = 0; i < value; i++) {
-            playerList.add(new Player());
+            playerList.add(new Player(i));
             playerList.get(i).initializePlayerHand((ArrayList<Tile>) bag.removeTiles(7));
         }
 
@@ -77,9 +77,14 @@ public class Game {
                 break;
 
             case "pass":
-
                 break;
 
+
+            case "forfeit":
+                System.out.println("Player " + (currentPlayer.getPlayerNumber()+1) + " has forfeited");
+                bag.placeTiles(currentPlayer.getHand().getHand());
+                playerList.set(currentPlayer.getPlayerNumber(), null);
+                break;
             default:
                 break;
         }
@@ -87,8 +92,12 @@ public class Game {
         return false;
     }
 
-    public ArrayList getPlayerList() {
+    private ArrayList getPlayerList() {
         return playerList;
+    }
+
+    private Board getBoard() {
+        return board;
     }
 
     public static void main(String[] args) {
@@ -137,13 +146,29 @@ public class Game {
         GAME:
         do {
             boolean nextPlayer = false;
-            Command command = parser.getCommand();
 
-
-
-            while(!nextPlayer) {
-
+            if (game.playerList.get(currentPlayer.getPlayerNumber()) == null) {
+                currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber()+1);
             }
+            else {
+                game.getBoard().printBoard();
+                currentPlayer.displayHand();
+
+                System.out.println("It is Player " + (currentPlayer.getPlayerNumber() + 1) + "'s turn");
+                System.out.println("What would you like to do? (play, exchange, shuffle, pass, forfeit)");
+
+                Command command = parser.getCommand();
+
+                game.processCommand(command, currentPlayer);
+            }
+
+            if (currentPlayer.getPlayerNumber() == 3) {
+                currentPlayer = game.playerList.get(0);
+            }
+            else {
+                currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber()+1);
+            }
+
         } while(running);
 
     }

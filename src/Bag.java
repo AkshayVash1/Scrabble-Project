@@ -58,10 +58,10 @@ public class Bag {
         return tiles.size();
     }
 
-    public List<Tile> removeTiles(int amount) throws NotEnoughTiles {
+    public List<Tile> removeTiles(int amount){
         List<Tile> removedTiles = new ArrayList<>();
         if (amount > getBagSize()) {
-            throw new NotEnoughTiles("Not Enough Tiles, Only "+getBagSize()+" Tiles Left.");
+            //throw new NotEnoughTiles("Not Enough Tiles, Only "+getBagSize()+" Tiles Left.");
         }
         for (int i = 0; i < amount; i++) {
             removedTiles.add(tiles.remove(random.nextInt(getBagSize())));
