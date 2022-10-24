@@ -1,5 +1,3 @@
-package src;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -106,22 +104,18 @@ public class Square {
      */
 /*    public Square(String coordinates) {
         coordinates.trim(); // trim in case spaces are passed by mistake
-
         char rowChar = coordinates.charAt(0);
         char colChar = coordinates.charAt(1);
-
         // if column is passed as the standard letter instead of int, get its int ordinal value
         if (Character.isDigit(colChar)) {
             this.col = getColAsInt(colChar);
         }
-
         // gives error if row is passed as a letter
         if (!Character.isDigit(rowChar)) {
             System.out.println("Invalid input. The row must a number from 1 to 15");
         } else {
             this.row = (int) rowChar;
         }
-
     }*/
 
 

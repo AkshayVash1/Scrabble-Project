@@ -8,10 +8,19 @@ public class Bag {
     private List<String> numOfLetters = Arrays.asList("A-9", "B-2", "C-2", "D-4", "E-12", "F-2", "G-3", "H-2", "I-9", "J-1",
             "K-1", "L-4", "M-2", "N-6", "O-8", "P-2", "Q-1", "R-6", "S-4", "T-6", "U-4", "V-2", "W-2", "X-1", "Y-2", "Z-1");
     private Random random = new Random();
+
+
+    /**
+     * Constructs Bag containing 100 tiles.
+     */
     public Bag() {
         initialize();
     }
 
+
+    /**
+     * Initializes all letters with corresponding values and places it into tiles.
+     */
     private void initialize() {
         final Map<Integer, List<String>> pointLetterMap = new HashMap<>();
         pointLetterMap.put(1, Arrays.asList("A", "E", "I", "O", "U", "L", "N", "S", "T", "R"));
@@ -41,6 +50,10 @@ public class Bag {
         }
     }
 
+    /**
+     * Gets bag size.
+     * @return amount of tiles within bag
+     */
     public int getBagSize() {
         return tiles.size();
     }
@@ -57,12 +70,19 @@ public class Bag {
         return removedTiles;
     }
 
+    /**
+     * Adds tiles given back into bag.
+     * @param tiles The subset of Tile objects to be placed into bag.
+     */
     public void placeTiles(List<Tile> tiles) {
         for (Tile tile : tiles) {
             this.tiles.add(tile);
         }
     }
 
+    /**
+     * Prints all tiles within bag.
+     */
     public void print() {
         for (Tile tile : tiles) {
             System.out.println(tile);

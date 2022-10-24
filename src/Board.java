@@ -1,7 +1,5 @@
-package src;
-
-import java.beans.beancontext.BeanContextChild;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Board is a 16*16 table. row and column 0 contain labels. the other 15*15 Cells each include a Square and a Tile.
@@ -157,33 +155,33 @@ public class Board {
         int ROW = row;
         int COL = col;
         for (Tile tile: tiles) {
-                this.placeTileAt(ROW, COL, tile);
-                if (direction == Direction.VERTICAL) {
-                    ROW++;
-                } else {    // direction is horizontal
-                    COL++;
-                }
+            this.placeTileAt(ROW, COL, tile);
+            if (direction == Direction.VERTICAL) {
+                ROW++;
+            } else {    // direction is horizontal
+                COL++;
+            }
         }
 
     }
 
 
-    public static void main(String[] args) {
-        Board board = new Board();
-        board.printBoard();
-
-        // placing tiles for word "CAT" horizontally starting at 8H
-        ArrayList<Tile> HELLO_tiles = new ArrayList<>();
-        HELLO_tiles.add(new Tile("H", 3));
-        HELLO_tiles.add(new Tile("E", 1));
-        HELLO_tiles.add(new Tile("L", 1));
-        HELLO_tiles.add(new Tile("L", 1));
-        HELLO_tiles.add(new Tile("O", 1));
-
-        board.placeWord(8, 8, HELLO_tiles, Direction.VERTICAL);
-
-        board.printBoard();
-    }
+//    public static void main(String[] args) {
+//        Board board = new Board();
+//        board.printBoard();
+//
+//        // placing tiles for word "CAT" horizontally starting at 8H
+//        ArrayList<Tile> HELLO_tiles = new ArrayList<>();
+//        HELLO_tiles.add(new Tile("H", 3));
+//        HELLO_tiles.add(new Tile("E", 1));
+//        HELLO_tiles.add(new Tile("L", 1));
+//        HELLO_tiles.add(new Tile("L", 1));
+//        HELLO_tiles.add(new Tile("O", 1));
+//
+//        board.placeWord(8, 8, HELLO_tiles, Direction.VERTICAL);
+//
+//        board.printBoard();
+//    }
 
 
     //todo implement
