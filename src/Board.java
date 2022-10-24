@@ -1,4 +1,3 @@
-import java.beans.beancontext.BeanContextChild;
 import java.util.*;
 
 /**
@@ -15,6 +14,7 @@ public class Board {
     final String COLOR_RESET = "\u001B[0m"; // for resetting the color of print statements
 
     public enum Direction{HORIZONTAL, VERTICAL}
+
 
 
     public Board() {
@@ -106,7 +106,7 @@ public class Board {
 
     // returns true if a square has the empty tile (square has not been played yet)
     private boolean cellIsBlank(int row, int col){
-
+        // a cell is empty if it stores a single space (" ")
         if(cells[row][col].equals(" ")) {
             return true;
         }
@@ -122,48 +122,110 @@ public class Board {
         return cells[row][col];
     }
 
-    public void placeTileAt(int row, int col, Tile tile) {
+    // todo fix boolean return type
+    public Boolean placeTileAt(int row, int col, Tile tile) {
         final String RED_BOLD_TEXT_COLOR = "\033[1;31m";    // red bold text color for printing error messages
+
+        // invalid row error
         if (row < 1  || row > 15) {
             System.out.println(RED_BOLD_TEXT_COLOR + "ERROR: invalid row " + row);
             System.out.println("Cannot place tile: " + tile.getLetter() + ", on row: " + row + ", column: " + col);
             System.out.println("Valid row range is 1 to 15 inclusive." + COLOR_RESET);
-            return;
+            return false;
         }
+        // invalid column error
         if (col < 1  || col > 15) {
             System.out.println(RED_BOLD_TEXT_COLOR+ "ERROR: invalid column " + col);
             System.out.println("Cannot place tile: " + tile.getLetter() + ", on row: " + row + ", column: " + col);
             System.out.println("Valid column range is 1 to 15 inclusive." + COLOR_RESET);
-            return;
+            return false;
         }
 
+        // successful placement
         if (cellIsBlank(row, col)) {
             String coordinates = "" + row + Square.columns.get(col);
             tiles.put(coordinates,tile);
             cells[row][col] = tile.getLetter();
+            return true;
+
+            // todo error condition for when the tile is not touching another tile
+/*            if (allAdjacentCellsEmpty() == false) {
+
+            }*/
         }
         else {
             System.out.println(RED_BOLD_TEXT_COLOR + "ERROR: cannot place tile " + tile.getLetter()
                     + " on non-empty cell: " + "row: " + row + ", col: " + col + COLOR_RESET);
-            return;
+            return false;
         }
 
     }
 
-    public void placeWord(int row, int col, ArrayList<Tile> tiles, Direction direction) {
+    // returns false if the placement of the entire word would cause any error cases:
+    // case 1: at least one tile of the word would exceed the edges of the board or
+    // case 2: at least one tile of the word would intersect with another occupied cell
+    // case 3: all tiles of the word are next to empty cells (can only place a word if at least one tile touches another tile)
+    private Boolean placementIsValid() {
+        return false;
+    }
+
+    private boolean allAdjacentCellsEmpty() {
+        return false;
+    }
+
+    // todo fix implementation of Boolean return type
+    public Boolean placeWord(int row, int col, ArrayList<Tile> tiles, Direction direction) {
         ArrayList<Tile> wordTiles = tiles;
         int ROW = row;
         int COL = col;
+        Boolean tilePlaced = false;
+        int successCount = 0;
+
         for (Tile tile: tiles) {
-                this.placeTileAt(ROW, COL, tile);
+                tilePlaced = this.placeTileAt(ROW, COL, tile);
                 if (direction == Direction.VERTICAL) {
                     ROW++;
                 } else {    // direction is horizontal
                     COL++;
                 }
         }
-
+        // if all the tiles were placed successfully return true
+        return false;
     }
+
+
+    public ArrayList<String> getHorizontalWords() {
+        ArrayList<String> horizontalWords = new ArrayList<>();
+        String currentWord = "";
+        String currentLetter;
+        //Boolean wordComplete = false;
+
+        for (int row = 1; row < cells.length ; row++) {
+            for (int col = 1; col < cells.length - 1; col++) {
+                if (!cellIsBlank(row, col)) {   // if
+                    currentLetter = cells[row][col];
+                    currentWord += currentLetter;
+                    // if next cell in row is blank, store currentWord in horizontalWords list and move on to next word
+                    if (cellIsBlank(row, col + 1)) {
+                        horizontalWords.add(currentWord);
+                        System.out.println("current word is: " + currentWord);
+                        currentWord = ""; // set currentWord to empty string so it can store the next word in row
+                    }
+                    // handle cells on the right border of the board
+                    if (!cellIsBlank(row, col + 1) && (col == cells.length - 2)) {
+                        currentWord += cells[row][col + 1];
+                        horizontalWords.add(currentWord);
+                        System.out.println("current word is: " + currentWord);
+                        currentWord = ""; // set currentWord to empty string so it can store the next word in row
+                    }
+                }
+            }
+        }
+        System.out.println("number of words " + horizontalWords.size());
+        return horizontalWords;
+    }
+
+
 
 
     public static void main(String[] args) {
@@ -179,19 +241,15 @@ public class Board {
         HELLO_tiles.add(new Tile("O", 1));
 
         board.placeWord(8, 8, HELLO_tiles, Direction.VERTICAL);
+        board.placeWord(8, 11, HELLO_tiles, Direction.HORIZONTAL);
+
+        ArrayList <String> horizWords = board.getHorizontalWords();
 
         board.printBoard();
     }
 
-
-    //todo implement
-    // returns a list of all horizontal words to be checked by WordReader
-    //public List<String> getHorizontalWords() {}
-
     //todo implement
     // returns a list of all vertical words to be checked by WordReader
     //public List<String> getVerticalWords() {}
-
-
 
 }
