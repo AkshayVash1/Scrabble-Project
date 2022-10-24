@@ -7,6 +7,7 @@ public class Player {
     private Hand hand;
     private int points;
     private int playerNumber;
+    private boolean active;
 
     /**
      * Constructor to initialize player points to 0 when player is created. Constructor to initialize
@@ -18,6 +19,7 @@ public class Player {
         this.points = MIN_POINTS;
         hand = new Hand();
         this.playerNumber = playerNumber;
+        this.active = true;
     }
 
     /*Note: Exchange can be called either for play or for exchange.
@@ -135,5 +137,21 @@ public class Player {
      * */
     public int getPlayerNumber() {
         return playerNumber;
+    }
+
+    /**
+     * Getter for the current player's active state
+     * @return boolean returns true if active.
+     * */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Setter for the current player's active state
+     * @return set the state of the player to active or inactive.
+     * */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
