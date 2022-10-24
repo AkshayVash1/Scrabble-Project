@@ -2,7 +2,7 @@ public class CommandWords
 {
     // a constant array that holds all valid command words
     private static final String[] validCommands = {
-            "play", "quit", "exchange", "pass", "showhand", "showboard", "shuffle"
+            "play", "exchange", "pass", "shuffle", "forfeit"
     };
 
     /**
@@ -30,12 +30,13 @@ public class CommandWords
     /**
      * Print all valid commands to System.out.
      */
-    public void showAll()
+    public String showAll()
     {
+        StringBuilder sb = new StringBuilder();
         for(String command: validCommands) {
-            System.out.print(command + "  ");
+            sb.append(command + "  ");
         }
-        System.out.println();
+        return sb.toString();
     }
 }
 
