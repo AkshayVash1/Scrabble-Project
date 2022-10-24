@@ -6,11 +6,11 @@ import java.util.HashMap;
 public class Square {
 
     public enum Multiplier {
-        DL(2, "\033[46m"),    // Double Letter, multiplies by 2, color cyan
-        TL(3, "\033[44m"),    // Triple Letter, multiplies by 3, color blue
-        DW(2, "\033[45m"),    // Double Word, multiplies by 2, color purple
-        TW(3, "\033[41m"),    // Triple Word, multiplies by 3, color red
-        NONE(1, "\u001B[37m");
+        DL(2, "\033[46m"),    // Double Letter, multiplies by 2, background color cyan
+        TL(3, "\033[44m"),    // Triple Letter, multiplies by 3, background color blue
+        DW(2, "\033[45m"),    // Double Word, multiplies by 2, background color purple
+        TW(3, "\033[41m"),    // Triple Word, multiplies by 3, background color red
+        NONE(1, "\033[1;37m");// not a premium square, multiplies by 1, text color bold white
 
         private final int value;
         private final String color;

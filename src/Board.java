@@ -1,3 +1,4 @@
+import java.beans.beancontext.BeanContextChild;
 import java.util.*;
 
 /**
@@ -26,7 +27,7 @@ public class Board {
 
     // Place a Square on each cell and then place a Tile on the Square.
     private void initializeBoard() {
-        Tile emptyTile = new Tile("*", 0);
+        Tile emptyTile = new Tile(" ", 0);
         Square thisSquare;
         for (int row = 0; row < cells.length; row++) {
             for (int col = 0; col < cells[row].length; col++) {
@@ -44,7 +45,8 @@ public class Board {
     // prints the state of the board
     public void printBoard() {
         String dashedLine = "-";
-        final String YELLOW_BOLD_BRIGHT = "\033[1;93m";     // yellow color code for board labels
+        final String GREEN_BOLD_TEXT_COLOR = "\033[1;92m";     //bold green text color code for board labels
+        final String YELLOW_BOLD_TEXT_COLOR = "\033[1;93m";               //bold yellow text color for printing the letters of tiles
 
         // make a string dashedLine
         for (int i = 0; i < 19; i++) {
@@ -61,16 +63,16 @@ public class Board {
                     // skip printing column label for column 0
                     if (col == 0) {
                         System.out.printf("|" +"%5s", "|");
-                        col++;  //todo check if causes problems later
+                        col++;
                     }
                     String colAsLetter = Square.columns.get(col);
-                    System.out.printf(YELLOW_BOLD_BRIGHT + "%5s", colAsLetter);
+                    System.out.printf(GREEN_BOLD_TEXT_COLOR + "%5s", colAsLetter);
                     System.out.printf(COLOR_RESET + "|");
                 }
                 // print board's row labels as numbers
                 else if ((col == 0) && (row > 0) && (row < cells.length)) {
                     System.out.printf("|");
-                    System.out.printf(YELLOW_BOLD_BRIGHT + "%4s", row);
+                    System.out.printf(GREEN_BOLD_TEXT_COLOR + "%4s", row);
                     System.out.printf(COLOR_RESET + "|");
                 }
                 else {
@@ -79,7 +81,7 @@ public class Board {
                     Square thisSquare = squares.get(coordinates);
 
                     String squareColor = thisSquare.getMultiplier().getColor();
-                    System.out.printf(squareColor + "%5s", cells[row][col]);
+                    System.out.printf(squareColor + YELLOW_BOLD_TEXT_COLOR + "%5s", cells[row][col]);
                     System.out.print(COLOR_RESET + "|");
                 }
             }
@@ -103,9 +105,9 @@ public class Board {
 
 
     // returns true if a square has the empty tile (square has not been played yet)
-    private boolean isBlank(int row, int col){
+    private boolean cellIsBlank(int row, int col){
 
-        if(cells[row][col].equals("*")) {
+        if(cells[row][col].equals(" ")) {
             return true;
         }
         return false;
@@ -115,29 +117,72 @@ public class Board {
         return squares.get(coordinates);
     }
 
+
     private String getCellContent(int row, int col){
         return cells[row][col];
     }
 
     public void placeTileAt(int row, int col, Tile tile) {
-        String coordinates = "" + row + Square.columns.get(col);
-        tiles.put(coordinates,tile);
-        cells[row][col] = tile.getLetter();
+        final String RED_BOLD_TEXT_COLOR = "\033[1;31m";    // red bold text color for printing error messages
+        if (row < 1  || row > 15) {
+            System.out.println(RED_BOLD_TEXT_COLOR + "ERROR: invalid row " + row);
+            System.out.println("Cannot place tile: " + tile.getLetter() + ", on row: " + row + ", column: " + col);
+            System.out.println("Valid row range is 1 to 15 inclusive." + COLOR_RESET);
+            return;
+        }
+        if (col < 1  || col > 15) {
+            System.out.println(RED_BOLD_TEXT_COLOR+ "ERROR: invalid column " + col);
+            System.out.println("Cannot place tile: " + tile.getLetter() + ", on row: " + row + ", column: " + col);
+            System.out.println("Valid column range is 1 to 15 inclusive." + COLOR_RESET);
+            return;
+        }
+
+        if (cellIsBlank(row, col)) {
+            String coordinates = "" + row + Square.columns.get(col);
+            tiles.put(coordinates,tile);
+            cells[row][col] = tile.getLetter();
+        }
+        else {
+            System.out.println(RED_BOLD_TEXT_COLOR + "ERROR: cannot place tile " + tile.getLetter()
+                    + " on non-empty cell: " + "row: " + row + ", col: " + col + COLOR_RESET);
+            return;
+        }
+
     }
+
+    public void placeWord(int row, int col, ArrayList<Tile> tiles, Direction direction) {
+        ArrayList<Tile> wordTiles = tiles;
+        int ROW = row;
+        int COL = col;
+        for (Tile tile: tiles) {
+                this.placeTileAt(ROW, COL, tile);
+                if (direction == Direction.VERTICAL) {
+                    ROW++;
+                } else {    // direction is horizontal
+                    COL++;
+                }
+        }
+
+    }
+
 
     public static void main(String[] args) {
         Board board = new Board();
         board.printBoard();
 
+        // placing tiles for word "CAT" horizontally starting at 8H
+        ArrayList<Tile> HELLO_tiles = new ArrayList<>();
+        HELLO_tiles.add(new Tile("H", 3));
+        HELLO_tiles.add(new Tile("E", 1));
+        HELLO_tiles.add(new Tile("L", 1));
+        HELLO_tiles.add(new Tile("L", 1));
+        HELLO_tiles.add(new Tile("O", 1));
+
+        board.placeWord(8, 8, HELLO_tiles, Direction.VERTICAL);
+
+        board.printBoard();
     }
 
-
-
-
-    //todo implement
-    // places tiles on the board when Player plays
-    // creates new Square using startingSquare String
-    public void placeTiles(String startingSquare, List<Tile> tiles) {}  // todo add direction parameter
 
     //todo implement
     // returns a list of all horizontal words to be checked by WordReader
