@@ -8,6 +8,7 @@ public class Hand {
 
     private ArrayList<Tile> hand;
     private ArrayList<Tile> recentlyRemoved;
+    private ArrayList<Tile> recentlyAdded;
 
     /**
      * Public constructor for class Hand. Use to initialize a hand of size MAX_HAND_SIZE (7)*
@@ -77,12 +78,21 @@ public class Hand {
     }
 
     /**
-     * Returns a set of the recently removed Tiles in order to be added back to the bag.
+     * Returns a set of the recently removed Tiles in order to be added back to the bag if play not valid.
      * @return the set of recently removed Tiles as a Tile ArrayList
      * */
     public ArrayList<Tile> getRecentlyRemoved()
     {
         return this.recentlyRemoved;
+    }
+
+    /**
+     * Returns a set of the recently added Tiles in order to be remove from hand if play not valid.
+     * @return the set of recently removed Tiles as a Tile ArrayList
+     * */
+    public ArrayList<Tile> getRecentlyAdded()
+    {
+        return this.recentlyAdded;
     }
 
     /**
@@ -93,6 +103,7 @@ public class Hand {
     public boolean addTiles(ArrayList<Tile> addTiles)
     {
         boolean rc = true;
+        this.recentlyAdded.clear();
 
         if ((rc = (this.hand.size() + addTiles.size() == MAX_HAND_SIZE)) == false)
         {
@@ -100,6 +111,7 @@ public class Hand {
         }
         else
         {
+            this.recentlyAdded.addAll(addTiles);
             this.hand.addAll(addTiles);
         }
 

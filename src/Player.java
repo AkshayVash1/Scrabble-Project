@@ -51,7 +51,14 @@ public class Player {
      * */
     public void rollBack()
     {
+        ArrayList<Character> charArray = new ArrayList<>();
         this.hand.addTiles(this.hand.getRecentlyRemoved());
+        for (Tile t : this.hand.getRecentlyAdded())
+        {
+            charArray.add(t.getLetter().charAt(Hand.PARSE_CHAR_AT_ZERO));
+        }
+
+        this.hand.removeTiles(charArray);
     }
 
     /**
