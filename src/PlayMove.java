@@ -3,34 +3,56 @@ import java.util.List;
 
 public class PlayMove {
 
-    private String wordAttempt;
+    public final static int PARSE_CHAR_AT_ONE = 1;
+
     private String placementAttempt;
-    private InHand inHand;
-    private Command command;
     private Board board;
-    private Hand hand;
-    private boolean direction;
+    private Board.Direction direction;
+    private ArrayList<Tile> wordTiles;
 
-    public PlayMove(String wordAttempt, String placementAttempt, Hand hand, Board board)
+    public PlayMove(String placementAttempt, ArrayList<Tile> wordTiles, Board board, boolean direction)
     {
-        this.hand = hand;
         this.board = board;
-        this.wordAttempt = wordAttempt;
         this.placementAttempt = placementAttempt;
-        //this.command = new Command(this.wordAttempt, this.placementAttempt);
-        this.inHand = new InHand(wordAttempt, hand);
+        this.direction = direction ? Board.Direction.HORIZONTAL : Board.Direction.VERTICAL;
+        this.wordTiles = wordTiles;
     }
 
-    public boolean placeHorizontally()
+    private int parseRow()
     {
-        //When direction is implemented, pass in this.command.getPlacementDirection
-        //this.board.placeTiles(this.placementAttempt);
-        return true;
+        if (this.direction == Board.Direction.HORIZONTAL)
+        {
+            return this.placementAttempt.charAt(Hand.PARSE_CHAR_AT_ZERO);
+        }
+        else
+        {
+            return this.placementAttempt.charAt(PlayMove.PARSE_CHAR_AT_ONE);
+        }
     }
 
-    /*Requires Board Implementation to continue */
-    private boolean placeVertically()
+    private int parseColumn()
     {
+        if (this.direction == Board.Direction.VERTICAL)
+        {
+            return this.placementAttempt.charAt(Hand.PARSE_CHAR_AT_ZERO);
+        }
+        else
+        {
+            return this.placementAttempt.charAt(PlayMove.PARSE_CHAR_AT_ONE);
+        }
+    }
+
+    public boolean placeTile()
+    {
+        //return this.board.placeWord(parseRow(), parseColumn(), this.wordTiles, this.direction); modify for this
+        //to return void
+
         return true;
+
+    }
+
+    public Board getUpdatedBoard()
+    {
+        return this.board;
     }
 }

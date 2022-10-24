@@ -47,6 +47,14 @@ public class Player {
     }
 
     /**
+     * If the play is deemed illegal, roll back by adding the recently removed Tiles to the hand.
+     * */
+    public void rollBack()
+    {
+        this.hand.addTiles(this.hand.getRecentlyRemoved());
+    }
+
+    /**
      * Initializes the Player's hand with 7 tiles
      * @param t ArrayList of Tiles to initialize Player's hand with.
      * @return boolean returns true if the size of the ArrayList is 7
