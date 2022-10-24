@@ -20,18 +20,6 @@ public class Game {
         }
     }
 
-    /*
-    public void printHand(Player player) {
-        String hand = "";
-
-        for (int i = 0; i < player.getHand().getHandSize(); i++) {
-            hand += player.getHand().getHand();
-        }
-
-        System.out.println("Hand: " + hand);
-    }
-     */
-
     public ArrayList getPlayerList() {
         return playerList;
     }

@@ -1,5 +1,6 @@
 package src;
 
+import src.*;
 import java.util.ArrayList;
 
 public class Player {
@@ -32,13 +33,13 @@ public class Player {
      * */
     public ArrayList<Tile> exchange(ArrayList<Tile> addTiles, ArrayList<Character> removeTiles)
     {
-        if ((this.hand.addTiles(addTiles)) == false)
-        {
-            System.out.println("Couldn't add Tiles to hand");
-        }
-        else if ((this.hand.removeTiles(removeTiles)) == false)
+        if ((this.hand.removeTiles(removeTiles)) == false)
         {
             System.out.println("Couldn't remove tiles from hand");
+        }
+        else if ((this.hand.addTiles(addTiles)) == false)
+        {
+            System.out.println("Couldn't add Tiles to hand");
         }
         else if ((this.hand.getHandSize() == Hand.MAX_HAND_SIZE) == false)
         {
@@ -48,19 +49,40 @@ public class Player {
         return this.hand.getRecentlyRemoved();
     }
 
-    public boolean initializePlayerHand(ArrayList<Tile> t1)
+    /**
+     * If the play is deemed illegal, roll back by adding the recently removed Tiles to the hand.
+     * */
+    public void rollBack()
+    {
+        this.hand.addTiles(this.hand.getRecentlyRemoved());
+    }
+
+    /**
+     * Initializes the Player's hand with 7 tiles
+     * @param t ArrayList of Tiles to initialize Player's hand with.
+     * @return boolean returns true if the size of the ArrayList is 7
+     * */
+    public boolean initializePlayerHand(ArrayList<Tile> t)
     {
         boolean rc = true;
 
-        if ((rc = (t1.size() == Hand.MAX_HAND_SIZE)) == false) {
+        if ((rc = (t.size() == Hand.MAX_HAND_SIZE)) == false) {
             System.out.println("Need to Initialize with 7 tiles");
         }
         else
         {
-            this.hand.addTiles(t1);
+            this.hand.addTiles(t);
         }
 
         return rc;
+    }
+
+    /**
+     * Displays the Player's hand
+     * */
+    public void displayHand()
+    {
+        this.hand.displayHand();
     }
 
     /**
@@ -94,7 +116,7 @@ public class Player {
      * Getter to get current state of the Player's hand
      * @return the current Hand of player
      * */
-    public Hand getPlayerHand ()
+    public Hand getHand ()
     {
         return this.hand;
     }
