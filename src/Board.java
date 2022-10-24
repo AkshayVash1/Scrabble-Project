@@ -3,12 +3,12 @@ import java.util.*;
 /**
  * Board is a 16*16 table. row and column 0 contain labels. the other 15*15 Cells each include a Square and a Tile.
  * Each Square has a corresponding multiplier type. Each tile has a letter that will be printed on Board.
- * Tiles are placed on Squares, which are placed on the Cells of the board.
+ * Each Cell of the board has a Square (with a specific multiplier and color) and a Tile (with a letter and a score value).
  */
 public class Board {
 
     private String[][] cells;                   // Stores letters of tiles
-    private HashMap<Square, Tile> tiles;        // Maps Tiles to corresponding Squares based on matching coordinates
+    private HashMap<String, Tile> tiles;        // Maps Tiles to corresponding coordinates
     private HashMap<String, Square> squares;    // Maps Squares to their corresponding coordinates
 
     final String COLOR_RESET = "\u001B[0m"; // for resetting the color of print statements
@@ -32,10 +32,10 @@ public class Board {
             for (int col = 0; col < cells[row].length; col++) {
                 // Each placement has a corresponding Tile and a Square
                 thisSquare = new Square(row,col);
-                tiles.put(thisSquare, emptyTile);   // put an empty tile on thisSquare
                 String coordinates = thisSquare.getStringCoordinates();
+                tiles.put(coordinates, emptyTile);   // put an empty tile on thisSquare
                 squares.put(coordinates, thisSquare);   // put thisSquare on the placement corresponding to coordinates (this placement)
-                cells[row][col] = (tiles.get(thisSquare).getLetter());     // store the letter of the tile in this placement
+                cells[row][col] = (tiles.get(coordinates).getLetter());     // store the letter of the tile in this placement
             }
         }
     }
@@ -121,7 +121,7 @@ public class Board {
 
     public void placeTileAt(int row, int col, Tile tile) {
         String coordinates = "" + row + Square.columns.get(col);
-        tiles.put(getSquareAt(coordinates),tile);
+        tiles.put(coordinates,tile);
         cells[row][col] = tile.getLetter();
     }
 
