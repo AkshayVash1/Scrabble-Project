@@ -13,6 +13,8 @@ public class Board {
 
     final String COLOR_RESET = "\u001B[0m"; // for resetting the color of print statements
 
+    public enum Direction{HORIZONTAL, VERTICAL}
+
 
     public Board() {
         this.cells = new String[16][16];     // first row and col are for grid labels. the other 15*15 are for placing Squares and Tiles
@@ -99,6 +101,30 @@ public class Board {
     }
 
 
+
+    // returns true if a square has the empty tile (square has not been played yet)
+    private boolean isBlank(int row, int col){
+
+        if(cells[row][col].equals("*")) {
+            return true;
+        }
+        return false;
+    }
+
+    private Square getSquareAt(String coordinates) {
+        return squares.get(coordinates);
+    }
+
+    private String getCellContent(int row, int col){
+        return cells[row][col];
+    }
+
+    public void placeTileAt(int row, int col, Tile tile) {
+        String coordinates = "" + row + Square.columns.get(col);
+        tiles.put(getSquareAt(coordinates),tile);
+        cells[row][col] = tile.getLetter();
+    }
+
     public static void main(String[] args) {
         Board board = new Board();
         board.printBoard();
@@ -121,14 +147,6 @@ public class Board {
     // returns a list of all vertical words to be checked by WordReader
     //public List<String> getVerticalWords() {}
 
-    /*    // todo finish
-    // returns true if a square has the empty tile (square hasn't been played yet)
-    private boolean isBlank(int row, int col){
-        final String PURPLE_BACKGROUND = "\033[45m"; // PURPLE
-        if(cells[row][col].equals(PURPLE_BACKGROUND + "*" + COLOR_RESET)) {
-            return true;
-        }
-        return false;
-    }*/
+
 
 }
