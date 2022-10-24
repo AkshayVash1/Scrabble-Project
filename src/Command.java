@@ -1,3 +1,5 @@
+package src;
+
 public class Command {
 
     public final static int PLACEMENT_ATTEMPT_SIZE = 2;

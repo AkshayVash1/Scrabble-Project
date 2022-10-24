@@ -1,6 +1,7 @@
 package src;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import src.*;
 
@@ -17,7 +18,73 @@ public class Game {
 
         for (int i = 0; i < value; i++) {
             playerList.add(new Player());
+            playerList.get(i).initializePlayerHand((ArrayList<Tile>) bag.removeTiles(7));
         }
+
+
+    }
+
+    private boolean processCommand(Command command, Player currentPlayer) {
+        ArrayList<Character> removeTilesFromHand = new ArrayList<>();
+        List<Tile> addTilesToHand = new ArrayList<>();
+        InHand inHand = null;
+
+        if (!command.hasAction()) {
+            System.out.println("Unknown Command");
+            return false;
+        }
+        else if (command.hasWordAttempt()) {
+            inHand = new InHand(command.getWordAttempt(), currentPlayer.getHand());
+        }
+
+        String action = command.getAction();
+
+        switch (action) {
+            case "exchange":
+                assert inHand != null;
+                if (inHand.wordInHand()) {
+                    removeTilesFromHand = inHand.wordToList();
+                    addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
+                    bag.placeTiles(currentPlayer.exchange((ArrayList<Tile>) addTilesToHand,
+                            removeTilesFromHand));
+                }
+                else {
+                    return false;
+                }
+                break;
+
+            case "play":
+                assert inHand != null;
+                if (inHand.wordInHand()) {
+                    removeTilesFromHand = inHand.wordToList();
+                    addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
+                    PlayMove playMove = new PlayMove(command.getPlacementAttempt(),
+                            currentPlayer.exchange((ArrayList<Tile>) addTilesToHand, removeTilesFromHand),
+                            this.board, command.getPlacementDirection());
+
+                    if (playMove.placeTile()) {
+                        this.board = playMove.getUpdatedBoard();
+                    }
+                    else {
+                        this.bag.placeTiles(addTilesToHand);
+                        currentPlayer.rollBack();
+                    }
+                }
+                break;
+
+            case "shuffle":
+                currentPlayer.shuffle();
+                break;
+
+            case "pass":
+
+                break;
+
+            default:
+                break;
+        }
+
+        return false;
     }
 
     public ArrayList getPlayerList() {
@@ -31,6 +98,7 @@ public class Game {
         String userInput;
         Player currentPlayer;
         boolean flag = false;
+        Parser parser = new Parser();
 
         boolean running = true;
 
@@ -69,6 +137,7 @@ public class Game {
         GAME:
         do {
             boolean nextPlayer = false;
+            Command command = parser.getCommand();
 
 
 

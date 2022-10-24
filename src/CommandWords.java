@@ -1,8 +1,10 @@
+package src;
+
 public class CommandWords
 {
     // a constant array that holds all valid command words
     private static final String[] validCommands = {
-            "play", "quit", "exchange", "pass", "showhand", "showboard", "shuffle"
+            "play", "quit", "exchange", "pass", "shuffle"
     };
 
     /**
