@@ -1,3 +1,5 @@
+package src;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -17,6 +19,7 @@ public class Hand {
     {
         this.hand = new ArrayList<>(MAX_HAND_SIZE);
         this.recentlyRemoved = new ArrayList<>();
+        this.recentlyAdded = new ArrayList<>();
     }
 
     /**
@@ -103,7 +106,13 @@ public class Hand {
     public boolean addTiles(ArrayList<Tile> addTiles)
     {
         boolean rc = true;
-        this.recentlyAdded.clear();
+
+        if (this.recentlyAdded.isEmpty()) {
+            return false;
+        }
+        else {
+            this.recentlyAdded.clear();
+        }
 
         if ((rc = (this.hand.size() + addTiles.size() == MAX_HAND_SIZE)) == false)
         {
