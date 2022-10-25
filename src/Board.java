@@ -11,9 +11,21 @@ public class Board {
     private HashMap<String, Tile> tiles;        // Maps Tiles to corresponding coordinates
     private HashMap<String, Square> squares;    // Maps Squares to their corresponding coordinates
 
-    final String COLOR_RESET = "\u001B[0m"; // for resetting the color of print statements
 
+    // direction of word placement
     public enum Direction{HORIZONTAL, VERTICAL}
+
+    // colors and corresponding color code used in this class's print statements
+    public enum TextColor{
+        GREEN_BOLD("\033[1;92m"),
+        YELLOW_BOLD("\033[1;93m"),
+        COLOR_RESET("\u001B[0m");
+
+        final String code;
+        TextColor(String colorCode) {
+            this.code = colorCode;
+        }
+    }
 
 
 
@@ -45,8 +57,6 @@ public class Board {
     // prints the state of the board
     public void printBoard() {
         String dashedLine = "-";
-        final String GREEN_BOLD_TEXT_COLOR = "\033[1;92m";     //bold green text color code for board labels
-        final String YELLOW_BOLD_TEXT_COLOR = "\033[1;93m";               //bold yellow text color for printing the letters of tiles
 
         // make a string dashedLine
         for (int i = 0; i < 19; i++) {
@@ -66,14 +76,14 @@ public class Board {
                         col++;
                     }
                     String colAsLetter = Square.columns.get(col);
-                    System.out.printf(GREEN_BOLD_TEXT_COLOR + "%5s", colAsLetter);
-                    System.out.printf(COLOR_RESET + "|");
+                    System.out.printf(TextColor.GREEN_BOLD.code + "%5s", colAsLetter);
+                    System.out.printf(TextColor.COLOR_RESET.code + "|");
                 }
                 // print board's row labels as numbers
                 else if ((col == 0) && (row > 0) && (row < cells.length)) {
                     System.out.printf("|");
-                    System.out.printf(GREEN_BOLD_TEXT_COLOR + "%4s", row);
-                    System.out.printf(COLOR_RESET + "|");
+                    System.out.printf(TextColor.GREEN_BOLD.code + "%4s", row);
+                    System.out.printf(TextColor.COLOR_RESET.code + "|");
                 }
                 else {
                     // print Squares in corresponding color
@@ -81,8 +91,8 @@ public class Board {
                     Square thisSquare = squares.get(coordinates);
 
                     String squareColor = thisSquare.getMultiplier().getColor();
-                    System.out.printf(squareColor + YELLOW_BOLD_TEXT_COLOR + "%5s", cells[row][col]);
-                    System.out.print(COLOR_RESET + "|");
+                    System.out.printf(squareColor + TextColor.YELLOW_BOLD.code + "%5s", cells[row][col]);
+                    System.out.print(TextColor.COLOR_RESET.code + "|");
                 }
             }
             System.out.println();
@@ -94,12 +104,11 @@ public class Board {
 
     // prints a color legend after the board to indicate the cell background color associated with premium squares
     private void printColorLegend() {
-        final String COLOR_RESET = "\u001B[0m";     // color code for resetting text color to original
         System.out.println("\n" + "Color Legend");
-        System.out.println(Square.Multiplier.DL.getColor() + "DL: Double Letter Score" + COLOR_RESET);
-        System.out.println(Square.Multiplier.TL.getColor() + "TL: Triple Letter Score" + COLOR_RESET);
-        System.out.println(Square.Multiplier.DW.getColor() + "DW: Double Word Score" + COLOR_RESET);
-        System.out.println(Square.Multiplier.TW.getColor() + "TW: Triple Word Score" + COLOR_RESET + "\n");
+        System.out.println(Square.Multiplier.DL.getColor() + "DL: Double Letter Score" + TextColor.COLOR_RESET.code);
+        System.out.println(Square.Multiplier.TL.getColor() + "TL: Triple Letter Score" + TextColor.COLOR_RESET.code);
+        System.out.println(Square.Multiplier.DW.getColor() + "DW: Double Word Score" + TextColor.COLOR_RESET.code);
+        System.out.println(Square.Multiplier.TW.getColor() + "TW: Triple Word Score" + TextColor.COLOR_RESET.code + "\n");
     }
 
 
@@ -123,18 +132,15 @@ public class Board {
     }
 
 
-    // todo fix boolean return type
     public Boolean placeTileAt(int row, int col, Tile tile) {
-
-
-        // invalid row error
+        // row out of bounds error
         if (row < 1  || row > 15) {
             System.out.println("Cannot place tile " + tile.getLetter() + ", on invalid row: " + row
                     + ", and valid column: " + col);
             System.out.println("Valid row range is 1 to 15 inclusive.");
             return false;
         }
-        // invalid column error
+        // column out of bounds error
         if (col < 1  || col > 15) {
 
             System.out.println("ERROR: Cannot place tile " + tile.getLetter() + " on row: " + row
@@ -151,20 +157,13 @@ public class Board {
             return true;
 
         }
+        // placement attempt on non-empty cell error
         else {
             System.out.println("ERROR: Cannot place tile " + tile.getLetter()
                     + " on non-empty cell: " + "row: " + row + ", col: " + col);
             return false;
         }
 
-    }
-
-    // returns false if the placement of the entire word would cause any error cases:
-    // case 1: at least one tile of the word would exceed the edges of the board or
-    // case 2: at least one tile of the word would intersect with another occupied cell
-    // case 3: all tiles of the word are next to empty cells (can only place a word if at least one tile touches another tile)
-    private Boolean placementIsValid() {
-        return false;
     }
 
 
