@@ -102,6 +102,11 @@ public class PlayMove {
         }
     }
 
+    public int getPlayedWordScore()
+    {
+        return this.board.getWordScore(parseRow(), parseColumn(), this.wordTiles, this.direction);
+    }
+
     public boolean placeTile()
     {
         handleBlanks();
