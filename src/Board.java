@@ -364,7 +364,7 @@ public class Board {
         ArrayList<String> horizontalWords = new ArrayList<>();
         String currentWord = "";
         String currentLetter;
-        //Boolean wordComplete = false;
+
 
         for (int row = 1; row < cells.length ; row++) {
             for (int col = 1; col < cells.length - 1; col++) {
@@ -377,7 +377,7 @@ public class Board {
                         System.out.println("current word is: " + currentWord);
                         currentWord = ""; // set currentWord to empty string so it can store the next word in row
                     }
-                    // handle cells on the right border of the board
+                    // handle cells on the right border of the board (col == 15)
                     if (!cellIsBlank(row, col + 1) && (col == cells.length - 2)) {
                         currentWord += cells[row][col + 1];
                         horizontalWords.add(currentWord);
@@ -389,6 +389,37 @@ public class Board {
         }
         System.out.println("number of words " + horizontalWords.size());
         return horizontalWords;
+    }
+
+    // returns ArrayList of all Vertical words placed on board
+    public ArrayList<String> getVerticalWords() {
+        ArrayList<String> VerticalWords = new ArrayList<>();
+        String currentWord = "";
+        String currentLetter;
+
+        for (int col = 1; col < cells.length ; col++) {
+            for (int row = 1; row < cells.length - 1; row++) {
+                if (!cellIsBlank(row, col)) {   // if
+                    currentLetter = cells[row][col];
+                    currentWord += currentLetter;
+                    // if next cell in column is blank, store currentWord in horizontalWords list and move on to next word
+                    if (cellIsBlank(row + 1, col)) {
+                        VerticalWords.add(currentWord);
+                        System.out.println("current word is: " + currentWord);
+                        currentWord = ""; // set currentWord to empty string so it can store the next word in row
+                    }
+                    // handle cells on the bottom border of board (row == 15)
+                    if (!cellIsBlank(row + 1, col ) && (row == cells.length - 2)) {
+                        currentWord += cells[row + 1][col];
+                        VerticalWords.add(currentWord);
+                        System.out.println("current word is: " + currentWord);
+                        currentWord = ""; // set currentWord to empty string so it can store the next word in row
+                    }
+                }
+            }
+        }
+        System.out.println("number of words " + VerticalWords.size());
+        return VerticalWords;
     }
 
 
@@ -476,15 +507,16 @@ public class Board {
 
         board.placeWord(1,3 , LONGWORD_tiles, Direction.VERTICAL);
 
-
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("horizontal words");
         board.printBoard();
+        board.getHorizontalWords();
+
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("vertical words");
+        board.printBoard();
+        board.getVerticalWords();
 
     }
-
-
-
-    //todo implement
-    // returns a list of all vertical words to be checked by WordReader
-    //public List<String> getVerticalWords() {}
 
 }
