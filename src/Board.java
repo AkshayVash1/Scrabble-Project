@@ -7,6 +7,7 @@ import java.util.*;
  *
  * @author Mahtab Ameli
  * @version 0.0
+ * Last Updated 2022-10-25
  */
 public class Board {
 
@@ -535,9 +536,15 @@ public class Board {
 
 
 
-
-    // given the dirsction of word placement, checks which word on that row/column the word attempt is a subset of
-    //score the entire word (including suffix/prefix and new letters added)
+    /**
+     * Returns the score for given word.
+     *
+     * @param row
+     * @param col
+     * @param tilesList
+     * @param direction
+     * @return
+     */
     public int getWordScore(int row, int col, ArrayList<Tile> tilesList, Direction direction) {
         ArrayList<Tile> wordTiles = tilesList;
         String lettersPlayed = getWordFromTiles(wordTiles);
@@ -575,7 +582,11 @@ public class Board {
     }
 
 
-
+    /**
+     * Calculates score of the given word.
+     * @param wordToScore
+     * @return
+     */
     private int calculateWordScore(String wordToScore) {
         int letterScore = 0;
         int wordScore = 0;
@@ -589,7 +600,11 @@ public class Board {
     }
 
 
-    // returns ArrayList of all horizontal words placed on board
+
+    /**
+     * Returns ArrayList of all horizontal words placed on board.
+     * @return
+     */
     public ArrayList<String> getHorizontalWords () {
         ArrayList<String> horizontalWords = new ArrayList<>();
         String currentWord = "";
@@ -622,7 +637,11 @@ public class Board {
 
 
 
-        // returns ArrayList of all Vertical words placed on board
+
+        /**
+         * Returns a list of all vertical words placed on board.
+         * @return
+         */
         public ArrayList<String> getVerticalWords () {
             ArrayList<String> VerticalWords = new ArrayList<>();
             String currentWord = "";
@@ -652,7 +671,6 @@ public class Board {
             System.out.println("number of words " + VerticalWords.size());
             return VerticalWords;
         }
-
 
 
         public static void main (String[]args){

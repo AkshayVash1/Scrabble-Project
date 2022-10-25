@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 public class Square {
 
+    // Multiplier type for premium squares
     public enum Multiplier {
         DL(2, "\033[46m"),    // Double Letter, multiplies by 2, background color cyan
         TL(3, "\033[44m"),    // Triple Letter, multiplies by 3, background color blue
@@ -27,7 +28,7 @@ public class Square {
     private int row;
     private int col;
     private Multiplier multiplier;
-    public static HashMap<Integer,String> columns;
+    public static HashMap<Integer,String> columns;  //Maps integer columns to columns as letters
 
     /**
      * constructor 1
@@ -52,17 +53,30 @@ public class Square {
     }
 
 
-    // return's square's coordinates as a string of a row as a number and column as a letter
+    /**
+     * Returns the coordinates of the square, as a String of row (as a digit) and column (as a letter)
+     * @return
+     */
     public String getStringCoordinates() {
         String stringCoordinates = "" + row + columns.get(col);
         return stringCoordinates;
     }
 
+
+
+    /**
+     * Returns multiplier of this square.
+     * @return
+     */
     public Multiplier getMultiplier() {
         return this.multiplier;
     }
 
 
+
+    /**
+     * Assigns each new square it's corresponding multiplier based on square's coordinates.
+     */
     private void assignMultiplier() {
         String coordinates = "" + row + columns.get(col);
 
@@ -92,35 +106,6 @@ public class Square {
             this.multiplier = Multiplier.NONE;
         }
     }
-
-
-    /**
-     * constructor 2
-     * creates a Square when row and column are passed as a single 2-character string,
-     * EXAMPLE: "9A" is the square with row 9, col A
-     * Convention: first character is the row, second character is the column
-     * handles column both as a letter or a digit
-     *
-     */
-/*    public Square(String coordinates) {
-        coordinates.trim(); // trim in case spaces are passed by mistake
-
-        char rowChar = coordinates.charAt(0);
-        char colChar = coordinates.charAt(1);
-
-        // if column is passed as the standard letter instead of int, get its int ordinal value
-        if (Character.isDigit(colChar)) {
-            this.col = getColAsInt(colChar);
-        }
-
-        // gives error if row is passed as a letter
-        if (!Character.isDigit(rowChar)) {
-            System.out.println("Invalid input. The row must a number from 1 to 15");
-        } else {
-            this.row = (int) rowChar;
-        }
-
-    }*/
 
 
 }
