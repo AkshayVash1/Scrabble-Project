@@ -3,6 +3,7 @@
  * @Date 2022-10-25
  */
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -45,10 +46,11 @@ public class Game {
      * @param currentPlayer
      * @return
      */
-    private boolean processCommand(Command command, Player currentPlayer) {
+    private boolean processCommand(Command command, Player currentPlayer) throws FileNotFoundException {
         ArrayList<Character> removeTilesFromHand = new ArrayList<>();
         List<Tile> addTilesToHand = new ArrayList<>();
         InHand inHand = null;
+        placementCheck = true;
 
         inHand = new InHand(command.getWordAttempt(), currentPlayer.getHand());
 
@@ -76,8 +78,16 @@ public class Game {
                             currentPlayer.exchange((ArrayList<Tile>) addTilesToHand, removeTilesFromHand),
                             this.board, command.getPlacementDirection());
                     if (playMove.placeTile()) {
-                        this.board = playMove.getUpdatedBoard();
-                        currentPlayer.addPoints(playMove.getPlayedWordScore());
+                        if (playMove.checkWord()) {
+                            this.board = playMove.getUpdatedBoard();
+                            currentPlayer.addPoints(playMove.getPlayedWordScore());
+                        }
+                        else {
+                            System.out.println("Word is not valid.");
+                            this.bag.placeTiles(addTilesToHand);
+                            currentPlayer.rollBack();
+                        }
+
                     }
                     else {
                         this.bag.placeTiles(addTilesToHand);
@@ -99,12 +109,12 @@ public class Game {
             case "pass":
                 break;
 
-
             case "forfeit":
                 System.out.println("Player " + (currentPlayer.getPlayerNumber()+1) + " has forfeited");
                 bag.placeTiles(currentPlayer.getHand().getHand());
                 currentPlayer.setActive(false);
                 break;
+
             default:
                 break;
         }
@@ -112,15 +122,11 @@ public class Game {
         return false;
     }
 
-    private ArrayList getPlayerList() {
-        return playerList;
-    }
-
     private Board getBoard() {
         return board;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
 
         Game game = new Game();
         Scanner scanner = new Scanner(System.in);
@@ -218,11 +224,12 @@ public class Game {
 
                 game.processCommand(command, currentPlayer);
 
-                if (!command.getAction().equals("shuffle")) {
-                    if (currentPlayer.getPlayerNumber() == (game.playerList.size() - 1)) {
-                        currentPlayer = game.playerList.get(0);
+                if (!command.getAction().equals("shuffle")) {;
+                    if (!game.placementCheck) {
+                        System.out.println("Try again");
                     }
-                    else if (!game.placementCheck) {
+                    if (currentPlayer.getPlayerNumber() == (game.playerList.size()-1)) {
+                        currentPlayer = game.playerList.get(0);
                     }
                     else {
                         currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber()+1);

@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -170,5 +171,14 @@ public class PlayMove {
     public Board getUpdatedBoard()
     {
         return this.board;
+    }
+
+    public boolean checkWord() throws FileNotFoundException {
+        WordValidator wordValidator = new WordValidator();
+        ArrayList<String> allWords = new ArrayList<>();
+        allWords.addAll(board.getHorizontalWords());
+        allWords.addAll(board.getVerticalWords());
+
+        return wordValidator.isWordsValid(allWords);
     }
 }

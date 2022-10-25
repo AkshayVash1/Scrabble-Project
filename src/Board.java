@@ -508,7 +508,7 @@ public class Board {
         for (int i = 0; i < wordToScore.length(); i++) {
             letterScore = Bag.getLetterValue("" + wordToScore.charAt(i));
             wordScore += letterScore;
-            System.out.println("current character of word " + wordToScore + ": " + wordToScore.charAt(i));
+            //System.out.println("current character of word " + wordToScore + ": " + wordToScore.charAt(i));
         }
         return wordScore;
     }
@@ -541,7 +541,7 @@ public class Board {
                 }
             }
         }
-        System.out.println("number of words " + horizontalWords.size());
+        //System.out.println("number of words " + horizontalWords.size());
         return horizontalWords;
     }
 
@@ -561,20 +561,20 @@ public class Board {
                         // if next cell in column is blank, store currentWord in horizontalWords list and move on to next word
                         if (cellIsBlank(row + 1, col)) {
                             VerticalWords.add(currentWord);
-                            System.out.println("current word is: " + currentWord);
+                            //System.out.println("current word is: " + currentWord);
                             currentWord = ""; // set currentWord to empty string so it can store the next word in row
                         }
                         // handle cells on the bottom border of board (row == 15)
                         if (!cellIsBlank(row + 1, col) && (row == cells.length - 2)) {
                             currentWord += cells[row + 1][col];
                             VerticalWords.add(currentWord);
-                            System.out.println("current word is: " + currentWord);
+                            //System.out.println("current word is: " + currentWord);
                             currentWord = ""; // set currentWord to empty string so it can store the next word in row
                         }
                     }
                 }
             }
-            System.out.println("number of words " + VerticalWords.size());
+            //System.out.println("number of words " + VerticalWords.size());
             return VerticalWords;
         }
 

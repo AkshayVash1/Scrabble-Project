@@ -17,7 +17,7 @@ public class Tile {
 
     @Override
     public String toString() {
-        return "{Letter: "+letter+", Points: "+value+"}";
+        return letter+", " + value + " |";
     }
 
     public void setLetter(String letter) {

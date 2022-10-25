@@ -1,5 +1,3 @@
-package src;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -9,16 +7,11 @@ import java.util.Scanner;
 
 public class WordValidator {
     final Map<Integer, String> wordsMap = new HashMap<>();
-    private static final String FILE = "src\\words.txt";
+    private static final String FILE = "./words.txt";
 
-    public WordValidator(ArrayList<String> wordsToValidate) {
+    public WordValidator() {
         try {
             scanner();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            isWordsValid(wordsToValidate);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -44,10 +37,8 @@ public class WordValidator {
             }
         }
         if (count == wordsToValidate.size()) {
-            System.out.println("All words given are valid");
             return true;
         } else {
-            System.out.println("Not all words given are valid");
             return false;
         }
     }
