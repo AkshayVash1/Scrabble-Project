@@ -169,11 +169,27 @@ public class Board {
         return false;
     }
 
-    // returns true if at least one cell adjacent to given cell is not blank
-    private boolean adjacentNotBlank(int row, int col) {
-        //if cell is a corner cell
+    // returns true if at least one cell adjacent to given cell is not blank (hence the word can be placed according to Scrabble rules)
+    public ArrayList<String> getAllAdjacentCells(int row, int col) {
+        ArrayList<String> adjacentCells = new ArrayList<>();
 
-        return false;
+        //handle corner cells
+        ArrayList<String> cornerCellCoords = new ArrayList<String>(Arrays.asList(new String[]{"1A", "1O", "15A", "15O"}));
+        String thisCell = getStringCoords(row,col);
+        //if this cell is a corner cell
+        if (cornerCellCoords.contains(thisCell)) {
+            adjacentCells = getCornersAdjacentCells(row, col);
+        }
+        // else if this cell is not a  corner cell, but it's on the b order row/columns of the board
+        else if ((row == 1) || (row == 15) || (col == 1) || (col == 15)) {
+            adjacentCells = getBordersAdjacentCells(row, col); }
+        // else if the cell is a regular cell
+        else if ((row > 1) && (row < 15) && (col > 1) && (col < 15)) {
+            adjacentCells = getAdjacentCells(row,col);}
+        else {
+            System.out.println("ERROR: Invalid cell");
+        }
+        return adjacentCells;
     }
 
 
@@ -388,9 +404,15 @@ public class Board {
         board.placeTileAt(8,9,new Tile("Q",1));
         board.placeTileAt(7,8,new Tile("R",1));
         System.out.println(board.getAdjacentCells(8, 8));
-        System.out.println(board.getAdjacentCells(8, 14));
 
-        board.printBoard();
+
+        // testing getAllAdjacentCells()
+        System.out.println("---------------------------------------------------------------");
+        for (int i = 1; i < 16; i++) {
+            for (int j = 1; j < 16; j++) {
+                System.out.println(board.getAllAdjacentCells(i, j));
+            }
+        }
     }
 
 
