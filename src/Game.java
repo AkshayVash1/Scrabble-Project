@@ -1,3 +1,8 @@
+/**
+ * @Author Akshay Vashisht
+ * @Date 2022-10-25
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -8,8 +13,16 @@ public class Game {
     private Board board = new Board();
     private ArrayList<Player> playerList = new ArrayList<Player>();
 
+    /**
+     * Public constructor for class game.
+     */
     public Game() {}
 
+
+    /**
+     * Creates number of players based on user input
+     * @param input
+     */
     private void createPlayers(String input) {
         int value = Integer.parseInt(input);
 
@@ -19,10 +32,18 @@ public class Game {
         }
     }
 
-    private void printRules() {
 
+    private void printRules() {
+        System.out.println();
     }
 
+
+    /**
+     *
+     * @param command
+     * @param currentPlayer
+     * @return
+     */
     private boolean processCommand(Command command, Player currentPlayer) {
         ArrayList<Character> removeTilesFromHand = new ArrayList<>();
         List<Tile> addTilesToHand = new ArrayList<>();
@@ -142,6 +163,10 @@ public class Game {
         do {
             activeCount = game.playerList.size();;
 
+            if (currentPlayer.getPoints() >= 50) {
+                System.out.println("Player " + currentPlayer.getPlayerNumber() + " wins with "
+                        + currentPlayer.getPoints()+ "!");
+            }
             for (int i = 0; i < game.playerList.size(); i++) {
                 if (!game.playerList.get(i).isActive()) {
                     activeCount--;
