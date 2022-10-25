@@ -169,7 +169,20 @@ public class Board {
         return false;
     }
 
+
     // returns true if at least one cell adjacent to given cell is not blank (hence the word can be placed according to Scrabble rules)
+    public Boolean adjacentNotBlank(int row, int col) {
+        ArrayList<String> adjacentCells = new ArrayList<>();
+        adjacentCells = getAllAdjacentCells(row,col);
+        for (String cell: adjacentCells) {
+            if(!cellIsBlank(row,col)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // returns list of all cells adjacent to given cell, regardless of cell's type (corner, border, regular)
     public ArrayList<String> getAllAdjacentCells(int row, int col) {
         ArrayList<String> adjacentCells = new ArrayList<>();
 
@@ -405,12 +418,13 @@ public class Board {
         board.placeTileAt(7,8,new Tile("R",1));
         System.out.println(board.getAdjacentCells(8, 8));
 
-
-        // testing getAllAdjacentCells()
+        board.printBoard();
+        // testing adjacentNotBlank()
         System.out.println("---------------------------------------------------------------");
-        for (int i = 1; i < 16; i++) {
+        for (int i = 15; i < 16; i++) {
             for (int j = 1; j < 16; j++) {
-                System.out.println(board.getAllAdjacentCells(i, j));
+                System.out.println(board.adjacentNotBlank(i,j));
+
             }
         }
     }
