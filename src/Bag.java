@@ -44,7 +44,7 @@ public class Bag {
             }
         }
         for (int i = 0; i < 2; i++) {
-            tiles.add(new Tile("BLANK", null));
+            tiles.add(new Tile("_", 0));
         }
     }
 

@@ -155,8 +155,6 @@ public class Game {
             else {
                 game.getBoard().printBoard();
 
-                System.out.println(activeCount);
-
                 System.out.println("It is Player " + (currentPlayer.getPlayerNumber() + 1) + "'s turn");
                 System.out.println("Current Player Points: " + currentPlayer.getPoints());
                 currentPlayer.displayHand();
@@ -183,13 +181,17 @@ public class Game {
                 }
                 flag = false;
 
-                game.processCommand(command, currentPlayer);
+                if (command.getAction().equals("shuffle")) {
 
-                if (currentPlayer.getPlayerNumber() == (game.playerList.size() - 1)) {
-                    currentPlayer = game.playerList.get(0);
                 }
                 else {
-                    currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber()+1);
+                    game.processCommand(command, currentPlayer);
+                    if (currentPlayer.getPlayerNumber() == (game.playerList.size() - 1)) {
+                        currentPlayer = game.playerList.get(0);
+                    }
+                    else {
+                        currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber()+1);
+                    }
                 }
             }
 
