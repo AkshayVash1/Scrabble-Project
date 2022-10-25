@@ -1,5 +1,3 @@
-package src;
-
 public class Tile {
     private String letter;
     private Integer value;

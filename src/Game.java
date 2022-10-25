@@ -1,9 +1,6 @@
-package src;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import src.*;
 
 public class Game {
 
@@ -20,8 +17,6 @@ public class Game {
             playerList.add(new Player(i));
             playerList.get(i).initializePlayerHand((ArrayList<Tile>) bag.removeTiles(7));
         }
-
-
     }
 
     private boolean processCommand(Command command, Player currentPlayer) {
@@ -56,6 +51,7 @@ public class Game {
             case "play":
                 assert inHand != null;
                 if (inHand.wordInHand()) {
+                    System.out.println(command.getWordAttempt());
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
                     PlayMove playMove = new PlayMove(command.getPlacementAttempt(),
@@ -162,7 +158,7 @@ public class Game {
                 game.processCommand(command, currentPlayer);
             }
 
-            if (currentPlayer.getPlayerNumber() == 3) {
+            if (currentPlayer.getPlayerNumber() == (game.playerList.size() - 1)) {
                 currentPlayer = game.playerList.get(0);
             }
             else {

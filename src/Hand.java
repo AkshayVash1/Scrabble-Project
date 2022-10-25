@@ -1,5 +1,3 @@
-package src;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -72,6 +70,7 @@ public class Hand {
                         this.hand.remove(l);
                         this.recentlyRemoved.add(l);
                         remCount++;
+                        break;
                     }
                 }
             }
@@ -107,12 +106,7 @@ public class Hand {
     {
         boolean rc = true;
 
-        if (this.recentlyAdded.isEmpty()) {
-            return false;
-        }
-        else {
-            this.recentlyAdded.clear();
-        }
+        this.recentlyAdded.clear();
 
         if ((rc = (this.hand.size() + addTiles.size() == MAX_HAND_SIZE)) == false)
         {
