@@ -45,14 +45,17 @@ public class Hand {
     /**
      * Removes a subset of Tile objects from the Hand Arraylist.
      * @param removeTiles ArrayList of Character element to remove the corresponding Tiles
+     * @param clear Indicates it's safe to clear recently removed Tiles
      * @return boolean Return true if successfully removed Tile objects, else return false.
      * */
-    public boolean removeTiles(ArrayList<Character> removeTiles)
+    public boolean removeTiles(ArrayList<Character> removeTiles, boolean clear)
     {
         boolean rc = true;
         int remCount = 0;
 
-        this.recentlyRemoved.clear();
+        if (clear == true) {
+            this.recentlyRemoved.clear();
+        }
 
         ArrayList<Tile> mock = new ArrayList<>();
         mock.addAll(this.hand);
@@ -68,7 +71,9 @@ public class Hand {
                     if (c.equals(l.getLetter().charAt(PARSE_CHAR_AT_ZERO)))
                     {
                         this.hand.remove(l);
-                        this.recentlyRemoved.add(l);
+                        if (clear == true) {
+                            this.recentlyRemoved.add(l);
+                        }
                         remCount++;
                         break;
                     }
@@ -100,14 +105,16 @@ public class Hand {
     /**
      * Adds a set of Tile objects to the Hand Arraylist.
      * @param addTiles ArrayList of Tile elements to added to hand
+     * @param clear Indicates it's safe to clear recently added Tiles
      * */
-    public void addTiles(ArrayList<Tile> addTiles)
+    public void addTiles(ArrayList<Tile> addTiles, boolean clear)
     {
-        this.recentlyAdded.clear();
+        if (clear == true) {
+            this.recentlyAdded.clear();
+            this.recentlyAdded.addAll(addTiles);
+        }
 
-        this.recentlyAdded.addAll(addTiles);
         this.hand.addAll(addTiles);
-
     }
 
     /**

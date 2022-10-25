@@ -35,13 +35,13 @@ public class Player {
      * */
     public ArrayList<Tile> exchange(ArrayList<Tile> addTiles, ArrayList<Character> removeTiles)
     {
-        if ((this.hand.removeTiles(removeTiles)) == false)
+        if ((this.hand.removeTiles(removeTiles, true)) == false)
         {
             System.out.println("Couldn't remove tiles from hand");
         }
         else
         {
-            this.hand.addTiles(addTiles);
+            this.hand.addTiles(addTiles, true);
 
             if ((this.hand.getHandSize() == Hand.MAX_HAND_SIZE) == false)
             {
@@ -62,13 +62,20 @@ public class Player {
         System.out.println(this.hand.getRecentlyAdded().toString());
         System.out.println(this.hand.getRecentlyRemoved().toString());
 
-        this.hand.addTiles(this.hand.getRecentlyRemoved());
+        System.out.println( "+++++" + this.getHand().getHand().toString());
+
+        this.hand.addTiles(this.hand.getRecentlyRemoved(), false);
+
+        System.out.println( "+++++" + this.getHand().getHand().toString());
+
         for (Tile t : this.hand.getRecentlyAdded())
         {
             charArray.add(t.getLetter().charAt(Hand.PARSE_CHAR_AT_ZERO));
         }
 
-        this.hand.removeTiles(charArray);
+        this.hand.removeTiles(charArray, false);
+
+        System.out.println( "+++++" + this.getHand().getHand().toString());
     }
 
     /**
@@ -85,7 +92,7 @@ public class Player {
         }
         else
         {
-            this.hand.addTiles(t);
+            this.hand.addTiles(t, true);
         }
 
         return rc;

@@ -60,12 +60,9 @@ public class Game {
 
                     if (playMove.placeTile() == true) {
                         this.board = playMove.getUpdatedBoard();
-                        System.out.println("TRUE PLAY???");
                     }
                     else {
-                        System.out.println("FALSE PLAY???");
                         this.bag.placeTiles(addTilesToHand);
-                        System.out.println("BIG SIZE AFTER " + this.bag.getBagSize());
                         currentPlayer.rollBack();
                     }
                 }
