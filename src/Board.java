@@ -171,8 +171,12 @@ public class Board {
 
     // returns true if at least one cell adjacent to given cell is not blank
     private boolean adjacentNotBlank(int row, int col) {
+        //if cell is a corner cell
+
         return false;
     }
+
+
 
     // return's square's coordinates as a string of a row as a number and column as a letter
     public String getStringCoords(int row, int col) {
@@ -184,6 +188,46 @@ public class Board {
     private String getRightCellContent(int row, int col) {return cells[row][col+1];}
     private String getBottomCellContent(int row, int col) {return cells[row+1][col];}
     private String getLeftCellContent(int row, int col) {return cells[row][col-1];}
+
+
+
+    // returns list of cell contents adjacent to a border cell
+    public ArrayList<String> getBordersAdjacentCells(int row, int col) {
+        ArrayList<String> adjacentCells = new ArrayList<>();
+
+        // cell is on top row (row == 1) but not a corner cell
+        if ((row == 1) && (col > 1) && (col < 15)) {
+            adjacentCells.add(getRightCellContent(row, col));
+            adjacentCells.add(getBottomCellContent(row, col));
+            adjacentCells.add(getLeftCellContent(row, col));
+        }
+
+        // cell is on rightmost column (col == 15) but not a corner cell
+        else if ((col == 15) && (row > 1) && (row < 15)) {
+            adjacentCells.add(getTopCellContent(row, col));
+            adjacentCells.add(getBottomCellContent(row, col));
+            adjacentCells.add(getLeftCellContent(row, col));
+        }
+
+        // cell is on bottom row (row == 15) but not a corner cell
+        else if ((row == 15) && (col > 1) && (col < 15)) {
+            adjacentCells.add(getTopCellContent(row, col));
+            adjacentCells.add(getRightCellContent(row, col));
+            adjacentCells.add(getLeftCellContent(row, col));
+        }
+
+        // cell is on leftmost column (col == 1) but not a corner cell
+        else if ((col == 1) && (row > 1) && (row < 15)) {
+            adjacentCells.add(getTopCellContent(row, col));
+            adjacentCells.add(getBottomCellContent(row, col));
+            adjacentCells.add(getLeftCellContent(row, col));
+        }
+        else {
+            System.out.println("Error: given cell is either not on a border or is a corner cell.");
+        }
+        return adjacentCells;
+    }
+
 
     // returns list of all cells adjacent to corner cells of the board
     public ArrayList<String> getCornersAdjacentCells(int row, int col) {
@@ -211,11 +255,13 @@ public class Board {
                     adjacentCells.add(getTopCellContent(row, col));
                     break;
                 default:
-                    System.out.println("Error: No such cell!");
+                    System.out.println("Error: Not a corner cell!");
             }
         }
         return adjacentCells;
     }
+
+
 
     // todo fix implementation of Boolean return type
     public Boolean placeWord(int row, int col, ArrayList<Tile> tiles, Direction direction) {
@@ -288,6 +334,9 @@ public class Board {
         board.placeWord(8, 8, HELLO_tiles, Direction.VERTICAL);
         board.placeWord(8, 11, HELLO_tiles, Direction.HORIZONTAL);
 
+
+
+
         // testing all corners
         board.placeTileAt(1,1,new Tile("A",1));
         board.placeTileAt(1,2,new Tile("B",1));
@@ -312,8 +361,22 @@ public class Board {
 
         ArrayList <String> horizWords = board.getHorizontalWords();
 
+
+        board.printBoard();
+
+        // testing border cells
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("testing border cells adjacents");
+        System.out.println(board.getBordersAdjacentCells(5, 5));
+
+
+
+
+
         board.printBoard();
     }
+
+
 
     //todo implement
     // returns a list of all vertical words to be checked by WordReader
