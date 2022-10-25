@@ -55,6 +55,7 @@ public class Game {
 
                     if (playMove.placeTile()) {
                         this.board = playMove.getUpdatedBoard();
+                        currentPlayer.addPoints(playMove.getPlayedWordScore());
                     }
                     else {
                         this.bag.placeTiles(addTilesToHand);
