@@ -122,22 +122,24 @@ public class Board {
         return cells[row][col];
     }
 
+
     // todo fix boolean return type
     public Boolean placeTileAt(int row, int col, Tile tile) {
-        final String RED_BOLD_TEXT_COLOR = "\033[1;31m";    // red bold text color for printing error messages
+
 
         // invalid row error
         if (row < 1  || row > 15) {
-            System.out.println(RED_BOLD_TEXT_COLOR + "ERROR: invalid row " + row);
-            System.out.println("Cannot place tile: " + tile.getLetter() + ", on row: " + row + ", column: " + col);
-            System.out.println("Valid row range is 1 to 15 inclusive." + COLOR_RESET);
+            System.out.println("Cannot place tile " + tile.getLetter() + ", on invalid row: " + row
+                    + ", and valid column: " + col);
+            System.out.println("Valid row range is 1 to 15 inclusive.");
             return false;
         }
         // invalid column error
         if (col < 1  || col > 15) {
-            System.out.println(RED_BOLD_TEXT_COLOR+ "ERROR: invalid column " + col);
-            System.out.println("Cannot place tile: " + tile.getLetter() + ", on row: " + row + ", column: " + col);
-            System.out.println("Valid column range is 1 to 15 inclusive." + COLOR_RESET);
+
+            System.out.println("ERROR: Cannot place tile " + tile.getLetter() + " on row: " + row
+                    + ", and invalid column: " + col);
+            System.out.println("Valid column range is 1 to 15 inclusive.");
             return false;
         }
 
@@ -148,14 +150,10 @@ public class Board {
             cells[row][col] = tile.getLetter();
             return true;
 
-            // todo error condition for when the tile is not touching another tile
-/*            if (allAdjacentCellsEmpty() == false) {
-
-            }*/
         }
         else {
-            System.out.println(RED_BOLD_TEXT_COLOR + "ERROR: cannot place tile " + tile.getLetter()
-                    + " on non-empty cell: " + "row: " + row + ", col: " + col + COLOR_RESET);
+            System.out.println("ERROR: Cannot place tile " + tile.getLetter()
+                    + " on non-empty cell: " + "row: " + row + ", col: " + col);
             return false;
         }
 
@@ -171,15 +169,20 @@ public class Board {
 
 
     // returns true if at least one cell adjacent to given cell is not blank (hence the word can be placed according to Scrabble rules)
-    public Boolean adjacentNotBlank(int row, int col) {
-        ArrayList<String> adjacentCells = new ArrayList<>();
-        adjacentCells = getAllAdjacentCells(row,col);
+    public Boolean allAdjacentsBlank(int row, int col) {
+        Boolean allBlank = false;
+        int blankCount = 0;
+        ArrayList<String> adjacentCells = getAllAdjacentCells(row,col);
+
         for (String cell: adjacentCells) {
-            if(!cellIsBlank(row,col)) {
-                return true;
+            if(cell.equals(" ")) {
+                blankCount++;
             }
         }
-        return false;
+        if (blankCount < adjacentCells.size()) {
+            return false;
+        }
+        return true;
     }
 
     // returns list of all cells adjacent to given cell, regardless of cell's type (corner, border, regular)
@@ -264,7 +267,7 @@ public class Board {
             adjacentCells.add(getLeftCellContent(row, col));
         }
         else {
-            System.out.println("Error: given cell is either not on a border or is a corner cell.");
+            //System.out.println("Error: given cell is either not on a border or is a corner cell.");
         }
         return adjacentCells;
     }
@@ -302,30 +305,61 @@ public class Board {
         return adjacentCells;
     }
 
+    // returns true if this condition is met: if the word were to be placed
+    // , at least one tile would be adjacent to an existing tile
+    public Boolean adjacentConditionMet(int row, int col, ArrayList<Tile> tiles, Direction direction) {
+        ArrayList<Tile> wordTiles = tiles;
+        int ROW = row;
+        int COL = col;
+        int count = 0;
 
+        for (Tile tile: wordTiles) {
+            // check condition for tile
+            if (!allAdjacentsBlank(ROW,COL)) {count++;}
+            if (direction == Direction.VERTICAL) {ROW++;}
+            else {COL++;}
+        }
+        // if at least one tile would be next to a non-blank tile, the condition is met
+        if (count > 0) {
+            return true;
+        }
+        return false;
+    }
 
-    // todo fix implementation of Boolean return type
+    //Places as many letters on board as are valid. returns true if placement is valid. returns false if placement is invalid.
     public Boolean placeWord(int row, int col, ArrayList<Tile> tiles, Direction direction) {
         ArrayList<Tile> wordTiles = tiles;
         int ROW = row;
         int COL = col;
         Boolean tilePlaced = false;
-        int successCount = 0;
+        int tilePlacedCount = 0;
+        Boolean adjacentConditionMet = adjacentConditionMet(row, col, tiles, direction);
 
         for (Tile tile: tiles) {
-                tilePlaced = this.placeTileAt(ROW, COL, tile);
-                if (direction == Direction.VERTICAL) {
-                    ROW++;
-                } else {    // direction is horizontal
-                    COL++;
-                }
+            tilePlaced = this.placeTileAt(ROW, COL, tile);
+            if (tilePlaced) {tilePlacedCount++; }
+            if (direction == Direction.VERTICAL) {  // placement direction is vertical
+                ROW++;
+            } else {    // placement direction is horizontal
+                COL++;
+            }
         }
-        // if all the tiles were placed successfully return true
+        // return true if adjacent Not empty condition was met and all the tiles were placed successfully
+        if (!adjacentConditionMet) {
+            System.out.println("ERROR: Placement is NOT valid." +
+            "\nAt least one tile must be adjacent to an existing tile.");
+            return false;
+        }
+        else if ((adjacentConditionMet) && tilePlacedCount == tiles.size()){
+            System.out.println("Placement is valid.");
+            return true;
+        }
         return false;
     }
 
 
-    // todo bug fix: single letter word on right edge
+
+    // returns ArrayList of all horizontal words placed on board
     public ArrayList<String> getHorizontalWords() {
         ArrayList<String> horizontalWords = new ArrayList<>();
         String currentWord = "";
@@ -418,15 +452,33 @@ public class Board {
         board.placeTileAt(7,8,new Tile("R",1));
         System.out.println(board.getAdjacentCells(8, 8));
 
-        board.printBoard();
+
         // testing adjacentNotBlank()
         System.out.println("---------------------------------------------------------------");
-        for (int i = 15; i < 16; i++) {
+/*        for (int i = 15; i < 16; i++) {
             for (int j = 1; j < 16; j++) {
                 System.out.println(board.adjacentNotBlank(i,j));
 
             }
-        }
+        }*/
+
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("testing placeWord()");
+        ArrayList<Tile> LONGWORD_tiles = new ArrayList<>();
+        LONGWORD_tiles.add(new Tile("L", 3));
+        LONGWORD_tiles.add(new Tile("O", 1));
+        LONGWORD_tiles.add(new Tile("N", 1));
+        LONGWORD_tiles.add(new Tile("G", 1));
+        LONGWORD_tiles.add(new Tile("W", 1));
+        LONGWORD_tiles.add(new Tile("O", 1));
+        LONGWORD_tiles.add(new Tile("R", 1));
+        LONGWORD_tiles.add(new Tile("D", 1));
+
+        board.placeWord(1,3 , LONGWORD_tiles, Direction.VERTICAL);
+
+
+        board.printBoard();
+
     }
 
 
