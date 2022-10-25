@@ -11,6 +11,7 @@ public class Board {
     private String[][] cells;                   // Stores letters of tiles
     private HashMap<String, Tile> tiles;        // Maps Tiles to corresponding coordinates
     private HashMap<String, Square> squares;    // Maps Squares to their corresponding coordinates
+    private boolean isFirstPlay;
 
     // direction of word placement
     public enum Direction{HORIZONTAL, VERTICAL}
@@ -30,6 +31,7 @@ public class Board {
         this.cells = new String[16][16];     // first row and col are for grid labels. the other 15*15 are for placing Squares and Tiles
         this.tiles = new HashMap<>();
         this.squares = new HashMap<>();
+        this.isFirstPlay = true;
         initializeBoard();                   // assign a Square and a Tile to each cell
     }
 
@@ -343,11 +345,18 @@ public class Board {
     //Places as many letters on board as are valid. returns true if placement is valid. returns false if placement is invalid.
     public Boolean placeWord(int row, int col, ArrayList<Tile> tiles, Direction direction) {
         ArrayList<Tile> wordTiles = tiles;
+        Boolean adjacentConditionMet = true;
+
         int ROW = row;
         int COL = col;
         Boolean tilePlaced = false;
         int tilePlacedCount = 0;
-        Boolean adjacentConditionMet = adjacentConditionMet(row, col, tiles, direction);
+        adjacentConditionMet = adjacentConditionMet(row, col, tiles, direction);
+        if (isFirstPlay)
+        {
+            adjacentConditionMet = true;
+            this.isFirstPlay = false;
+        }
         for (Tile tile: tiles) {
             tilePlaced = this.placeTileAt(ROW, COL, tile);
             if (tilePlaced) {tilePlacedCount++; }
