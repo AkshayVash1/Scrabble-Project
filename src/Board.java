@@ -62,6 +62,14 @@ public class Board {
         return squares;
     }
 
+    public boolean isFirstPlay() {
+        return isFirstPlay;
+    }
+
+    public void setFirstPlay(boolean firstPlay) {
+        isFirstPlay = firstPlay;
+    }
+
     public void setSquares(HashMap<String, Square> squares) {
         this.squares.clear();
         this.squares.putAll(squares);

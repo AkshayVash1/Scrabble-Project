@@ -39,6 +39,7 @@ public class PlayMove {
         this.board.setCells(board.getCells());
         this.board.setSquares(board.getSquares());
         this.board.setTiles(board.getTiles());
+        this.board.setFirstPlay(board.isFirstPlay());
 
         this.placementAttempt = placementAttempt;
         this.direction = direction ? Board.Direction.HORIZONTAL : Board.Direction.VERTICAL;
