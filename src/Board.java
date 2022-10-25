@@ -462,7 +462,7 @@ public class Board {
         int wordScore = 0;
 
         for (int i = 0; i < wordToScore.length(); i++) {
-            //letterScore = Bag.getLetterValue("" + wordToScore.charAt(i));
+            letterScore = Bag.getLetterValue("" + wordToScore.charAt(i));
             wordScore += letterScore;
             System.out.println("current character of word " + wordToScore + ": " + wordToScore.charAt(i));
         }
