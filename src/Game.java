@@ -79,7 +79,7 @@ public class Game {
             case "forfeit":
                 System.out.println("Player " + (currentPlayer.getPlayerNumber()+1) + " has forfeited");
                 bag.placeTiles(currentPlayer.getHand().getHand());
-                playerList.set(currentPlayer.getPlayerNumber(), null);
+                currentPlayer.setActive(false);
                 break;
             default:
                 break;
@@ -138,22 +138,35 @@ public class Game {
         }
 
         currentPlayer = game.playerList.get(0);
+        Command command = null;
 
         GAME:
         do {
             boolean nextPlayer = false;
 
-            if (game.playerList.get(currentPlayer.getPlayerNumber()) == null) {
+            if (game.playerList.size() == 1)
+            {
+                System.out.println("Not enough players");
+                running = false;
+            }
+            else if (game.playerList.get(currentPlayer.getPlayerNumber()).isActive() == false) {
                 currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber()+1);
             }
             else {
-                game.getBoard().printBoard();
+                while (!flag)
+                {
+                    game.getBoard().printBoard();
 
-                System.out.println("It is Player " + (currentPlayer.getPlayerNumber() + 1) + "'s turn");
-                currentPlayer.displayHand();
-                System.out.println("What would you like to do? (play, exchange, shuffle, pass, forfeit)");
+                    System.out.println("It is Player " + (currentPlayer.getPlayerNumber() + 1) + "'s turn");
+                    currentPlayer.displayHand();
+                    System.out.println("What would you like to do? (play, exchange, shuffle, pass, forfeit)");
 
-                Command command = parser.getCommand();
+                    command = parser.getCommand();
+                    if (command.hasAction() == true)
+                    {
+                        flag = true;
+                    }
+                }
 
                 game.processCommand(command, currentPlayer);
             }
