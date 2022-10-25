@@ -30,7 +30,6 @@ public class Game {
 
         switch (action) {
             case "exchange":
-                assert inHand != null;
                 if (inHand.wordInHand()) {
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
@@ -43,7 +42,6 @@ public class Game {
                 break;
 
             case "play":
-                assert inHand != null;
                 if (inHand.wordInHand()) {
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
@@ -52,7 +50,7 @@ public class Game {
                             currentPlayer.exchange((ArrayList<Tile>) addTilesToHand, removeTilesFromHand),
                             this.board, command.getPlacementDirection());
 
-                    if (playMove.placeTile() == true) {
+                    if (playMove.placeTile()) {
                         this.board = playMove.getUpdatedBoard();
                     }
                     else {
@@ -99,6 +97,7 @@ public class Game {
         Player currentPlayer;
         boolean flag = false;
         Parser parser = new Parser();
+        int activeCount = game.playerList.size();
 
         boolean running = true;
 
@@ -138,12 +137,17 @@ public class Game {
 
         GAME:
         do {
-            if (game.playerList.size() == 1)
+            for (int i = 0; i < game.playerList.size(); i++) {
+                if (!game.playerList.get(i).isActive()) {
+                    activeCount--;
+                }
+            }
+            if (activeCount == 1)
             {
                 System.out.println("Not enough players");
                 running = false;
             }
-            else if (!game.playerList.get(currentPlayer.getPlayerNumber()).isActive()) {
+            else if (!currentPlayer.isActive()) {
                 currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber());
             }
             else {
