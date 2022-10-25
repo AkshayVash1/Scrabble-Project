@@ -19,6 +19,10 @@ public class Game {
         }
     }
 
+    private void printRules() {
+
+    }
+
     private boolean processCommand(Command command, Player currentPlayer) {
         ArrayList<Character> removeTilesFromHand = new ArrayList<>();
         List<Tile> addTilesToHand = new ArrayList<>();
@@ -34,7 +38,7 @@ public class Game {
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
                     bag.placeTiles(currentPlayer.exchange((ArrayList<Tile>) addTilesToHand,
-                            removeTilesFromHand));
+                            removeTilesFromHand)); //only enter capital letters
                 }
                 else {
                     return false;
@@ -62,7 +66,6 @@ public class Game {
 
             case "shuffle":
                 currentPlayer.shuffle();
-                currentPlayer.displayHand();
                 break;
 
             case "pass":
@@ -170,8 +173,8 @@ public class Game {
                     {
                         System.out.println("Word attempt is blank");
                     }
-                    else if (!command.hasPlacementAttempt() && ((command.getAction().equalsIgnoreCase("play") |
-                            (command.getAction().equalsIgnoreCase("exchange")))))
+                    else if (!command.hasPlacementAttempt() &&
+                            ((command.getAction().equalsIgnoreCase("play"))))
                     {
                         System.out.println("Placement attempt is blank");
                     }
@@ -181,11 +184,9 @@ public class Game {
                 }
                 flag = false;
 
-                if (command.getAction().equals("shuffle")) {
+                game.processCommand(command, currentPlayer);
 
-                }
-                else {
-                    game.processCommand(command, currentPlayer);
+                if (!command.getAction().equals("shuffle")) {
                     if (currentPlayer.getPlayerNumber() == (game.playerList.size() - 1)) {
                         currentPlayer = game.playerList.get(0);
                     }
