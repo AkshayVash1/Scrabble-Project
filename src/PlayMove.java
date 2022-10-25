@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class PlayMove {
 
@@ -60,11 +61,49 @@ public class PlayMove {
         }
     }
 
+    private boolean isLetter(char c) {
+        return (c >= 'A' && c <= 'Z');
+    }
+
+    public void handleBlanks()
+    {
+        Scanner scan = new Scanner(System.in);
+        String userValue = "";
+        boolean flag = false;
+
+        for (Tile t : this.wordTiles)
+        {
+            if (t.getLetter().equals("_"))
+            {
+                System.out.println("Enter blank replacement (1 LETTER)");
+                userValue = scan.nextLine();
+
+                while (!flag)
+                {
+                    if (!(userValue.length() == 1))
+                    {
+                        System.out.println("Enter one character");
+                        userValue = scan.nextLine();
+                    }
+                    else if (!(isLetter(userValue.charAt(0))))
+                    {
+                        System.out.println("Enter a letter");
+                        userValue = scan.nextLine();
+                    }
+                    else {
+                        flag = true;
+                    }
+                }
+
+                t.setLetter(userValue);
+            }
+        }
+    }
+
     public boolean placeTile()
     {
-        System.out.println(parseColumn() + " " + parseRow());
+        handleBlanks();
         return this.board.placeWord(parseRow(), parseColumn(), this.wordTiles, this.direction);
-
     }
 
     public Board getUpdatedBoard()

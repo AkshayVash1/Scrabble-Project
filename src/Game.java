@@ -49,7 +49,6 @@ public class Game {
                 if (inHand.wordInHand()) {
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
-                    System.out.println("BAG SIZE FIRST " + this.bag.getBagSize());
                     PlayMove playMove = new PlayMove(command.getPlacementAttempt(),
                             currentPlayer.exchange((ArrayList<Tile>) addTilesToHand, removeTilesFromHand),
                             this.board, command.getPlacementDirection());
