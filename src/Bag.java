@@ -43,8 +43,8 @@ public class Bag {
                 tiles.add(new Tile(token[0], eachLetterPointMap.get(token[0])));
             }
         }
-        for (int i = 0; i < 2; i++) {
-            tiles.add(new Tile("BLANK", null));
+        for (int i = 0; i < 30; i++) {
+            tiles.add(new Tile("_", 0));
         }
     }
 

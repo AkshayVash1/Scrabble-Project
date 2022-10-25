@@ -59,14 +59,8 @@ public class Player {
     public void rollBack()
     {
         ArrayList<Character> charArray = new ArrayList<>();
-        System.out.println(this.hand.getRecentlyAdded().toString());
-        System.out.println(this.hand.getRecentlyRemoved().toString());
-
-        System.out.println( "+++++" + this.getHand().getHand().toString());
 
         this.hand.addTiles(this.hand.getRecentlyRemoved(), false);
-
-        System.out.println( "+++++" + this.getHand().getHand().toString());
 
         for (Tile t : this.hand.getRecentlyAdded())
         {
@@ -74,8 +68,6 @@ public class Player {
         }
 
         this.hand.removeTiles(charArray, false);
-
-        System.out.println( "+++++" + this.getHand().getHand().toString());
     }
 
     /**

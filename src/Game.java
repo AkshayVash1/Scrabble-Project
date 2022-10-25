@@ -45,7 +45,6 @@ public class Game {
                 if (inHand.wordInHand()) {
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
-                    System.out.println("BAG SIZE FIRST " + this.bag.getBagSize());
                     PlayMove playMove = new PlayMove(command.getPlacementAttempt(),
                             currentPlayer.exchange((ArrayList<Tile>) addTilesToHand, removeTilesFromHand),
                             this.board, command.getPlacementDirection());
@@ -154,8 +153,6 @@ public class Game {
             }
             else {
                 game.getBoard().printBoard();
-
-                System.out.println(activeCount);
 
                 System.out.println("It is Player " + (currentPlayer.getPlayerNumber() + 1) + "'s turn");
                 System.out.println("Current Player Points: " + currentPlayer.getPoints());
