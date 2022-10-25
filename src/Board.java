@@ -169,8 +169,52 @@ public class Board {
         return false;
     }
 
-    private boolean allAdjacentCellsEmpty() {
+    // returns true if at least one cell adjacent to given cell is not blank
+    private boolean adjacentNotBlank(int row, int col) {
         return false;
+    }
+
+    // return's square's coordinates as a string of a row as a number and column as a letter
+    public String getStringCoords(int row, int col) {
+        String stringCoordinates = "" + row + Square.columns.get(col);
+        return stringCoordinates;
+    }
+
+    private String getTopCellContent(int row, int col) {return cells[row-1][col];}
+    private String getRightCellContent(int row, int col) {return cells[row][col+1];}
+    private String getBottomCellContent(int row, int col) {return cells[row+1][col];}
+    private String getLeftCellContent(int row, int col) {return cells[row][col-1];}
+
+    // returns list of all cells adjacent to corner cells of the board
+    public ArrayList<String> getCornersAdjacentCells(int row, int col) {
+
+        ArrayList<String> adjacentCells = new ArrayList<>();
+        ArrayList<String> cornerCellCoords = new ArrayList<String>(Arrays.asList(new String[]{"1A", "1O", "15A", "15O"}));
+        String thisCell = getStringCoords(row,col);
+        //if this cell is a corner cell
+        if (cornerCellCoords.contains(thisCell)) {
+            switch (thisCell) {
+                case "1A":
+                    adjacentCells.add(getRightCellContent(row,col));
+                    adjacentCells.add(getBottomCellContent(row, col));
+                    break;
+                case "1O":
+                    adjacentCells.add(getLeftCellContent(row,col));
+                    adjacentCells.add(getBottomCellContent(row, col));
+                    break;
+                case "15A":
+                    adjacentCells.add(getRightCellContent(row,col));
+                    adjacentCells.add(getTopCellContent(row, col));
+                    break;
+                case "15O":
+                    adjacentCells.add(getLeftCellContent(row,col));
+                    adjacentCells.add(getTopCellContent(row, col));
+                    break;
+                default:
+                    System.out.println("Error: No such cell!");
+            }
+        }
+        return adjacentCells;
     }
 
     // todo fix implementation of Boolean return type
@@ -194,6 +238,7 @@ public class Board {
     }
 
 
+    // todo bug fix: single letter word on right edge
     public ArrayList<String> getHorizontalWords() {
         ArrayList<String> horizontalWords = new ArrayList<>();
         String currentWord = "";
@@ -242,6 +287,28 @@ public class Board {
 
         board.placeWord(8, 8, HELLO_tiles, Direction.VERTICAL);
         board.placeWord(8, 11, HELLO_tiles, Direction.HORIZONTAL);
+
+        // testing all corners
+        board.placeTileAt(1,1,new Tile("A",1));
+        board.placeTileAt(1,2,new Tile("B",1));
+        board.placeTileAt(2,1,new Tile("C",1));
+        System.out.println(board.getCornersAdjacentCells(1,1));
+
+
+        board.placeTileAt(1,15,new Tile("D",1));
+        board.placeTileAt(1,14,new Tile("E",1));
+        board.placeTileAt(2,15,new Tile("F",1));
+        System.out.println(board.getCornersAdjacentCells(1,15));
+
+        board.placeTileAt(15,1,new Tile("G",1));
+        board.placeTileAt(15,2,new Tile("H",1));
+        board.placeTileAt(14,1,new Tile("I",1));
+        System.out.println(board.getCornersAdjacentCells(15,1));
+
+        board.placeTileAt(15,15,new Tile("J",1));
+        board.placeTileAt(15,14,new Tile("K",1));
+        board.placeTileAt(14,15,new Tile("L",1));
+        System.out.println(board.getCornersAdjacentCells(15,15));
 
         ArrayList <String> horizWords = board.getHorizontalWords();
 
