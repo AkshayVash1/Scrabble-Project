@@ -190,6 +190,18 @@ public class Board {
     private String getLeftCellContent(int row, int col) {return cells[row][col-1];}
 
 
+    // returns list of cell contents adjacent to given cell
+    // only for cells that are not in corners or on borders (cells that have 4 adjacent cells each)
+    public ArrayList<String> getAdjacentCells(int row, int col) {
+        ArrayList<String> adjacentCells = new ArrayList<>();
+
+        adjacentCells.add(getTopCellContent(row, col));
+        adjacentCells.add(getRightCellContent(row, col));
+        adjacentCells.add(getBottomCellContent(row, col));
+        adjacentCells.add(getLeftCellContent(row, col));
+
+        return adjacentCells;
+    }
 
     // returns list of cell contents adjacent to a border cell
     public ArrayList<String> getBordersAdjacentCells(int row, int col) {
@@ -369,9 +381,14 @@ public class Board {
         System.out.println("testing border cells adjacents");
         System.out.println(board.getBordersAdjacentCells(5, 5));
 
-
-
-
+        // testing getAdjacentCells()
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("testing get adjacent cells");
+        board.placeTileAt(8,7,new Tile("P",1));
+        board.placeTileAt(8,9,new Tile("Q",1));
+        board.placeTileAt(7,8,new Tile("R",1));
+        System.out.println(board.getAdjacentCells(8, 8));
+        System.out.println(board.getAdjacentCells(8, 14));
 
         board.printBoard();
     }
