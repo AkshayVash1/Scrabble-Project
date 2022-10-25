@@ -167,6 +167,11 @@ public class Game {
                     {
                         System.out.println("Word attempt is blank");
                     }
+                    else if (!command.hasPlacementAttempt() && ((command.getAction().equalsIgnoreCase("play") |
+                            (command.getAction().equalsIgnoreCase("exchange")))))
+                    {
+                        System.out.println("Placement attempt is blank");
+                    }
                     else {
                         flag = true;
                     }
