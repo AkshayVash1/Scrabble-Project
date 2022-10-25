@@ -71,10 +71,13 @@ public class PlayMove {
         String userValue = "";
         boolean flag = false;
 
+        System.out.println(wordTiles.toString());
+
         for (Tile t : this.wordTiles)
         {
             if (t.getLetter().equals("_"))
             {
+                flag = false;
                 System.out.println("Enter blank replacement (1 LETTER)");
                 userValue = scan.nextLine();
 
@@ -92,10 +95,9 @@ public class PlayMove {
                     }
                     else {
                         flag = true;
+                        t.setLetter(userValue);
                     }
                 }
-
-                t.setLetter(userValue);
             }
         }
     }
