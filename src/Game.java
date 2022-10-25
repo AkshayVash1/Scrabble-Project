@@ -12,6 +12,7 @@ public class Game {
     private Bag bag = new Bag();
     private Board board = new Board();
     private ArrayList<Player> playerList = new ArrayList<Player>();
+    private boolean placementCheck;
 
     /**
      * Public constructor for class game.
@@ -74,7 +75,6 @@ public class Game {
                     PlayMove playMove = new PlayMove(command.getPlacementAttempt(),
                             currentPlayer.exchange((ArrayList<Tile>) addTilesToHand, removeTilesFromHand),
                             this.board, command.getPlacementDirection());
-
                     if (playMove.placeTile()) {
                         this.board = playMove.getUpdatedBoard();
                         currentPlayer.addPoints(playMove.getPlayedWordScore());
@@ -82,6 +82,7 @@ public class Game {
                     else {
                         this.bag.placeTiles(addTilesToHand);
                         currentPlayer.rollBack();
+                        placementCheck = false;
                     }
                 }
                 else
@@ -220,6 +221,8 @@ public class Game {
                 if (!command.getAction().equals("shuffle")) {
                     if (currentPlayer.getPlayerNumber() == (game.playerList.size() - 1)) {
                         currentPlayer = game.playerList.get(0);
+                    }
+                    else if (!game.placementCheck) {
                     }
                     else {
                         currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber()+1);
