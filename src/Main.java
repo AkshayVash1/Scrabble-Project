@@ -1,3 +1,0 @@
-//INITIAL COMMIT TO MASTER BRANCH
-public class Main{
-}
