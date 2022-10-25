@@ -97,7 +97,7 @@ public class Game {
         Player currentPlayer;
         boolean flag = false;
         Parser parser = new Parser();
-        int activeCount = game.playerList.size();
+        int activeCount = 0;
 
         boolean running = true;
 
@@ -137,6 +137,8 @@ public class Game {
 
         GAME:
         do {
+            activeCount = game.playerList.size();;
+
             for (int i = 0; i < game.playerList.size(); i++) {
                 if (!game.playerList.get(i).isActive()) {
                     activeCount--;
@@ -148,12 +150,15 @@ public class Game {
                 running = false;
             }
             else if (!currentPlayer.isActive()) {
-                currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber());
+                currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber() + 1);
             }
             else {
                 game.getBoard().printBoard();
 
+                System.out.println(activeCount);
+
                 System.out.println("It is Player " + (currentPlayer.getPlayerNumber() + 1) + "'s turn");
+                System.out.println("Current Player Points: " + currentPlayer.getPoints());
                 currentPlayer.displayHand();
                 System.out.println("What would you like to do? (play, exchange, shuffle, pass, forfeit)");
                 while (!flag)
@@ -179,13 +184,13 @@ public class Game {
                 flag = false;
 
                 game.processCommand(command, currentPlayer);
-            }
 
-            if (currentPlayer.getPlayerNumber() == (game.playerList.size() - 1)) {
-                currentPlayer = game.playerList.get(0);
-            }
-            else {
-                currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber()+1);
+                if (currentPlayer.getPlayerNumber() == (game.playerList.size() - 1)) {
+                    currentPlayer = game.playerList.get(0);
+                }
+                else {
+                    currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber()+1);
+                }
             }
 
         } while(running);
