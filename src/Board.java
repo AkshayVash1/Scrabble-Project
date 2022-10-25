@@ -1,22 +1,25 @@
-import javax.swing.*;
 import java.util.*;
 
 /**
- * Board is a 16*16 table. row and column 0 contain labels. the other 15*15 Cells each include a Square and a Tile.
- * Each Square has a corresponding multiplier type. Each tile has a letter that will be printed on Board.
- * Each Cell of the board has a Square (with a specific multiplier and color) and a Tile (with a letter and a score value).
+ * A board is a 16*16 table of cells, representing the board of the game Scrabble. Each cell of the board contains
+ * a square with its corresponding color and multiplier value, as well as the tile placed on it, which has a letter and score.
+ * The cells themselves store the value of the tile letter placed on them. Printing the board displays the state of the game.
+ *
+ * @author Mahtab Ameli
+ * @version 0.0
  */
 public class Board {
 
     private String[][] cells;                   // Stores letters of tiles
-    private HashMap<String, Tile> tiles;        // Maps Tiles to corresponding coordinates
-    private HashMap<String, Square> squares;    // Maps Squares to their corresponding coordinates
+    private HashMap<String, Tile> tiles;        // Maps Tiles to corresponding String coordinates (row as digit, and column as letter)
+    private HashMap<String, Square> squares;    // Maps Squares to their corresponding String coordinates (row as digit, and column as letter)
 
 
-    // direction of word placement
+
+    // direction of word placement on the board
     public enum Direction{HORIZONTAL, VERTICAL}
 
-    // colors and corresponding color code used in this class's print statements
+    // colors and corresponding color codes used in this class's print statements
     public enum TextColor{
         GREEN_BOLD("\033[1;92m"),
         YELLOW_BOLD("\033[1;93m"),
@@ -27,18 +30,21 @@ public class Board {
         }
     }
 
-
-
+    /**
+     * Constructor for the class.
+     * Creates a board and initializes its fields.
+     */
     public Board() {
-        this.cells = new String[16][16];     // first row and col are for grid labels. the other 15*15 are for placing Squares and Tiles
+        this.cells = new String[16][16];    // first row and col are for labels. the other 15*15 are for placing Squares and Tiles
         this.tiles = new HashMap<>();
         this.squares = new HashMap<>();
-        initializeBoard();                   // assign a Square and a Tile to each cell
+        initializeBoard();  // assign an initial Square and a Tile to each cell
     }
 
 
-
-    // Place a Square on each cell and then place a Tile on the Square.
+    /**
+     * Place a Square on each cell and then place a Tile on the Square. Update the value of the cell to tile's letter.
+     */
     private void initializeBoard() {
         Tile emptyTile = new Tile(" ", 0);
         Square thisSquare;
@@ -56,7 +62,9 @@ public class Board {
 
 
 
-    // prints the state of the board
+    /**
+     * Prints the state of the board, displaying each square's corresponding color, and each cell's letter value.
+     */
     public void printBoard() {
         String dashedLine = "-";
         // make a string dashedLine
@@ -103,7 +111,9 @@ public class Board {
 
 
 
-    // prints a color legend after the board to indicate the cell background color associated with premium squares
+    /**
+     * Prints a color legend under the board to indicate the cell background color associated with premium squares.
+     */
     private void printColorLegend() {
         System.out.println("\n" + "Color Legend");
         System.out.println(Square.Multiplier.DL.getColor() + "DL: Double Letter Score" + TextColor.COLOR_RESET.code);
@@ -114,8 +124,15 @@ public class Board {
 
 
 
-    // returns true if a square has the empty tile (square has not been played yet)
-    private boolean cellIsBlank(int row, int col){
+    //
+
+    /**
+     * Returns true if a square has the empty tile (square has not been played yet).
+     * @param row
+     * @param col
+     * @return Boolean
+     */
+    private Boolean cellIsBlank(int row, int col){
         // a cell is empty if it stores a single space (" ")
         if(cells[row][col].equals(" ")) {
             return true;
@@ -124,7 +141,13 @@ public class Board {
     }
 
 
-
+    /**
+     * Places a single tile on the cell with given coordinates. Prints error messages if placement is invalid.
+     * @param row
+     * @param col
+     * @param tile
+     * @return
+     */
     public Boolean placeTileAt(int row, int col, Tile tile) {
         // row out of bounds error
         if (row < 1  || row > 15) {
@@ -159,7 +182,12 @@ public class Board {
 
 
 
-    // returns true if at least one cell adjacent to given cell is not blank (hence the word can be placed according to Scrabble rules)
+    /**
+     *  Returns true if at least one cell adjacent to given cell is not blank (hence the word can be placed according to Scrabble rules)
+     * @param row
+     * @param col
+     * @return
+     */
     public Boolean allAdjacentsBlank(int row, int col) {
         Boolean allBlank = false;
         int blankCount = 0;
@@ -176,7 +204,65 @@ public class Board {
     }
 
 
-    // returns list of all cells adjacent to given cell, regardless of cell's type (corner, border, regular)
+    /**
+     * Return's square's coordinates as a string of the row as a digit, and the column as a letter
+     * @param row
+     * @param col
+     * @return
+     */
+    public String getStringCoords(int row, int col) {
+        String stringCoordinates = "" + row + Square.columns.get(col);
+        return stringCoordinates;
+    }
+
+
+
+    /**
+     * Returns the String content of the cell located above given cell
+     * @param row
+     * @param col
+     * @return
+     */
+    private String getTopCellContent(int row, int col) {return cells[row-1][col];}
+
+
+
+    /**
+     * Returns the String content of the cell located to the right of given cell
+     * @param row
+     * @param col
+     * @return
+     */
+    private String getRightCellContent(int row, int col) {return cells[row][col+1];}
+
+
+
+    /**
+     * Returns the String content of the cell located underneath the given cell
+     * @param row
+     * @param col
+     * @return
+     */
+    private String getBottomCellContent(int row, int col) {return cells[row+1][col];}
+
+
+
+    /**
+     * Returns the String content of the cell located to the left of given cell
+     * @param row
+     * @param col
+     * @return
+     */
+    private String getLeftCellContent(int row, int col) {return cells[row][col-1];}
+
+
+
+    /**
+     * Returns list of all cells adjacent to given cell, handling all cell types (corner, border, regular)
+     * @param row
+     * @param col
+     * @return
+     */
     public ArrayList<String> getAllAdjacentCells(int row, int col) {
         ArrayList<String> adjacentCells = new ArrayList<>();
         //handle corner cells
@@ -200,23 +286,12 @@ public class Board {
 
 
 
-    // return's square's coordinates as a string of a row as a number and column as a letter
-    public String getStringCoords(int row, int col) {
-        String stringCoordinates = "" + row + Square.columns.get(col);
-        return stringCoordinates;
-    }
-
-
-
-    private String getTopCellContent(int row, int col) {return cells[row-1][col];}
-    private String getRightCellContent(int row, int col) {return cells[row][col+1];}
-    private String getBottomCellContent(int row, int col) {return cells[row+1][col];}
-    private String getLeftCellContent(int row, int col) {return cells[row][col-1];}
-
-
-
-    // returns list of cell contents adjacent to given cell
-    // only for cells that are not in corners or on borders (cells that have 4 adjacent cells each)
+    /**
+     * Returns a list of contents of all cells adjacent to given cell. Handles ell type: regular (not in coreners or on the borders)
+     * @param row
+     * @param col
+     * @return
+     */
     public ArrayList<String> getAdjacentCells(int row, int col) {
         ArrayList<String> adjacentCells = new ArrayList<>();
         adjacentCells.add(getTopCellContent(row, col));
@@ -226,8 +301,15 @@ public class Board {
         return adjacentCells;
     }
 
-    // returns list of cell contents adjacent to a border cell
-    public ArrayList<String> getBordersAdjacentCells(int row, int col) {
+
+
+    /**
+     * Returns a list of contents of all cells adjacent to given cell. Handles ell type: border (cells on the outer borders of the board)
+     * @param row
+     * @param col
+     * @return
+     */
+    private ArrayList<String> getBordersAdjacentCells(int row, int col) {
         ArrayList<String> adjacentCells = new ArrayList<>();
         // cell is on top row (row == 1) but not a corner cell
         if ((row == 1) && (col > 1) && (col < 15)) {
@@ -258,8 +340,13 @@ public class Board {
 
 
 
-    // returns list of all cells adjacent to corner cells of the board
-    public ArrayList<String> getCornersAdjacentCells(int row, int col) {
+    /**
+     * Returns a list of contents of all cells adjacent to given cell. Handles ell type: corner (cells on the 4 corners of the board)
+     * @param row
+     * @param col
+     * @return
+     */
+    private ArrayList<String> getCornersAdjacentCells(int row, int col) {
         ArrayList<String> adjacentCells = new ArrayList<>();
         ArrayList<String> cornerCellCoords = new ArrayList<String>(Arrays.asList(new String[]{"1A", "1O", "15A", "15O"}));
         String thisCell = getStringCoords(row,col);
@@ -290,8 +377,12 @@ public class Board {
     }
 
 
-    // returns true if this condition is met: if the word were to be placed
-    // , at least one tile would be adjacent to an existing tile
+    /**
+     * eturns true if this condition would be met after word placement: at least one tile is be adjacent to an existing tile
+     * @param row
+     * @param col
+     * @return
+     */
     public Boolean adjacentConditionMet(int row, int col, ArrayList<Tile> tiles, Direction direction) {
         ArrayList<Tile> wordTiles = tiles;
         int ROW = row;
@@ -313,8 +404,18 @@ public class Board {
 
 
 
-    //Places as many letters on board as are valid. returns true if placement is valid. returns false if placement is invalid.
-    public Boolean placeWord(int row, int col, ArrayList<Tile> tiles, Direction direction) {
+
+    /**
+     * Places as many single letters on board as are valid. returns true if placement is valid.
+     * Returns false if placement was unsuccessful for that cell.
+     * @param row
+     * @param col
+     * @param tiles
+     * @param direction
+     * @param isFirstWord
+     * @return
+     */
+    public Boolean placeWord(int row, int col, ArrayList<Tile> tiles, Direction direction, Boolean isFirstWord) {
         ArrayList<Tile> wordTiles = tiles;
         int ROW = row;
         int COL = col;
@@ -345,7 +446,11 @@ public class Board {
     }
 
 
-
+    /**
+     * Concatenates and returns String combination of letters from given tiles.
+     * @param tiles
+     * @return
+     */
     public String getWordFromTiles(ArrayList<Tile> tiles) {
         String word = "";
         ArrayList<Tile> tilesList = tiles;
@@ -357,6 +462,11 @@ public class Board {
 
 
 
+    /**
+     * Returns list of all String words on given row of board.
+     * @param row
+     * @return
+     */
     public ArrayList<String> getWordsOnRow(int row) {
         ArrayList<String> wordsOnRow = new ArrayList<>();
         String currentWord = "";
@@ -386,6 +496,13 @@ public class Board {
         return wordsOnRow;
     }
 
+
+
+    /**
+     * Returns list of all String words on given column of board.
+     * @param col
+     * @return
+     */
     public ArrayList<String> getWordsOnCol(int col) {
         ArrayList<String> wordsOnCol = new ArrayList<>();
         String currentWord = "";
@@ -414,6 +531,8 @@ public class Board {
         System.out.println("number of words on column: " + wordsOnCol.size());
         return wordsOnCol;
     }
+
+
 
 
 
