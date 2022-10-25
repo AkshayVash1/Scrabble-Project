@@ -15,13 +15,12 @@ public class Tile {
         return value;
     }
 
-    public void setLetter(String letter)
-    {
-        this.letter = letter;
-    }
-
     @Override
     public String toString() {
         return "{Letter: "+letter+", Points: "+value+"}";
+    }
+
+    public void setLetter(String letter) {
+        this.letter = letter;
     }
 }
