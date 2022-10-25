@@ -41,6 +41,7 @@ public class Game {
                             removeTilesFromHand)); //only enter capital letters
                 }
                 else {
+                    System.out.println("All tiles not in hand");
                     return false;
                 }
                 break;
@@ -61,6 +62,11 @@ public class Game {
                         this.bag.placeTiles(addTilesToHand);
                         currentPlayer.rollBack();
                     }
+                }
+                else
+                {
+                    System.out.println("All tiles not in hand");
+                    return false;
                 }
                 break;
 

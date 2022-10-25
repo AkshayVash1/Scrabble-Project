@@ -12,7 +12,6 @@ public class Board {
     private HashMap<String, Tile> tiles;        // Maps Tiles to corresponding coordinates
     private HashMap<String, Square> squares;    // Maps Squares to their corresponding coordinates
 
-
     // direction of word placement
     public enum Direction{HORIZONTAL, VERTICAL}
 
@@ -27,8 +26,6 @@ public class Board {
         }
     }
 
-
-
     public Board() {
         this.cells = new String[16][16];     // first row and col are for grid labels. the other 15*15 are for placing Squares and Tiles
         this.tiles = new HashMap<>();
@@ -36,7 +33,37 @@ public class Board {
         initializeBoard();                   // assign a Square and a Tile to each cell
     }
 
+    public String[][] getCells() {
+        return cells;
+    }
 
+    public void setCells(String[][] cells) {
+        for (int i = 0; i < 15; i++)
+        {
+            for (int j = 0; j < 15; j++)
+            {
+                this.cells[i][j] = cells[i][j];
+            }
+        }
+    }
+
+    public HashMap<String, Tile> getTiles() {
+        return tiles;
+    }
+
+    public void setTiles(HashMap<String, Tile> tiles) {
+        this.tiles.clear();
+        this.tiles.putAll(tiles);
+    }
+
+    public HashMap<String, Square> getSquares() {
+        return squares;
+    }
+
+    public void setSquares(HashMap<String, Square> squares) {
+        this.squares.clear();
+        this.squares.putAll(squares);
+    }
 
     // Place a Square on each cell and then place a Tile on the Square.
     private void initializeBoard() {

@@ -16,9 +16,13 @@ public class PlayMove {
 
     public PlayMove(String placementAttempt, ArrayList<Tile> wordTiles, Board board, boolean direction)
     {
-        this.board = board;
+        //Manual Cloning
+        this.board = new Board();
+        this.board.setCells(board.getCells());
+        this.board.setSquares(board.getSquares());
+        this.board.setTiles(board.getTiles());
+
         this.placementAttempt = placementAttempt;
-        System.out.println(direction);
         this.direction = direction ? Board.Direction.HORIZONTAL : Board.Direction.VERTICAL;
         this.wordTiles = wordTiles;
     }
@@ -70,8 +74,6 @@ public class PlayMove {
         Scanner scan = new Scanner(System.in);
         String userValue = "";
         boolean flag = false;
-
-        System.out.println(wordTiles.toString());
 
         for (Tile t : this.wordTiles)
         {
