@@ -24,13 +24,7 @@ public class Game {
         List<Tile> addTilesToHand = new ArrayList<>();
         InHand inHand = null;
 
-        if (!command.hasAction()) {
-            System.out.println("Unknown Command");
-            return false;
-        }
-        else if (command.hasWordAttempt()) {
-            inHand = new InHand(command.getWordAttempt(), currentPlayer.getHand());
-        }
+        inHand = new InHand(command.getWordAttempt(), currentPlayer.getHand());
 
         String action = command.getAction();
 
@@ -70,6 +64,7 @@ public class Game {
 
             case "shuffle":
                 currentPlayer.shuffle();
+                currentPlayer.displayHand();
                 break;
 
             case "pass":
@@ -139,34 +134,40 @@ public class Game {
 
         currentPlayer = game.playerList.get(0);
         Command command = null;
+        flag = false;
 
         GAME:
         do {
-            boolean nextPlayer = false;
-
             if (game.playerList.size() == 1)
             {
                 System.out.println("Not enough players");
                 running = false;
             }
-            else if (game.playerList.get(currentPlayer.getPlayerNumber()).isActive() == false) {
+            else if (!game.playerList.get(currentPlayer.getPlayerNumber()).isActive()) {
                 currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber()+1);
             }
             else {
+                game.getBoard().printBoard();
+
+                System.out.println("It is Player " + (currentPlayer.getPlayerNumber() + 1) + "'s turn");
+                currentPlayer.displayHand();
+                System.out.println("What would you like to do? (play, exchange, shuffle, pass, forfeit)");
                 while (!flag)
                 {
-                    game.getBoard().printBoard();
-
-                    System.out.println("It is Player " + (currentPlayer.getPlayerNumber() + 1) + "'s turn");
-                    currentPlayer.displayHand();
-                    System.out.println("What would you like to do? (play, exchange, shuffle, pass, forfeit)");
-
                     command = parser.getCommand();
-                    if (command.hasAction() == true)
+                    if (!command.hasAction()) {
+                        System.out.println("Invalid Command");
+                    }
+                    else if (!command.hasWordAttempt() && ((command.getAction().equalsIgnoreCase("play") |
+                            (command.getAction().equalsIgnoreCase("exchange")))))
                     {
+                        System.out.println("Word attempt is blank");
+                    }
+                    else {
                         flag = true;
                     }
                 }
+                flag = false;
 
                 game.processCommand(command, currentPlayer);
             }
