@@ -49,7 +49,8 @@ public class Parser {
                 return new Command(word1, word2, word3);
             }
         } else {
-            System.out.println("Command does not exist please re-enter new command\nList of valid commands: " + showCommands());
+            System.out.println("Command does not exist please re-enter new command\nList of valid commands: "
+                    + showCommands());
         }
         return new Command(null, word2, word3);
     }

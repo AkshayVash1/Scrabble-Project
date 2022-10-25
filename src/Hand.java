@@ -9,6 +9,8 @@ public class Hand {
     private ArrayList<Tile> hand;
     private ArrayList<Tile> recentlyRemoved;
     private ArrayList<Tile> recentlyAdded;
+    final String YELLOW_BOLD_TEXT_COLOR = "\033[1;93m";
+    final String COLOR_RESET = "\u001B[0m";
 
     /**
      * Public constructor for class Hand. Use to initialize a hand of size MAX_HAND_SIZE (7)*
@@ -37,8 +39,9 @@ public class Hand {
     {
         for (Tile t : this.hand)
         {
-            System.out.print(t + " ");
+            System.out.print(YELLOW_BOLD_TEXT_COLOR + t + " ");
         }
+        System.out.println(COLOR_RESET);
         System.out.println();
     }
 

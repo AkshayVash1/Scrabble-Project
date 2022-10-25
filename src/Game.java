@@ -144,7 +144,7 @@ public class Game {
                 running = false;
             }
             else if (!game.playerList.get(currentPlayer.getPlayerNumber()).isActive()) {
-                currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber()+1);
+                currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber());
             }
             else {
                 game.getBoard().printBoard();

@@ -34,7 +34,7 @@ public class CommandWords
     {
         StringBuilder sb = new StringBuilder();
         for(String command: validCommands) {
-            sb.append(command + "  ");
+            sb.append(command + ".  ");
         }
         return sb.toString();
     }
