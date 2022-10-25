@@ -100,25 +100,14 @@ public class Hand {
     /**
      * Adds a set of Tile objects to the Hand Arraylist.
      * @param addTiles ArrayList of Tile elements to added to hand
-     * @return boolean Return true if successfully added Tile objects, else return false.
      * */
-    public boolean addTiles(ArrayList<Tile> addTiles)
+    public void addTiles(ArrayList<Tile> addTiles)
     {
-        boolean rc = true;
-
         this.recentlyAdded.clear();
 
-        if ((rc = (this.hand.size() + addTiles.size() == MAX_HAND_SIZE)) == false)
-        {
-            System.out.println("MISMATCH WITH ADDING TILES" + this.hand.size() + " " + addTiles.size());
-        }
-        else
-        {
-            this.recentlyAdded.addAll(addTiles);
-            this.hand.addAll(addTiles);
-        }
+        this.recentlyAdded.addAll(addTiles);
+        this.hand.addAll(addTiles);
 
-        return rc;
     }
 
     /**

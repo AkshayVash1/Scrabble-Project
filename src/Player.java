@@ -39,13 +39,14 @@ public class Player {
         {
             System.out.println("Couldn't remove tiles from hand");
         }
-        else if ((this.hand.addTiles(addTiles)) == false)
+        else
         {
-            System.out.println("Couldn't add Tiles to hand");
-        }
-        else if ((this.hand.getHandSize() == Hand.MAX_HAND_SIZE) == false)
-        {
-            System.out.print("Unexpected Hand size: " + this.hand.getHandSize());
+            this.hand.addTiles(addTiles);
+
+            if ((this.hand.getHandSize() == Hand.MAX_HAND_SIZE) == false)
+            {
+                System.out.print("Unexpected Hand size: " + this.hand.getHandSize());
+            }
         }
 
         return this.hand.getRecentlyRemoved();
@@ -58,6 +59,7 @@ public class Player {
     public void rollBack()
     {
         ArrayList<Character> charArray = new ArrayList<>();
+       // System.out.println(this.);
         this.hand.addTiles(this.hand.getRecentlyRemoved());
         for (Tile t : this.hand.getRecentlyAdded())
         {

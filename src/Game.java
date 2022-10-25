@@ -51,18 +51,21 @@ public class Game {
             case "play":
                 assert inHand != null;
                 if (inHand.wordInHand()) {
-                    System.out.println(command.getWordAttempt());
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
+                    System.out.println("BAG SIZE FIRST " + this.bag.getBagSize());
                     PlayMove playMove = new PlayMove(command.getPlacementAttempt(),
                             currentPlayer.exchange((ArrayList<Tile>) addTilesToHand, removeTilesFromHand),
                             this.board, command.getPlacementDirection());
 
-                    if (playMove.placeTile()) {
+                    if (playMove.placeTile() == true) {
                         this.board = playMove.getUpdatedBoard();
+                        System.out.println("TRUE PLAY???");
                     }
                     else {
+                        System.out.println("FALSE PLAY???");
                         this.bag.placeTiles(addTilesToHand);
+                        System.out.println("BIG SIZE AFTER " + this.bag.getBagSize());
                         currentPlayer.rollBack();
                     }
                 }
@@ -148,9 +151,9 @@ public class Game {
             }
             else {
                 game.getBoard().printBoard();
-                currentPlayer.displayHand();
 
                 System.out.println("It is Player " + (currentPlayer.getPlayerNumber() + 1) + "'s turn");
+                currentPlayer.displayHand();
                 System.out.println("What would you like to do? (play, exchange, shuffle, pass, forfeit)");
 
                 Command command = parser.getCommand();

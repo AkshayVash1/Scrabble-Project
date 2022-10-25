@@ -61,10 +61,7 @@ public class PlayMove {
     public boolean placeTile()
     {
         System.out.println(parseColumn() + " " + parseRow());
-        this.board.placeWord(parseRow(), parseColumn(), this.wordTiles, this.direction);
-        //to return void
-
-        return true;
+        return this.board.placeWord(parseRow(), parseColumn(), this.wordTiles, this.direction);
 
     }
 
