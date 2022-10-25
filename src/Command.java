@@ -26,8 +26,7 @@ public class Command {
 
     public boolean getPlacementDirection() {
         /* Portion may be removed if exception handling already handled by other class */
-        if (this.placementAttempt != null && this.wordAttempt != null &&
-                (this.placementAttempt.length() == PLACEMENT_ATTEMPT_SIZE)) {
+        if (this.placementAttempt != null && this.wordAttempt != null) {
             return Character.isDigit(this.placementAttempt.charAt(0));
         } else {
             /* todo throw exception possibly */

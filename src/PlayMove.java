@@ -17,6 +17,7 @@ public class PlayMove {
     {
         this.board = board;
         this.placementAttempt = placementAttempt;
+        System.out.println(direction);
         this.direction = direction ? Board.Direction.HORIZONTAL : Board.Direction.VERTICAL;
         this.wordTiles = wordTiles;
     }
@@ -54,7 +55,8 @@ public class PlayMove {
         }
         else
         {
-            return (this.placementAttempt.charAt(PlayMove.PARSE_CHAR_AT_ONE)) - ASCII_BASE;
+            return (this.placementAttempt.charAt(this.placementAttempt.length() == DOUBLE_DIGIT_DETECTION
+                    ? PlayMove.PARSE_CHAR_AT_TWO : PlayMove.PARSE_CHAR_AT_ONE)) - ASCII_BASE;
         }
     }
 
