@@ -1,5 +1,18 @@
 import java.util.Scanner;
 
+/**
+ * This parser reads user input.
+ * Every time it is called it reads a line from the terminal and
+ * tries to interpret the line as a two or three word command depending on the command. It returns the command
+ * as an object of class Command.
+ *
+ * The parser has a set of known command words. It checks user input against
+ * the known commands, and if the input is not one of the known commands, it
+ * returns a command object that is marked as an unknown command.
+ *
+ * @author Jaydon Haghighi
+ * @version 2022.10.25
+ */
 public class Parser {
     private CommandWords commands;  // holds all valid command words
     private Scanner reader;         // source of command input

@@ -5,10 +5,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * This class validates an arraylist of words formed by the players turn
+ * based off the players word placement it will create either one or more words.
+ * it will validate every word by checking if words.txt contains word.
+ */
 public class WordValidator {
     final Map<Integer, String> wordsMap = new HashMap<>();
     private static final String FILE = "./words.txt";
 
+    /**
+     * Initializes the scanner
+     */
     public WordValidator() {
         try {
             scanner();
@@ -17,6 +25,10 @@ public class WordValidator {
         }
     }
 
+    /**
+     * Scans the file containing all the valid words
+     * @throws FileNotFoundException if file given is not found an exception will occur
+     */
     public void scanner() throws FileNotFoundException {
         Scanner scanner = new Scanner(new FileInputStream(FILE));
         int index = 0;
@@ -25,10 +37,13 @@ public class WordValidator {
             wordsMap.put(index, word);
             index++;
         }
-        //System.out.println(wordsMap);
     }
 
-    public boolean isWordsValid(ArrayList<String> wordsToValidate) throws FileNotFoundException {
+    /**
+     * @param wordsToValidate Arraylist of words Board has analyzed
+     * @return returns true if all words given are valid and false if one or more words are not valid
+     */
+    public boolean isWordsValid(ArrayList<String> wordsToValidate) {
         //Reading the word to be found from the user
         int count = 0;
         for (String word : wordsToValidate) {

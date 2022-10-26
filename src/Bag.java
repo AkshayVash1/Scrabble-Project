@@ -1,5 +1,9 @@
 import java.util.*;
 
+/**
+ * This class creates a bag of 100 tiles it has letters ranging from A to Z each letter
+ * has different number of occurrences and values.
+ */
 public class Bag {
 
     final private LinkedList<Tile> tiles = new LinkedList<>();
@@ -12,7 +16,7 @@ public class Bag {
      * Constructs Bag containing 100 tiles.
      */
     public Bag() {
-        initialize();
+        initialize(); //initializes Bag
     }
 
 
@@ -20,7 +24,7 @@ public class Bag {
      * Initializes all letters with corresponding values and places it into tiles.
      */
     private void initialize() {
-        final Map<Integer, List<String>> pointLetterMap = new HashMap<>();
+        final Map<Integer, List<String>> pointLetterMap = new HashMap<>(); //Map of points for each letter
         pointLetterMap.put(1, Arrays.asList("A", "E", "I", "O", "U", "L", "N", "S", "T", "R"));
         pointLetterMap.put(2, Arrays.asList("D", "G"));
         pointLetterMap.put(3, Arrays.asList("B", "C", "M", "P"));
@@ -29,15 +33,15 @@ public class Bag {
         pointLetterMap.put(8, Arrays.asList("J", "X"));
         pointLetterMap.put(10, Arrays.asList("Q", "Z"));
 
-        final Map<String, Integer> eachLetterPointMap = new HashMap<>();
+        final Map<String, Integer> eachLetterPointMap = new HashMap<>(); //Map of letters with points associated to it
 
-        for (Map.Entry<Integer, List<String>> entry : pointLetterMap.entrySet()) {
+        for (Map.Entry<Integer, List<String>> entry : pointLetterMap.entrySet()) { //loops through letter and associates it to a value
             for (String letter : entry.getValue()) {
                 eachLetterPointMap.put(letter, entry.getKey());
             }
         }
 
-        for (String numOfLetter : numOfLetters) {
+        for (String numOfLetter : numOfLetters) { //loops through each letter and duplicates the letter occordingly to scrabble rules
             String[] token = numOfLetter.split("-");
             for (int i = 0; i < Integer.parseInt(token[1]); i++) {
                 tiles.add(new Tile(token[0], eachLetterPointMap.get(token[0])));
@@ -56,10 +60,15 @@ public class Bag {
         return tiles.size();
     }
 
+    /**
+     * Removes tiles from bag.
+     * @param amount amount of tiles to remove
+     * @return Returns the removed tiles from bag
+     */
     public List<Tile> removeTiles(int amount){
         List<Tile> removedTiles = new ArrayList<>();
         if (amount > getBagSize()) {
-            //throw new NotEnoughTiles("Not Enough Tiles, Only "+getBagSize()+" Tiles Left.");
+            //throw new NotEnoughTiles("Not Enough Tiles, Only "+getBagSize()+" Tiles Left."); //Implemented in later milestones
         }
         for (int i = 0; i < amount; i++) {
             removedTiles.add(tiles.remove(random.nextInt(getBagSize())));
@@ -77,7 +86,12 @@ public class Bag {
             this.tiles.add(tile);
         }
     }
-    
+
+    /**
+     * Returns Letters value
+     * @param letter Letter between A-Z
+     * @return returns value of letter given
+     */
     public static Integer getLetterValue(String letter) {
         if (letter.equals("A") || letter.equals("E") || letter.equals("I") || letter.equals("O") || letter.equals("U")
                 || letter.equals("L") || letter.equals("N") || letter.equals("S") || letter.equals("T") || letter.equals("R")) {
