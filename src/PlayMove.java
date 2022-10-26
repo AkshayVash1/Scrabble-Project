@@ -173,6 +173,11 @@ public class PlayMove {
         return this.board;
     }
 
+    /**
+     * Returns a value if the word in the board currently are valid. Done using the board being passed in and
+     * checking whether or not the words are valid.
+     * @return boolean if all the passed in words are valid.
+     * */
     public boolean checkWord() throws FileNotFoundException {
         WordValidator wordValidator = new WordValidator();
         ArrayList<String> allWords = new ArrayList<>();
