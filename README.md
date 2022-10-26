@@ -17,13 +17,14 @@ As of 2022-10-25, the primary functionality of the game is up. Players can excha
 - Player does not need to start at middle of board, will be implemented in later milestones. 
 
 Code Style: 
-Primarily coded in Java v.17. Coded and Designed using funamdental Object-Oriented Programming concepts and Design Patterns and Forms discussed in SYSC3110. 
+Primarily coded in Java v.17. Coded and Designed using fundamental Object-Oriented Programming concepts and Design Patterns and Forms discussed in SYSC3110. 
 
 Tests:
 For this milestone, testing was done manually by running through the game and attempting to enter as many different branching paths as possible to identify any and all bugs. JUnit tests to be added in later milestones.  
 
 How to Use: 
 Running the main method in Game class will bring up the following:
+
 Welcome to Scrabble!
 Type number of players (2, 3, or 4):
 
