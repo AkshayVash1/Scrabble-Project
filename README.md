@@ -84,6 +84,8 @@ The board is displayed and is colour coded. The legend below it indicates the co
 The player number, score and hand are then displayed. The user is then prompted to enter commands. Below are examples of valid commands:
 "shuffle, pass, forfeit, play MAP 8H, play SAP H8, exchange MTS"
 
+NOTE: If fileNotFoundException is thrown in relation to words.txt, please refer to WordValidator.java, L18 to modify the directory to fit your machine. 
+
 Credits: 
 - Vashisht, Akshay
 - Kaddour, Mohamed
