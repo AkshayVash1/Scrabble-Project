@@ -1,5 +1,16 @@
 import java.util.ArrayList;
 
+/**
+ * This class is part of the "Scrabble" application.
+ *
+ * Player class manages the Player as well as allows a way for the Game to interact with the hand. Contains storage
+ * for the player's number, status and current points. Allows for the ability to control the Hand through an exchange
+ * method.
+ *
+ * @author Mohamed Kaddour
+ * @date 2022.10.25
+ */
+
 public class Player {
 
     public static final int MIN_POINTS = 0;
@@ -12,7 +23,7 @@ public class Player {
     /**
      * Constructor to initialize player points to 0 when player is created. Constructor to initialize
      * hand.
-     * @param playerNumber
+     * @param playerNumber the number assigned to the player
      * */
     public Player (int playerNumber)
     {
@@ -22,10 +33,6 @@ public class Player {
         this.active = true;
     }
 
-    /*Note: Exchange can be called either for play or for exchange.
-    For Exchange: In Game, add letters to bag instead of to board.
-    For Play: In Game, add letters to board instead of to bag.
-     */
     /**
      * Emulates the exchanging of Tiles by removing the Tile objects from hand and replacing with new TIle objects
      * passed into the method.

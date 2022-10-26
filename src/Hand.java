@@ -1,19 +1,30 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * This class is part of the "Scrabble" application.
+ *
+ * Hand class is used to simulate the Player's hand as it contains an ArrayList containing Tiles. It is also responsible
+ * for interacting with this ArrayList by adding and removing Hands respectively. Also performs passive actions on
+ * the Hand like shuffling. Hand also keeps track of recently removed and added Tiles
+ *
+ * @author Mohamed Kaddour
+ * @date 2022.10.25
+ */
 public class Hand {
 
     public final static int MAX_HAND_SIZE = 7;
     public final static int PARSE_CHAR_AT_ZERO = 0;
+    public final static String YELLOW_BOLD_TEXT_COLOR = "\033[1;93m";
+    public final static String COLOR_RESET = "\u001B[0m";
 
     private ArrayList<Tile> hand;
     private ArrayList<Tile> recentlyRemoved;
     private ArrayList<Tile> recentlyAdded;
-    final String YELLOW_BOLD_TEXT_COLOR = "\033[1;93m";
-    final String COLOR_RESET = "\u001B[0m";
 
     /**
-     * Public constructor for class Hand. Use to initialize a hand of size MAX_HAND_SIZE (7)*
+     * Public constructor for class Hand. Use to initialize a hand of size MAX_HAND_SIZE (7) and also the
+     * recently removed and added ArrayLists*
      * */
     public Hand()
     {
@@ -54,7 +65,6 @@ public class Hand {
     public boolean removeTiles(ArrayList<Character> removeTiles, boolean clear)
     {
         boolean rc = true;
-        int remCount = 0;
 
         if (clear == true) {
             this.recentlyRemoved.clear();
@@ -77,7 +87,6 @@ public class Hand {
                         if (clear == true) {
                             this.recentlyRemoved.add(l);
                         }
-                        remCount++;
                         break;
                     }
                 }
