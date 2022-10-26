@@ -9,6 +9,9 @@ import java.util.Scanner;
  * This class validates an arraylist of words formed by the players turn
  * based off the players word placement it will create either one or more words.
  * it will validate every word by checking if words.txt contains word.
+ *
+ * @author Jaydon Haghighi
+ * @version 2022.10.25
  */
 public class WordValidator {
     final Map<Integer, String> wordsMap = new HashMap<>();

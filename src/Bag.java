@@ -3,6 +3,9 @@ import java.util.*;
 /**
  * This class creates a bag of 100 tiles it has letters ranging from A to Z each letter
  * has different number of occurrences and values.
+ *
+ * @author Jaydon Haghighi
+ * @version 2022.10.25
  */
 public class Bag {
 

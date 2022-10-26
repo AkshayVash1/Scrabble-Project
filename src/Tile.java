@@ -1,6 +1,9 @@
 /**
  * This class creates a tile which contains a letter between A to Z
  * and a value between (1,2,3,4,5,8,10)
+ *
+ * @author Jaydon Haghighi
+ * @version 2022.10.25
  */
 public class Tile {
     private String letter;
