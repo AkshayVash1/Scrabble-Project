@@ -1,18 +1,17 @@
+/**
+ * This class holds an enumeration of all command words known to the game.
+ * It is used to recognise commands as they are typed in.
+ *
+ * @author Jaydon Haghighi
+ * @version 2022.10.25
+ */
 public class CommandWords
 {
     // a constant array that holds all valid command words
     private static final String[] validCommands = {
             "play", "exchange", "pass", "shuffle", "forfeit"
     };
-
-    /**
-     * Constructor - initialise the command words.
-     */
-    public CommandWords()
-    {
-        // nothing to do at the moment...
-    }
-
+    
     /**
      * Check whether a given String is a valid command word.
      * @return true if it is, false if it isn't.
