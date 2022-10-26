@@ -1,6 +1,7 @@
 /**
  * @Author Akshay Vashisht
  * @Date 2022-10-25
+ * @Version 1.0
  */
 
 import java.io.FileNotFoundException;
@@ -20,10 +21,9 @@ public class Game {
      */
     public Game() {}
 
-
     /**
      * Creates number of players based on user input
-     * @param input
+     * @param input User input for number of players
      */
     private void createPlayers(String input) {
         int value = Integer.parseInt(input);
@@ -35,16 +35,38 @@ public class Game {
     }
 
 
+    /**
+     * Prints rules for the game
+     */
     private void printRules() {
-        System.out.println();
+        System.out.println("\n");
+        System.out.println("Welcome to Scrabble!\n");
+        System.out.println("------------------------------------------------");
+        System.out.println("Scrabble is a word game with 2-4 players. The goal of the game is to accumulate more " +
+                "than or equal to 50 points");
+        System.out.println("Each player starts with 7 tiles in their hand. All players have the 5 different actions " +
+                "they can perform: Play, Exchange, Pass, Shuffle and Forfeit.");
+        System.out.println("Play is used to place words from your hand onto the board (placing is done by typing " +
+                "'Play CAT (your word) A1 (the tile)'");
+        System.out.println("The order of the tile placement is important. Letter first means vertical placement and " +
+                "Number first means horizontal (A1) is vertical");
+        System.out.println("If the placement is illegal you will be asked to type a legal placement");
+        System.out.println("Exchange is used to exchange any letters in your hand for new ones from the bag. " +
+                "This is done by typing 'Exchange AO (words to be exchanged)'");
+        System.out.println("Pass will pass the current players turn. This is done by typing 'Pass'");
+        System.out.println("Shuffle will shuffle the current players hand so they can see their hand in a different " +
+                "order. This is done by typing 'Shuffle'");
+        System.out.println("Forfeit will have the player removed from the game " +
+                "and all of the player's tiles will be put back into the bag");
+        System.out.println("Good luck and have fun!");
+        System.out.println("------------------------------------------------");
     }
 
-
     /**
-     *
-     * @param command
-     * @param currentPlayer
-     * @return
+     * Takes in a command from a given player and performs an action based on the command
+     * @param command Contains the different parts of the command the user entered
+     * @param currentPlayer The current player playing their turn
+     * @return returns true of false (Should be void)
      */
     private boolean processCommand(Command command, Player currentPlayer) throws FileNotFoundException {
         ArrayList<Character> removeTilesFromHand = new ArrayList<>();
@@ -122,10 +144,19 @@ public class Game {
         return false;
     }
 
+    /**
+     * Board getter method
+     * @return returns instance of board in game
+     */
     private Board getBoard() {
         return board;
     }
 
+    /**
+     * Main method
+     * @param args
+     * @throws FileNotFoundException
+     */
     public static void main(String[] args) throws FileNotFoundException {
 
         Game game = new Game();
@@ -138,7 +169,7 @@ public class Game {
 
         boolean running = true;
 
-        System.out.println("Welcome to Scrabble!");
+        game.printRules();
 
         while(!flag) {
             System.out.println("Type number of players (2, 3, or 4):");
