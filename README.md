@@ -72,7 +72,9 @@ DW: Double Word Score
 TW: Triple Word Score
 
 It is Player 1's turn
+
 Current Player Points: 0
+
 I, 1 | P, 3 | A, 1 | V, 4 | M, 3 | T, 1 | S, 1 | 
 
 What would you like to do? (play, exchange, shuffle, pass, forfeit)
@@ -83,10 +85,10 @@ The player number, score and hand are then displayed. The user is then prompted 
 "shuffle, pass, forfeit, play MAP 8H, play SAP H8, exchange MTS"
 
 Credits: 
-Vashisht, Akshay
-Kaddour, Mohamed
-Haghighi Saed, Jaydon
-Ameli, Mahtab
+- Vashisht, Akshay
+- Kaddour, Mohamed
+- Haghighi Saed, Jaydon
+- Ameli, Mahtab
 
 Despite focusing on specific classes, each member contributed equally to the overall functionailty of the program.
 
