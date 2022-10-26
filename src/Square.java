@@ -2,9 +2,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-
+/**
+ * A square is added to each cell of the Scrabble board. Each square has one of five Multiplier types,
+ * 4 representing Scrabble's premium squares and 1 representing regular squares.
+ *
+ * @author Mahtab Ameli
+ * @date 2022-10-25
+ * @version 0.0
+ */
 public class Square {
 
+    /**
+     * Multiplier type for premium squares of the board.
+     */
     public enum Multiplier {
         DL(2, "\033[46m"),    // Double Letter, multiplies by 2, background color cyan
         TL(3, "\033[44m"),    // Triple Letter, multiplies by 3, background color blue
@@ -12,15 +22,39 @@ public class Square {
         TW(3, "\033[41m"),    // Triple Word, multiplies by 3, background color red
         NONE(1, "\033[1;37m");// not a premium square, multiplies by 1, text color bold white
 
+        /**
+         * Int value of each Multiplier type.
+         */
         private final int value;
+
+        /**
+         * Print color value corresponding to Multiplier's name.
+         */
         private final String color;
 
+        /**
+         * Constructor for the enum.
+         *
+         * @param value Multiplier's int value.
+         * @param color Multiplier's color code.
+         */
         Multiplier(int value, String color) {
             this.value = value;
             this.color = color;
         }
 
+        /**
+         * Getter for the Multiplier value.
+         *
+         * @return Multiplier value.
+         */
         public int getValue() {return value; }
+
+        /**
+         * Getter for color code of the Multiplier.
+         *
+         * @return Multiplier color code.
+         */
         public String getColor() {return color;}
     }
 
@@ -30,8 +64,8 @@ public class Square {
     public static HashMap<Integer,String> columns;
 
     /**
-     * constructor 1
-     * creates a Square when both row column are passed separately as int values
+     * Constructor for the class Square.
+     * Creates a Square when both row column are passed separately as int values.
      */
     public Square(Integer row, Integer col) {
         // todo errors for unacceptable inputs
@@ -42,8 +76,10 @@ public class Square {
         assignMultiplier();
     }
 
+    /**
+     * Assigns String letter values to integer values for all columns of the board.
+     */
     private void initializeColumns() {
-        //todo error checking
         columns.put(1,"A"); columns.put(2,"B"); columns.put(3,"C");
         columns.put(4,"D"); columns.put(5,"E"); columns.put(6,"F");
         columns.put(7,"G"); columns.put(8,"H"); columns.put(9,"I");
@@ -51,18 +87,29 @@ public class Square {
         columns.put(13,"M"); columns.put(14,"N"); columns.put(15,"O");
     }
 
-
-    // return's square's coordinates as a string of a row as a number and column as a letter
+    /**
+     * Returns the coordinates of the square as a string of the row as a digit, followed by the column as a letter .
+     *
+     * @return this square's coordinates as a string.
+     */
     public String getStringCoordinates() {
         String stringCoordinates = "" + row + columns.get(col);
         return stringCoordinates;
     }
 
+    /**
+     * Getter for the square's multiplier.
+     *
+     * @return this square's multiplier.
+     */
     public Multiplier getMultiplier() {
         return this.multiplier;
     }
 
 
+    /**
+     * Assigns this square's multiplier based on the square's coordinates. Called from the constructor.
+     */
     private void assignMultiplier() {
         String coordinates = "" + row + columns.get(col);
 
@@ -92,31 +139,5 @@ public class Square {
             this.multiplier = Multiplier.NONE;
         }
     }
-
-
-    /**
-     * constructor 2
-     * creates a Square when row and column are passed as a single 2-character string,
-     * EXAMPLE: "9A" is the square with row 9, col A
-     * Convention: first character is the row, second character is the column
-     * handles column both as a letter or a digit
-     *
-     */
-/*    public Square(String coordinates) {
-        coordinates.trim(); // trim in case spaces are passed by mistake
-        char rowChar = coordinates.charAt(0);
-        char colChar = coordinates.charAt(1);
-        // if column is passed as the standard letter instead of int, get its int ordinal value
-        if (Character.isDigit(colChar)) {
-            this.col = getColAsInt(colChar);
-        }
-        // gives error if row is passed as a letter
-        if (!Character.isDigit(rowChar)) {
-            System.out.println("Invalid input. The row must a number from 1 to 15");
-        } else {
-            this.row = (int) rowChar;
-        }
-    }*/
-
 
 }
