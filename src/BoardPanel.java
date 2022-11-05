@@ -1,5 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileView;
+import javax.swing.plaf.IconUIResource;
+import javax.xml.transform.stax.StAXResult;
 import java.awt.*;
 
 /**
@@ -98,8 +101,14 @@ public class BoardPanel extends JPanel{
         }
         // if square is a premium, set label's text as the multiplier type
         else {
-            label.setText(String.valueOf(square.getMultiplier()));
-            label.setFont(new Font(Font.MONOSPACED, Font.BOLD,18));
+            // if square is the one at the centre of the board (game start square), set label text as a star
+            if (square.isCentreSquare()) {
+                label.setIcon(new ImageIcon("src/star_icon.png"));
+            }
+            else {
+                label.setText(String.valueOf(square.getMultiplier()));
+                label.setFont(new Font(Font.MONOSPACED, Font.BOLD,18));
+            }
         }
         return label;
     }
