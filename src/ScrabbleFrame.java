@@ -7,6 +7,7 @@
  * @version 0.0
  */
 import javax.swing.*;
+import java.awt.*;
 
 public class ScrabbleFrame extends JFrame {
 
@@ -70,6 +71,7 @@ public class ScrabbleFrame extends JFrame {
     private void initializeFrame() {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setSize(FrameSize.WIDTH.getValue(), FrameSize.HEIGHT.getValue());
+        this.setLayout(new BorderLayout());
         this.setVisible(true);
         this.revalidate();
     }
