@@ -112,6 +112,16 @@ public class Square {
         return this.multiplier;
     }
 
+    /**
+     * Returns true if this square is the centre square of the board (row8,col8)
+     */
+    public Boolean isCentreSquare() {
+        if (this.row == 8 && this.col == 8) {
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * Assigns this square's multiplier based on the square's coordinates. Called from the constructor.
