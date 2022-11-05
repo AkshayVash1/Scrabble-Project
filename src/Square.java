@@ -16,11 +16,11 @@ public class Square {
      * Multiplier type for premium squares of the board.
      */
     public enum Multiplier {
-        DL(2, "\033[46m", 0XB0E0E6),    // Double Letter, multiplies by 2, background color cyan
-        TL(3, "\033[46m", 0X6495ED),    // Triple Letter, multiplies by 3, background color blue
-        DW(2, "\033[46m", 0X9370DB),    // Double Word, multiplies by 2, background color purple
+        DL(2, "\033[46m", 0XADDFB3),    // Double Letter, multiplies by 2, background pale green
+        TL(3, "\033[46m", 0X80A4FF),    // Triple Letter, multiplies by 3, background color blue
+        DW(2, "\033[46m", 0XC6A1CF),    // Double Word, multiplies by 2, background color purple
         TW(3, "\033[46m", 0XF08080),    // Triple Word, multiplies by 3, background color red
-        NONE(1, "\033[46m", 0XFFFAF0);// not a premium square, multiplies by 1, text color bold white
+        NONE(1, "\033[46m", 0XFFFAF0);// not a premium square, multiplies by 1, background color off-white
 
         /**
          * Int value of each Multiplier type.
