@@ -24,7 +24,8 @@ public class BoardPanel extends JPanel {
     public BoardPanel() {
         cells = new JPanel[15][15];
 
-        this.setSize(600, 600);
+        final int BOARD_SIZE = 600;
+        this.setPreferredSize(new Dimension(BOARD_SIZE, BOARD_SIZE));
         this.setLayout(new GridLayout(cells.length, cells.length));
         this.setBorder(new LineBorder(Color.BLACK));
         this.addCells();
