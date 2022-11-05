@@ -19,11 +19,6 @@ public class BoardPanel extends JPanel{
     private JPanel cells[][];
 
     /**
-     * Temporary frame to hold and test the BoardPanel, before adding the panel to the game's main GUI's frame.
-     */
-    JFrame boardFrame;
-
-    /**
      * Constructor for the class.
      */
     public BoardPanel() {
@@ -33,22 +28,6 @@ public class BoardPanel extends JPanel{
         this.setLayout(new GridLayout(cells.length, cells.length));
         this.setBorder(new LineBorder(Color.BLACK));
         this.addCells();
-
-        // create boardFrame
-        this.initializeBoardFrame();
-        boardFrame.add(this);
-    }
-
-
-    /**
-     * Creates and initializes the temporary boardFrame which will contain BoardPanel.
-     */
-    private void initializeBoardFrame() {
-        boardFrame = new JFrame("Welcome to Scrabble!");
-        boardFrame.setSize(600,600);
-        boardFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        boardFrame.setVisible(true);
-        boardFrame.revalidate();
     }
 
     /**
@@ -87,6 +66,7 @@ public class BoardPanel extends JPanel{
      */
     private JLabel createCellLabel(Square square) {
         JLabel label = new JLabel();
+        label.setTransferHandler(new TransferHandler("text"));
 
         // center the label's alignment
         label.setHorizontalAlignment(SwingConstants.CENTER);
