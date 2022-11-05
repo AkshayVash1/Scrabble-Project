@@ -16,11 +16,11 @@ public class Square {
      * Multiplier type for premium squares of the board.
      */
     public enum Multiplier {
-        DL(2, "\033[46m"),    // Double Letter, multiplies by 2, background color cyan
-        TL(3, "\033[44m"),    // Triple Letter, multiplies by 3, background color blue
-        DW(2, "\033[45m"),    // Double Word, multiplies by 2, background color purple
-        TW(3, "\033[41m"),    // Triple Word, multiplies by 3, background color red
-        NONE(1, "\033[1;37m");// not a premium square, multiplies by 1, text color bold white
+        DL(2, "\033[46m", 0XB0E0E6),    // Double Letter, multiplies by 2, background color cyan
+        TL(3, "\033[46m", 0X6495ED),    // Triple Letter, multiplies by 3, background color blue
+        DW(2, "\033[46m", 0X9370DB),    // Double Word, multiplies by 2, background color purple
+        TW(3, "\033[46m", 0XF08080),    // Triple Word, multiplies by 3, background color red
+        NONE(1, "\033[46m", 0XFFFAF0);// not a premium square, multiplies by 1, text color bold white
 
         /**
          * Int value of each Multiplier type.
@@ -33,14 +33,18 @@ public class Square {
         private final String color;
 
         /**
-         * Constructor for the enum.
-         *
-         * @param value Multiplier's int value.
-         * @param color Multiplier's color code.
+         * Print RGB color value corresponding to Multiplier's name.
          */
-        Multiplier(int value, String color) {
+        private final int RGB_color;
+
+        /**
+         * Constructor for the enum.
+         *  @param value Multiplier's int value.
+         */
+        Multiplier(int value, String color, int RGB_color) {
             this.value = value;
             this.color = color;
+            this.RGB_color = RGB_color;
         }
 
         /**
@@ -55,7 +59,9 @@ public class Square {
          *
          * @return Multiplier color code.
          */
-        public String getColor() {return color;}
+        public String getColor() {return color; }
+
+        public int getRGB_color() {return RGB_color; }
     }
 
     private int row;
