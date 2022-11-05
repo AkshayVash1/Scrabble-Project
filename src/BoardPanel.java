@@ -30,7 +30,7 @@ public class BoardPanel extends JPanel{
         cells = new JPanel[15][15];
 
         this.setSize(600,600);
-        this.setLayout(new GridLayout(15, 15));
+        this.setLayout(new GridLayout(cells.length, cells.length));
         this.setBorder(new LineBorder(Color.BLACK));
         this.addCells();
 
@@ -92,11 +92,11 @@ public class BoardPanel extends JPanel{
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setVerticalAlignment(SwingConstants.CENTER);
 
-        // if the square is not premium, set text as a blank space
+        // if the square is not premium, set label's text as a blank space
         if (square.getMultiplier().equals(Square.Multiplier.NONE)) {
             label.setText(" ");
         }
-        // if square is a premium, set the cell's label as the multiplier type
+        // if square is a premium, set label's text as the multiplier type
         else {
             label.setText(String.valueOf(square.getMultiplier()));
             label.setFont(new Font(Font.MONOSPACED, Font.BOLD,18));
