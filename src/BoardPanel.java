@@ -1,7 +1,3 @@
-import javax.swing.*;
-import javax.swing.border.LineBorder;
-import java.awt.*;
-
 /**
  * An instance of BoardPanel represents the state of the Scrabble board in the GUI.
  * The boardPanel gets updated following each valid play move.
@@ -11,7 +7,11 @@ import java.awt.*;
  * @version 0.0
  */
 
-public class BoardPanel extends JPanel{
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+
+public class BoardPanel extends JPanel {
 
     /**
      * Cells of the Scrabble board.
@@ -19,44 +19,24 @@ public class BoardPanel extends JPanel{
     private JPanel cells[][];
 
     /**
-     * Temporary frame to hold and test the BoardPanel, before adding the panel to the game's main GUI's frame.
-     */
-    JFrame boardFrame;
-
-    /**
      * Constructor for the class.
      */
     public BoardPanel() {
         cells = new JPanel[15][15];
 
-        this.setSize(600,600);
+        this.setSize(600, 600);
         this.setLayout(new GridLayout(cells.length, cells.length));
         this.setBorder(new LineBorder(Color.BLACK));
         this.addCells();
-
-        // create boardFrame
-        this.initializeBoardFrame();
-        boardFrame.add(this);
     }
 
-
-    /**
-     * Creates and initializes the temporary boardFrame which will contain BoardPanel.
-     */
-    private void initializeBoardFrame() {
-        boardFrame = new JFrame("Welcome to Scrabble!");
-        boardFrame.setSize(600,600);
-        boardFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        boardFrame.setVisible(true);
-        boardFrame.revalidate();
-    }
 
     /**
      * Creates and add the 15*15 JPanel cells, which hold labels indicating the square type
      */
     private void addCells() {
         for (int row = 1; row < 16; row++) {
-            for  (int col = 1; col < 16; col++) {
+            for (int col = 1; col < 16; col++) {
 
                 Square thisSquare = new Square(row, col);
 
@@ -81,7 +61,8 @@ public class BoardPanel extends JPanel{
 
 
     /**
-     * Creates a label for given square, marking the multiplier type for premium squares.
+     * Creates a label for given square, to indicate the multiplier type for premium squares as label text.
+     *
      * @param square
      * @return
      */
@@ -101,16 +82,11 @@ public class BoardPanel extends JPanel{
             // if square is the one at the centre of the board (game start square), set label text as a star
             if (square.isCentreSquare()) {
                 label.setIcon(new ImageIcon("src/star_icon.png"));
-            }
-            else {
+            } else {
                 label.setText(String.valueOf(square.getMultiplier()));
-                label.setFont(new Font(Font.MONOSPACED, Font.BOLD,18));
+                label.setFont(new Font(Font.MONOSPACED, Font.BOLD, 18));
             }
         }
         return label;
-    }
-
-    public static void main(String[] args) {
-        BoardPanel boardPanel = new BoardPanel();
     }
 }
