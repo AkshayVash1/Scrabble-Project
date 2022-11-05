@@ -1,8 +1,5 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.filechooser.FileView;
-import javax.swing.plaf.IconUIResource;
-import javax.xml.transform.stax.StAXResult;
 import java.awt.*;
 
 /**
