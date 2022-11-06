@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 
@@ -99,6 +100,11 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(PLAY)) {
+            try {
+                this.game.processCommand(new Command("play", " ", "8H"));
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
             this.game.nextPlayer();
             /**
              * Play the move set onto board
