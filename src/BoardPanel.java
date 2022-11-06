@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetListener;
 
-public class BoardPanel extends JPanel{
+public class BoardPanel extends JPanel implements ScrabbleView{
 
     private Game game;
 
@@ -27,6 +27,7 @@ public class BoardPanel extends JPanel{
      */
     public BoardPanel(Game game) {
         this.game = game;
+        this.game.addScrabbleView(this);
 
         cells = new JPanel[15][15];
         final int BOARD_SIZE = 600;
@@ -73,7 +74,7 @@ public class BoardPanel extends JPanel{
      */
     private JLabel createCellLabel(Square square) {
         JLabel label = new JLabel();
-        BoardDropTargetListener dtl = new BoardDropTargetListener(label, square.getStringCoordinates());
+        BoardDropTargetListener dtl = new BoardDropTargetListener(label, square.getStringCoordinates(), this.game);
 
         // center the label's alignment
         label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -95,5 +96,10 @@ public class BoardPanel extends JPanel{
             }
         }
         return label;
+    }
+
+    @Override
+    public void update(Player currentPlayer) {
+        //
     }
 }

@@ -101,7 +101,7 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(PLAY)) {
             try {
-                this.game.processCommand(new Command("play", " ", "8H"));
+                this.game.processCommand(new Command("play", " ", this.game.getStartingCoordinates()));
             } catch (FileNotFoundException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             }
@@ -118,6 +118,7 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
              */
             System.out.println("button10");
         } else if (e.getActionCommand().equals(PASS)) {
+            this.game.nextPlayer();
             /**
              * Pass Turn go to next player
              */
