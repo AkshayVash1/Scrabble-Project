@@ -6,6 +6,7 @@
 
 import javax.swing.text.View;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -19,12 +20,16 @@ public class Game {
     private boolean placementCheck;
     private List<ScrabbleView> views;
     private int activeCount;
+    private ArrayList<Character> removeTilesFromHand;
+    private boolean firstPlayInTurn;
 
     /**
      * Public constructor for class game.
      */
     public Game() throws FileNotFoundException {
         this.views = new ArrayList<>();
+        this.removeTilesFromHand= new ArrayList<>();
+        this.firstPlayInTurn = true;
 
         this.printRules();
         this.createPlayers("2");
@@ -53,6 +58,7 @@ public class Game {
 
     public void nextPlayer()
     {
+        this.removeTilesFromHand.clear();
         if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
             this.currentPlayer = this.playerList.get(0);
         }
@@ -60,7 +66,31 @@ public class Game {
             this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
         }
 
+        this.firstPlayInTurn = true;
         for(ScrabbleView v : this.views){v.update(this.currentPlayer);}
+    }
+
+    public void addToRemoveTilesFromHand(Character c)
+    {
+        this.removeTilesFromHand.add(c);
+        this.firstPlayInTurn = false;
+    }
+
+    public boolean getFirstPlayInTurn()
+    {
+        return this.firstPlayInTurn;
+    }
+
+    private String convertCharArrayListToString(ArrayList<Character> ar)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (Character c : ar)
+        {
+            sb.append(c);
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -93,16 +123,15 @@ public class Game {
     /**
      * Takes in a command from a given player and performs an action based on the command
      * @param command Contains the different parts of the command the user entered
-     * @param currentPlayer The current player playing their turn
      * @return returns true of false (Should be void)
      */
-    public boolean processCommand(Command command, Player currentPlayer) throws FileNotFoundException {
-        ArrayList<Character> removeTilesFromHand = new ArrayList<>();
+    public boolean processCommand(Command command) throws FileNotFoundException {
         List<Tile> addTilesToHand = new ArrayList<>();
         InHand inHand = null;
         placementCheck = true;
 
-        inHand = new InHand(command.getWordAttempt(), currentPlayer.getHand());
+        inHand = new InHand(convertCharArrayListToString(this.removeTilesFromHand), currentPlayer.getHand());
+        System.out.println(this.removeTilesFromHand + " HAND: " + currentPlayer.getHand().getHand().toString());
 
         String action = command.getAction();
 
@@ -113,6 +142,7 @@ public class Game {
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
                     bag.placeTiles(currentPlayer.exchange((ArrayList<Tile>) addTilesToHand,
                             removeTilesFromHand)); //only enter capital letters
+                    for(ScrabbleView v : this.views){v.update(this.currentPlayer);}
                 }
                 else {
                     System.out.println("All tiles not in hand");
@@ -150,6 +180,8 @@ public class Game {
                     System.out.println("All tiles not in hand");
                     return false;
                 }
+
+                for(ScrabbleView v : this.views){v.update(this.currentPlayer);}
                 break;
 
             case "shuffle":
@@ -280,7 +312,7 @@ public class Game {
                 }
                 flag = false;
 
-                this.processCommand(command, currentPlayer);
+                //this.processCommand(command, currentPlayer);
 
                 if (!command.getAction().equals("shuffle")) {;
                     if (!this.placementCheck) {
