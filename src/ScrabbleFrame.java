@@ -73,6 +73,7 @@ public class ScrabbleFrame extends JFrame {
     private void initializeFrame() {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setSize(FrameSize.WIDTH.getValue(), FrameSize.HEIGHT.getValue());
+        this.setLayout(new BorderLayout()); //todo revisit later
         this.setVisible(true);
         this.revalidate();
         //temp
