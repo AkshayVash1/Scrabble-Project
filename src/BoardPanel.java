@@ -13,6 +13,8 @@ import java.awt.*;
 
 public class BoardPanel extends JPanel {
 
+    private Game game;
+
     /**
      * Cells of the Scrabble board.
      */
@@ -21,9 +23,10 @@ public class BoardPanel extends JPanel {
     /**
      * Constructor for the class.
      */
-    public BoardPanel() {
-        cells = new JPanel[15][15];
+    public BoardPanel(Game game) {
+        this.game = game;
 
+        cells = new JPanel[15][15];
         final int BOARD_SIZE = 600;
         this.setPreferredSize(new Dimension(BOARD_SIZE, BOARD_SIZE));
         this.setLayout(new GridLayout(cells.length, cells.length));

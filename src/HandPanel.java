@@ -7,9 +7,11 @@ import java.util.ArrayList;
 public class HandPanel extends JPanel {
 
     private Player player;
+    private Game game;
 
-    public HandPanel()
+    public HandPanel(Game game)
     {
+        this.game = game;
         player = new Player(1);
         Tile t1 = new Tile("A", 1);
         Tile t2 = new Tile("B", 1);

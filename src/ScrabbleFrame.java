@@ -8,6 +8,7 @@
  */
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileNotFoundException;
 
 public class ScrabbleFrame extends JFrame {
 
@@ -40,27 +41,27 @@ public class ScrabbleFrame extends JFrame {
         }
     }
 
-
     /**
      * Constructor for the class.
      */
-    public ScrabbleFrame() {
+    public ScrabbleFrame() throws FileNotFoundException {
         super("Welcome to Scrabble!");
         this.initializeFrame();
-        this.initializePanels();
+        Game game = new Game();
+        this.initializePanels(game);
     }
 
 
     /**
      * Creates and adds to this frame all component panels of the GUI.
      */
-    private void initializePanels() {
+    private void initializePanels(Game game) {
         // adding the BoardPanel
-        BoardPanel boardPanel = new BoardPanel();
+        BoardPanel boardPanel = new BoardPanel(game);
         this.add(boardPanel);
-        HandPanel handPanel = new HandPanel();
+        HandPanel handPanel = new HandPanel(game);
         this.add(handPanel);
-        GameCommandPanel gameCommandPanel = new GameCommandPanel();
+        GameCommandPanel gameCommandPanel = new GameCommandPanel(game);
         this.add(gameCommandPanel);
 
         // todo add other panels
@@ -81,7 +82,7 @@ public class ScrabbleFrame extends JFrame {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         ScrabbleFrame gameFrame = new ScrabbleFrame();
     }
 }
