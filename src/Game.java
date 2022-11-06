@@ -4,6 +4,7 @@
  * @Version 1.0
  */
 
+import javax.swing.text.View;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +15,22 @@ public class Game {
     private Bag bag = new Bag();
     private Board board = new Board();
     private ArrayList<Player> playerList = new ArrayList<Player>();
+    private Player currentPlayer;
     private boolean placementCheck;
+    private List<ScrabbleView> views;
+    private int activeCount;
 
     /**
      * Public constructor for class game.
      */
     public Game() throws FileNotFoundException {
-        gameLoop();
+        this.views = new ArrayList<>();
+
+        this.printRules();
+        this.createPlayers("2");
+        this.activeCount = this.playerList.size();
+        this.currentPlayer = this.playerList.get(0);
+        for(ScrabbleView v : this.views){v.update(this.currentPlayer);}
     }
 
     /**
@@ -36,6 +46,22 @@ public class Game {
         }
     }
 
+    public void addScrabbleView(ScrabbleView sv)
+    {
+        this.views.add(sv);
+    }
+
+    public void nextPlayer()
+    {
+        if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
+            this.currentPlayer = this.playerList.get(0);
+        }
+        else {
+            this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+        }
+
+        for(ScrabbleView v : this.views){v.update(this.currentPlayer);}
+    }
 
     /**
      * Prints rules for the game
@@ -70,7 +96,7 @@ public class Game {
      * @param currentPlayer The current player playing their turn
      * @return returns true of false (Should be void)
      */
-    private boolean processCommand(Command command, Player currentPlayer) throws FileNotFoundException {
+    public boolean processCommand(Command command, Player currentPlayer) throws FileNotFoundException {
         ArrayList<Character> removeTilesFromHand = new ArrayList<>();
         List<Tile> addTilesToHand = new ArrayList<>();
         InHand inHand = null;
@@ -206,7 +232,7 @@ public class Game {
 
         GAME:
         do {
-            activeCount = this.playerList.size();;
+            activeCount = this.playerList.size();
 
             if (currentPlayer.getPoints() >= 50) {
                 System.out.println("Player " + currentPlayer.getPlayerNumber() + " wins with "

@@ -4,38 +4,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class HandPanel extends JPanel {
+public class HandPanel extends JPanel implements ScrabbleView {
 
     private Player player;
     private Game game;
 
     public HandPanel(Game game)
     {
-        this.game = game;
-        player = new Player(1);
-        Tile t1 = new Tile("A", 1);
-        Tile t2 = new Tile("B", 1);
-        Tile t3 = new Tile("C", 1);
-        Tile t4 = new Tile("D", 1);
-        Tile t5 = new Tile("E", 1);
-        Tile t6 = new Tile("F", 1);
-        Tile t7 = new Tile("G", 1);
-        ArrayList<Tile> t = new ArrayList<>();
-        t.add(t1);
-        t.add(t2);
-        t.add(t3);
-        t.add(t4);
-        t.add(t5);
-        t.add(t6);
-        t.add(t7);
-
-        this.player.initializePlayerHand(t);
-        initializeHand();
+        this.player = new Player(10);
+        refreshHand();
+        game.addScrabbleView(this);
     }
 
-    private void initializeHand ()
+    private void refreshHand()
     {
         DragMouseAdapter listener = new DragMouseAdapter();
+        this.removeAll();
 
         for (Tile t : this.player.getHand().getHand())
         {
@@ -49,6 +33,12 @@ public class HandPanel extends JPanel {
             p.add(l);
             this.add(p);
         }
+    }
+
+    @Override
+    public void update(Player currentPlayer) {
+        this.player = currentPlayer;
+        refreshHand();
     }
 
     //Possible to be moved to controller

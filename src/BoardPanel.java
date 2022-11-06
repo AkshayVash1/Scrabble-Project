@@ -11,7 +11,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-public class BoardPanel extends JPanel {
+public class BoardPanel extends JPanel{
 
     private Game game;
 
