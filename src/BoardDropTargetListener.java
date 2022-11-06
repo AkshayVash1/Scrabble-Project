@@ -11,9 +11,11 @@ public class BoardDropTargetListener extends DropTargetAdapter {
 
     private final DropTarget dropTarget;
     private final JLabel label;
+    private final String boardCoordinates;
 
-    public BoardDropTargetListener(JLabel label) {
+    public BoardDropTargetListener(JLabel label, String boardCoordinates ) {
         this.label = label;
+        this.boardCoordinates = boardCoordinates;
 
         dropTarget = new DropTarget(label, DnDConstants.ACTION_COPY,
                 this, true, null);
@@ -29,6 +31,7 @@ public class BoardDropTargetListener extends DropTargetAdapter {
 
                 dropTargetDropEvent.acceptDrop(DnDConstants.ACTION_COPY);
                 this.label.setText(tile.getLetter());
+                System.out.println(boardCoordinates);
                 dropTargetDropEvent.dropComplete(true);
                 return;
             }
