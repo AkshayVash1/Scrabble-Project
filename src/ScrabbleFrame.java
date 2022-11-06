@@ -58,6 +58,8 @@ public class ScrabbleFrame extends JFrame {
         // adding the BoardPanel
         BoardPanel boardPanel = new BoardPanel();
         this.add(boardPanel);
+        HandPanel handPanel = new HandPanel();
+        this.add(handPanel);
 
         // todo add other panels
 
@@ -74,6 +76,8 @@ public class ScrabbleFrame extends JFrame {
         this.setLayout(new BorderLayout()); //todo revisit later
         this.setVisible(true);
         this.revalidate();
+        //temp
+        this.setLayout(new GridLayout(2,1));
     }
 
 
