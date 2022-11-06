@@ -22,6 +22,7 @@ public class Game {
     private int activeCount;
     private ArrayList<Character> removeTilesFromHand;
     private boolean firstPlayInTurn;
+    private String startingCoordinates;
 
     /**
      * Public constructor for class game.
@@ -81,6 +82,16 @@ public class Game {
         return this.firstPlayInTurn;
     }
 
+    public void setStartingCoordinates(String startingCoordinates)
+    {
+        this.startingCoordinates = startingCoordinates;
+    }
+
+    public String getStartingCoordinates()
+    {
+        return this.startingCoordinates;
+    }
+
     private String convertCharArrayListToString(ArrayList<Character> ar)
     {
         StringBuilder sb = new StringBuilder();
@@ -132,6 +143,7 @@ public class Game {
 
         inHand = new InHand(convertCharArrayListToString(this.removeTilesFromHand), currentPlayer.getHand());
         System.out.println(this.removeTilesFromHand + " HAND: " + currentPlayer.getHand().getHand().toString());
+        System.out.println(command.getPlacementAttempt() + " " + this.getStartingCoordinates());
 
         String action = command.getAction();
 

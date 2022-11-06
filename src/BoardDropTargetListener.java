@@ -12,10 +12,12 @@ public class BoardDropTargetListener extends DropTargetAdapter {
     private final DropTarget dropTarget;
     private final JLabel label;
     private final String boardCoordinates;
+    private Game game;
 
-    public BoardDropTargetListener(JLabel label, String boardCoordinates ) {
+    public BoardDropTargetListener(JLabel label, String boardCoordinates, Game game ) {
         this.label = label;
         this.boardCoordinates = boardCoordinates;
+        this.game = game;
 
         dropTarget = new DropTarget(label, DnDConstants.ACTION_COPY,
                 this, true, null);
@@ -31,6 +33,14 @@ public class BoardDropTargetListener extends DropTargetAdapter {
 
                 dropTargetDropEvent.acceptDrop(DnDConstants.ACTION_COPY);
                 this.label.setText(tile.getLetter());
+                if (this.game.getFirstPlayInTurn() == true)
+                {
+                    System.out.println("FIRST");
+                    this.game.setStartingCoordinates(this.boardCoordinates);
+                }
+
+                this.game.addToRemoveTilesFromHand(tile.getLetter().charAt(0));
+
                 System.out.println(boardCoordinates);
                 dropTargetDropEvent.dropComplete(true);
                 return;
