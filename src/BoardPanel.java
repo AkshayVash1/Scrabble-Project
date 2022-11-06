@@ -73,6 +73,7 @@ public class BoardPanel extends JPanel {
         // center the label's alignment
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setVerticalAlignment(SwingConstants.CENTER);
+        label.setTransferHandler(new TransferHandler("text"));
 
         // if the square is not premium, set label's text as a blank space
         if (square.getMultiplier().equals(Square.Multiplier.NONE)) {
