@@ -7,6 +7,7 @@
  * @version 0.0
  */
 import javax.swing.*;
+import java.awt.*;
 
 public class ScrabbleFrame extends JFrame {
 
@@ -57,6 +58,8 @@ public class ScrabbleFrame extends JFrame {
         // adding the BoardPanel
         BoardPanel boardPanel = new BoardPanel();
         this.add(boardPanel);
+        HandPanel handPanel = new HandPanel();
+        this.add(handPanel);
 
         // todo add other panels
 
@@ -72,6 +75,8 @@ public class ScrabbleFrame extends JFrame {
         this.setSize(FrameSize.WIDTH.getValue(), FrameSize.HEIGHT.getValue());
         this.setVisible(true);
         this.revalidate();
+        //temp
+        this.setLayout(new GridLayout(2,1));
     }
 
 
