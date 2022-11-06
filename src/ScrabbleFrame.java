@@ -60,6 +60,8 @@ public class ScrabbleFrame extends JFrame {
         this.add(boardPanel);
         HandPanel handPanel = new HandPanel();
         this.add(handPanel);
+        GameCommandPanel gameCommandPanel = new GameCommandPanel();
+        this.add(gameCommandPanel);
 
         // todo add other panels
 
