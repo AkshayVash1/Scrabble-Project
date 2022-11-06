@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 
-public class GameCommandPanel extends JPanel implements ActionListener {
+public class GameCommandPanel extends JPanel implements ActionListener, ScrabbleView {
     public static final String PLAY = "Button:" + 0 + ":" + 0;
     public static final String EXCHANGE_BUTTON = "Button:" + 0 + ":" + 1;
     public static final String SHUFFLE = "Button:" + 1 + ":" + 0;
@@ -25,7 +25,9 @@ public class GameCommandPanel extends JPanel implements ActionListener {
 
     public GameCommandPanel(Game game) {
         this.game = game;
-        createHand();
+        this.game.addScrabbleView(this);
+        this.player = new Player(10);
+        this.hypotheticalHand = this.player.getHand().getHand();
         JFrame hypotheticalFrame = new JFrame(); //Temp Frame
         hypotheticalFrame.setSize(500, 300);
         hypotheticalFrame.add(initializeGameCommands());
@@ -33,25 +35,8 @@ public class GameCommandPanel extends JPanel implements ActionListener {
         initializeExchangeFrame();
     }
 
-    private void createHand() {
-        player = new Player(1);
-        Tile t1 = new Tile("A", 1);
-        Tile t2 = new Tile("B", 1);
-        Tile t3 = new Tile("C", 1);
-        Tile t4 = new Tile("D", 1);
-        Tile t5 = new Tile("E", 1);
-        Tile t6 = new Tile("F", 1);
-        Tile t7 = new Tile("G", 1);
-        hypotheticalHand.add(t1);
-        hypotheticalHand.add(t2);
-        hypotheticalHand.add(t3);
-        hypotheticalHand.add(t4);
-        hypotheticalHand.add(t5);
-        hypotheticalHand.add(t6);
-        hypotheticalHand.add(t7);
-    }
-
     private JPanel initializeGameCommands() {
+        this.hypotheticalHand = this.player.getHand().getHand();
         JPanel gameButtonsPanel = new JPanel(new GridLayout(2, 2));
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
@@ -71,7 +56,11 @@ public class GameCommandPanel extends JPanel implements ActionListener {
 
     private void initializeExchangeFrame() {
         int counter = 0;
-        for (Tile tile : hypotheticalHand) {
+        this.hypotheticalHand = this.player.getHand().getHand();
+
+        tilePanel.removeAll();
+        this.resetButtonPanel.removeAll();
+        for (Tile tile : this.hypotheticalHand) {
             JToggleButton tileButton = new JToggleButton(tile.getLetter());
             tileButton.setActionCommand("Letter:" + counter);
             tileButton.setName(String.valueOf(hypotheticalHand.get(counter)));
@@ -91,6 +80,8 @@ public class GameCommandPanel extends JPanel implements ActionListener {
     }
 
     private void processToggleButtonAction(ActionEvent e) {
+        this.hypotheticalHand = this.player.getHand().getHand();
+
         JToggleButton button = (JToggleButton) e.getSource();
         final String[] split = button.getActionCommand().split(":");
         int col = Integer.parseInt(split[1]);
@@ -133,6 +124,12 @@ public class GameCommandPanel extends JPanel implements ActionListener {
              */
         }
 
+    }
+
+    @Override
+    public void update(Player currentPlayer) {
+        this.player = currentPlayer;
+        initializeExchangeFrame();
     }
 }
 
