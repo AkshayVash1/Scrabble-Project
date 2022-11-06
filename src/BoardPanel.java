@@ -65,7 +65,6 @@ public class BoardPanel extends JPanel{
         }
     }
 
-
     /**
      * Creates a label for given square, to indicate the multiplier type for premium squares as label text.
      *
@@ -74,7 +73,7 @@ public class BoardPanel extends JPanel{
      */
     private JLabel createCellLabel(Square square) {
         JLabel label = new JLabel();
-        BoardDropTargetListener dtl = new BoardDropTargetListener(label);
+        BoardDropTargetListener dtl = new BoardDropTargetListener(label, square.getStringCoordinates());
 
         // center the label's alignment
         label.setHorizontalAlignment(SwingConstants.CENTER);
