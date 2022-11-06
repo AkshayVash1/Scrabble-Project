@@ -21,7 +21,10 @@ public class GameCommandPanel extends JPanel implements ActionListener {
     ArrayList<JToggleButton> tileButtons = new ArrayList<>();
     ArrayList<Tile> tilesToExchange = new ArrayList<>();
 
-    public GameCommandPanel() {
+    private Game game;
+
+    public GameCommandPanel(Game game) {
+        this.game = game;
         createHand();
         JFrame hypotheticalFrame = new JFrame(); //Temp Frame
         hypotheticalFrame.setSize(500, 300);
@@ -129,10 +132,6 @@ public class GameCommandPanel extends JPanel implements ActionListener {
              */
         }
 
-    }
-
-    public static void main(String[] args) {
-        GameCommandPanel test1 = new GameCommandPanel();
     }
 }
 

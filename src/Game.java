@@ -19,7 +19,9 @@ public class Game {
     /**
      * Public constructor for class game.
      */
-    public Game() {}
+    public Game() throws FileNotFoundException {
+        gameLoop();
+    }
 
     /**
      * Creates number of players based on user input
@@ -153,13 +155,12 @@ public class Game {
     }
 
     /**
-     * Main method
-     * @param args
+     * gameLoop()
      * @throws FileNotFoundException
      */
-    public static void main(String[] args) throws FileNotFoundException {
+    public void gameLoop() throws FileNotFoundException {
 
-        Game game = new Game();
+        //Game game = new Game();
         Scanner scanner = new Scanner(System.in);
         String userInput;
         Player currentPlayer;
@@ -169,13 +170,13 @@ public class Game {
 
         boolean running = true;
 
-        game.printRules();
+        this.printRules();
 
         while(!flag) {
             System.out.println("Type number of players (2, 3, or 4):");
             userInput = scanner.nextLine();
             if (userInput.equals("2") | userInput.equals("3") | userInput.equals("4") ) {
-                game.createPlayers(userInput);
+                this.createPlayers(userInput);
                 flag = true;
             }
             else {
@@ -199,20 +200,20 @@ public class Game {
             }
         }
 
-        currentPlayer = game.playerList.get(0);
+        currentPlayer = this.playerList.get(0);
         Command command = null;
         flag = false;
 
         GAME:
         do {
-            activeCount = game.playerList.size();;
+            activeCount = this.playerList.size();;
 
             if (currentPlayer.getPoints() >= 50) {
                 System.out.println("Player " + currentPlayer.getPlayerNumber() + " wins with "
                         + currentPlayer.getPoints()+ "!");
             }
-            for (int i = 0; i < game.playerList.size(); i++) {
-                if (!game.playerList.get(i).isActive()) {
+            for (int i = 0; i < this.playerList.size(); i++) {
+                if (!this.playerList.get(i).isActive()) {
                     activeCount--;
                 }
             }
@@ -222,10 +223,10 @@ public class Game {
                 running = false;
             }
             else if (!currentPlayer.isActive()) {
-                currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber() + 1);
+                currentPlayer = this.playerList.get(currentPlayer.getPlayerNumber() + 1);
             }
             else {
-                game.getBoard().printBoard();
+                this.getBoard().printBoard();
 
                 System.out.println("It is Player " + (currentPlayer.getPlayerNumber() + 1) + "'s turn");
                 System.out.println("Current Player Points: " + currentPlayer.getPoints());
@@ -253,17 +254,17 @@ public class Game {
                 }
                 flag = false;
 
-                game.processCommand(command, currentPlayer);
+                this.processCommand(command, currentPlayer);
 
                 if (!command.getAction().equals("shuffle")) {;
-                    if (!game.placementCheck) {
+                    if (!this.placementCheck) {
                         System.out.println("Try again");
                     }
-                    if (currentPlayer.getPlayerNumber() == (game.playerList.size()-1)) {
-                        currentPlayer = game.playerList.get(0);
+                    if (currentPlayer.getPlayerNumber() == (this.playerList.size()-1)) {
+                        currentPlayer = this.playerList.get(0);
                     }
                     else {
-                        currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber()+1);
+                        currentPlayer = this.playerList.get(currentPlayer.getPlayerNumber()+1);
                     }
                 }
             }
