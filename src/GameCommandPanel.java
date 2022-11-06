@@ -108,6 +108,7 @@ public class GameCommandPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(PLAY)) {
+            this.game.nextPlayer();
             /**
              * Play the move set onto board
              */

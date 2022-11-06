@@ -44,7 +44,7 @@ public class ScrabbleFrame extends JFrame {
     /**
      * Constructor for the class.
      */
-    public ScrabbleFrame() throws FileNotFoundException {
+    public ScrabbleFrame() throws FileNotFoundException{
         super("Welcome to Scrabble!");
         this.initializeFrame();
         Game game = new Game();
@@ -63,6 +63,8 @@ public class ScrabbleFrame extends JFrame {
         this.add(handPanel);
         GameCommandPanel gameCommandPanel = new GameCommandPanel(game);
         this.add(gameCommandPanel);
+        PlayerDisplayPanel playerDisplayPanel = new PlayerDisplayPanel(game);
+        this.add(playerDisplayPanel);
 
         // todo add other panels
 
