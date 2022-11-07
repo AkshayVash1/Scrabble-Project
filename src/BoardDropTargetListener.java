@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
@@ -16,6 +17,8 @@ public class BoardDropTargetListener extends DropTargetAdapter {
 
     public BoardDropTargetListener(JLabel label, String boardCoordinates, Game game ) {
         this.label = label;
+
+
         this.boardCoordinates = boardCoordinates;
         this.game = game;
 
@@ -33,6 +36,7 @@ public class BoardDropTargetListener extends DropTargetAdapter {
 
                 dropTargetDropEvent.acceptDrop(DnDConstants.ACTION_COPY);
                 this.label.setText(tile.getLetter());
+                this.label.setForeground(Color.black);
                 if (this.game.getFirstPlayInTurn() == true)
                 {
                     System.out.println("FIRST");

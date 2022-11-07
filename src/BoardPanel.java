@@ -79,7 +79,7 @@ public class BoardPanel extends JPanel implements ScrabbleView{
         // center the label's alignment
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setVerticalAlignment(SwingConstants.CENTER);
-        label.setFont(new Font(Font.MONOSPACED, Font.BOLD, 19));
+        label.setFont(new Font(Font.MONOSPACED, Font.BOLD, 18));
         label.setTransferHandler(new TransferHandler("text"));
 
         // if the square is not premium, set label's text as a blank space
@@ -90,9 +90,10 @@ public class BoardPanel extends JPanel implements ScrabbleView{
         else {
             // if square is the one at the centre of the board (game start square), set label text as a star
             if (square.isCentreSquare()) {
-                label.setIcon(new ImageIcon("src/star_icon.png"));
+                //label.setIcon(new ImageIcon("src/star_icon.png"));
+                label.setText("*");
             } else {
-                //label.setForeground(Color.white);
+                label.setForeground(Color.white);
                 label.setText(String.valueOf(square.getMultiplier()));
             }
         }

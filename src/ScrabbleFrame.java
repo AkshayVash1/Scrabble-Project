@@ -13,33 +13,11 @@ import java.io.FileNotFoundException;
 public class ScrabbleFrame extends JFrame {
 
     /**
-     * FrameSize enum contains constant values for the width and height of the frame.
+     * Dimensions of the frame.
      */
-    public enum FrameSize {
-        WIDTH(600),
-        HEIGHT(600);
+    private final int frameWidth = 600;
+    private final int frameHeight = 600;
 
-        /**
-         * Value representing the width and length of the frame.
-         */
-        private final int value;
-
-        /**
-         * Constructor for the enum.
-         * @param value
-         */
-        FrameSize(int value) {
-            this.value = value;
-        }
-
-        /**
-         * Returns the length value of FrameSize.
-         * @return the length value of width/height.
-         */
-        public int getValue() {
-            return value;
-        }
-    }
 
     /**
      * Constructor for the class.
@@ -63,8 +41,8 @@ public class ScrabbleFrame extends JFrame {
         this.add(handPanel);
         GameCommandPanel gameCommandPanel = new GameCommandPanel(game);
         this.add(gameCommandPanel);
-        PlayerDisplayPanel playerDisplayPanel = new PlayerDisplayPanel(game);
-        this.add(playerDisplayPanel);
+        //PlayerDisplayPanel playerDisplayPanel = new PlayerDisplayPanel(game);
+        //this.add(playerDisplayPanel);
 
         // todo add other panels
 
@@ -77,7 +55,7 @@ public class ScrabbleFrame extends JFrame {
      */
     private void initializeFrame() {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setSize(FrameSize.WIDTH.getValue(), FrameSize.HEIGHT.getValue());
+        this.setSize(frameWidth, frameHeight);
         this.setLayout(new GridLayout(2, 2)); //todo revisit later
         this.setVisible(true);
         this.revalidate();
