@@ -79,12 +79,12 @@ public class BoardPanel extends JPanel implements ScrabbleView{
         // center the label's alignment
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setVerticalAlignment(SwingConstants.CENTER);
+        label.setFont(new Font(Font.MONOSPACED, Font.BOLD, 19));
         label.setTransferHandler(new TransferHandler("text"));
 
         // if the square is not premium, set label's text as a blank space
         if (square.getMultiplier().equals(Square.Multiplier.NONE)) {
             label.setText(" ");
-            label.setFont(new Font(Font.MONOSPACED, Font.BOLD, 19));
         }
         // if square is a premium, set label's text as the multiplier type
         else {
@@ -92,8 +92,8 @@ public class BoardPanel extends JPanel implements ScrabbleView{
             if (square.isCentreSquare()) {
                 label.setIcon(new ImageIcon("src/star_icon.png"));
             } else {
+                //label.setForeground(Color.white);
                 label.setText(String.valueOf(square.getMultiplier()));
-                label.setFont(new Font(Font.MONOSPACED, Font.BOLD, 19));
             }
         }
         return label;
