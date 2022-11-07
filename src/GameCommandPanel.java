@@ -29,10 +29,12 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
         this.game.addScrabbleView(this);
         this.player = new Player(10);
         this.hypotheticalHand = this.player.getHand().getHand();
-        JFrame hypotheticalFrame = new JFrame(); //Temp Frame
-        hypotheticalFrame.setSize(500, 300);
-        hypotheticalFrame.add(initializeGameCommands());
-        hypotheticalFrame.setVisible(true);
+        //JFrame hypotheticalFrame = new JFrame(); //Temp Frame
+        //hypotheticalFrame.setSize(500, 300);
+        //hypotheticalFrame.add(initializeGameCommands());
+        //hypotheticalFrame.setVisible(true);
+        this.setPreferredSize(new Dimension(500,300));
+        this.add(initializeGameCommands());
         initializeExchangeFrame();
     }
 
@@ -137,6 +139,7 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
     public void update(Player currentPlayer) {
         this.player = currentPlayer;
         initializeExchangeFrame();
+        this.revalidate();
     }
 }
 
