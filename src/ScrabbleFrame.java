@@ -41,7 +41,7 @@ public class ScrabbleFrame extends JFrame {
         //this.setLayout(new GridLayout(2,1)); //todo revisit later
         this.setLayout(new BorderLayout()); //todo revisit later
         this.setVisible(true);
-        //this.setResizable(false);
+        this.setResizable(false);
         //this.revalidate();
     }
 
