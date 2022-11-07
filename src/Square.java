@@ -16,7 +16,7 @@ public class Square {
      * Multiplier type for premium squares of the board.
      */
     public enum Multiplier {
-        DL(2, "\033[46m", 0XADDFB3),    // Double Letter, multiplies by 2, background pale green
+        DL(2, "\033[46m", 0X8DC9AA),    // Double Letter, multiplies by 2, background pale green
         TL(3, "\033[46m", 0X80A4FF),    // Triple Letter, multiplies by 3, background color blue
         DW(2, "\033[46m", 0XC6A1CF),    // Double Word, multiplies by 2, background color purple
         TW(3, "\033[46m", 0XF08080),    // Triple Word, multiplies by 3, background color red
@@ -35,16 +35,16 @@ public class Square {
         /**
          * Print RGB color value corresponding to Multiplier's name.
          */
-        private final int RGB_color;
+        private final int HEX_color;
 
         /**
          * Constructor for the enum.
          *  @param value Multiplier's int value.
          */
-        Multiplier(int value, String color, int RGB_color) {
+        Multiplier(int value, String color, int HEX_color) {
             this.value = value;
             this.color = color;
-            this.RGB_color = RGB_color;
+            this.HEX_color = HEX_color;
         }
 
         /**
@@ -61,7 +61,7 @@ public class Square {
          */
         public String getColor() {return color; }
 
-        public int getRGB_color() {return RGB_color; }
+        public int getRGB_color() {return HEX_color; }
     }
 
     private int row;
