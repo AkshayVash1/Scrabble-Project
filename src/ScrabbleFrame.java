@@ -7,39 +7,19 @@
  * @version 0.0
  */
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.io.FileNotFoundException;
+import java.net.NoRouteToHostException;
 
 public class ScrabbleFrame extends JFrame {
 
     /**
-     * FrameSize enum contains constant values for the width and height of the frame.
+     * Dimensions of the frame.
      */
-    public enum FrameSize {
-        WIDTH(600),
-        HEIGHT(600);
+    private final int frameWidth = 600;
+    private final int frameHeight = 1000;
 
-        /**
-         * Value representing the width and length of the frame.
-         */
-        private final int value;
-
-        /**
-         * Constructor for the enum.
-         * @param value
-         */
-        FrameSize(int value) {
-            this.value = value;
-        }
-
-        /**
-         * Returns the length value of FrameSize.
-         * @return the length value of width/height.
-         */
-        public int getValue() {
-            return value;
-        }
-    }
 
     /**
      * Constructor for the class.
@@ -53,33 +33,44 @@ public class ScrabbleFrame extends JFrame {
 
 
     /**
-     * Creates and adds to this frame all component panels of the GUI.
-     */
-    private void initializePanels(Game game) {
-        // adding the BoardPanel
-        BoardPanel boardPanel = new BoardPanel(game);
-        this.add(boardPanel);
-        HandPanel handPanel = new HandPanel(game);
-        this.add(handPanel);
-        GameCommandPanel gameCommandPanel = new GameCommandPanel(game);
-        this.add(gameCommandPanel);
-        PlayerDisplayPanel playerDisplayPanel = new PlayerDisplayPanel(game);
-        this.add(playerDisplayPanel);
-
-        // todo add other panels
-
-        this.revalidate();
-    }
-
-
-    /**
      * Initializes this frame.
      */
     private void initializeFrame() {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setSize(FrameSize.WIDTH.getValue(), FrameSize.HEIGHT.getValue());
-        this.setLayout(new GridLayout(2, 2)); //todo revisit later
+        this.setSize(frameWidth, frameHeight);
+        //this.setLayout(new GridLayout(2,1)); //todo revisit later
+        this.setLayout(new BorderLayout()); //todo revisit later
         this.setVisible(true);
+        this.setResizable(false);
+        //this.revalidate();
+    }
+
+
+    /**
+     * Creates and adds to this frame all component panels of the GUI.
+     */
+    private void initializePanels(Game game) {
+        // adding the BoardPanel
+
+        BoardPanel boardPanel = new BoardPanel(game);
+        this.add(boardPanel, BorderLayout.NORTH);
+
+        HandPanel handPanel = new HandPanel(game);
+        GameCommandPanel gameCommandPanel = new GameCommandPanel(game);
+
+        // southPanel contains handPanel and gameCommandPanel
+        JPanel southPanel = new JPanel();
+        this.add(southPanel, BorderLayout.SOUTH);
+
+        // adding handPanel and gameCommandPanel to southPanel instead of adding to the frame directly
+        southPanel.add(handPanel, BorderLayout.WEST);
+        southPanel.add(gameCommandPanel,BorderLayout.CENTER);
+        //this.add(handPanel);
+        //this.add(gameCommandPanel);
+
+        //PlayerDisplayPanel playerDisplayPanel = new PlayerDisplayPanel(game);
+        //this.add(playerDisplayPanel);
+
         this.revalidate();
     }
 
