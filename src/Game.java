@@ -36,7 +36,7 @@ public class Game {
         this.createPlayers("2");
         this.activeCount = this.playerList.size();
         this.currentPlayer = this.playerList.get(0);
-        for(ScrabbleView v : this.views){v.update(this.currentPlayer);}
+        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
     }
 
     /**
@@ -68,7 +68,7 @@ public class Game {
         }
 
         this.firstPlayInTurn = true;
-        for(ScrabbleView v : this.views){v.update(this.currentPlayer);}
+        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
     }
 
     public void addToRemoveTilesFromHand(Character c)
@@ -85,6 +85,28 @@ public class Game {
     public void setStartingCoordinates(String startingCoordinates)
     {
         this.startingCoordinates = startingCoordinates;
+    }
+
+    public void changeStartingCoordinatesToVertical()
+    {
+        String num = " ";
+        char letter = ' ';
+        if (this.startingCoordinates.length() == 3) {
+            num = startingCoordinates.substring(0, 2);
+            letter = this.startingCoordinates.charAt(2);
+        }
+        else
+        {
+            num =startingCoordinates.substring(0, 1);
+            letter = this.startingCoordinates.charAt(1);
+
+        }
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(letter);
+        sb.append(num);
+
+        this.startingCoordinates = sb.toString();
     }
 
     public String getStartingCoordinates()
@@ -154,7 +176,7 @@ public class Game {
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
                     bag.placeTiles(currentPlayer.exchange((ArrayList<Tile>) addTilesToHand,
                             removeTilesFromHand)); //only enter capital letters
-                    for(ScrabbleView v : this.views){v.update(this.currentPlayer);}
+                    for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
                 }
                 else {
                     System.out.println("All tiles not in hand");
@@ -193,7 +215,7 @@ public class Game {
                     return false;
                 }
 
-                for(ScrabbleView v : this.views){v.update(this.currentPlayer);}
+                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
                 break;
 
             case "shuffle":

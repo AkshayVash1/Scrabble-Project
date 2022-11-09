@@ -37,15 +37,26 @@ public class BoardDropTargetListener extends DropTargetAdapter {
                 dropTargetDropEvent.acceptDrop(DnDConstants.ACTION_COPY);
                 this.label.setText(tile.getLetter());
                 this.label.setForeground(Color.black);
+
                 if (this.game.getFirstPlayInTurn() == true)
                 {
-                    System.out.println("FIRST");
                     this.game.setStartingCoordinates(this.boardCoordinates);
                 }
 
-                this.game.addToRemoveTilesFromHand(tile.getLetter().charAt(0));
+                System.out.println("INITIAL " +this.game.getStartingCoordinates().charAt(1) + " " +  boardCoordinates.charAt(1));
+
+                if ((this.game.getFirstPlayInTurn() == false) &&
+                        (this.game.getStartingCoordinates().charAt((this.game.getStartingCoordinates().length()
+                                == 3) ? 2 : 1) == boardCoordinates.charAt((boardCoordinates.length() == 3) ? 2: 1)))
+                {
+                    this.game.changeStartingCoordinatesToVertical();
+                    System.out.println(game.getStartingCoordinates());
+                }
 
                 System.out.println(boardCoordinates);
+
+                this.game.addToRemoveTilesFromHand(tile.getLetter().charAt(0));
+
                 dropTargetDropEvent.dropComplete(true);
                 return;
             }

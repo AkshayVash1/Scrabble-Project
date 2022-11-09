@@ -45,7 +45,7 @@ public class HandPanel extends JPanel implements ScrabbleView {
     }
 
     @Override
-    public void update(Player currentPlayer) {
+    public void update(Player currentPlayer, Board board) {
         this.player = currentPlayer;
         refreshHand();
     }

@@ -1,4 +1,4 @@
 public interface ScrabbleView {
 
-    void update(Player currentPlayer);
+    void update(Player currentPlayer, Board board);
 }

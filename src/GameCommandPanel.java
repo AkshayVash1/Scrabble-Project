@@ -136,7 +136,7 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
     }
 
     @Override
-    public void update(Player currentPlayer) {
+    public void update(Player currentPlayer, Board board) {
         this.player = currentPlayer;
         initializeExchangeFrame();
         this.revalidate();
