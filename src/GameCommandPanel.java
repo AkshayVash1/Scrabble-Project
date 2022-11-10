@@ -112,7 +112,6 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
             /**
              * Play the move set onto board
              */
-            System.out.println("button00");
         } else if (e.getActionCommand().equals(EXCHANGE_BUTTON)) {
             exchangeFrame.setVisible(true);
         } else if (e.getActionCommand().equals(SHUFFLE)) {
@@ -124,13 +123,11 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
             /**
              * Shuffle Hand change order of tiles within hand
              */
-            System.out.println("button10");
         } else if (e.getActionCommand().equals(PASS)) {
             this.game.nextPlayer();
             /**
              * Pass Turn go to next player
              */
-            System.out.println("button11");
         } else if (e.getActionCommand().contains("Letter")) {
             processToggleButtonAction(e);
         } else if (e.getActionCommand().contains(EXCHANGE_COMMAND)) {

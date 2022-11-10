@@ -26,6 +26,11 @@ public class BoardDropTargetListener extends DropTargetAdapter {
                 this, true, null);
     }
 
+    private char determineCharacterSwap(String boardCoordinates)
+    {
+        return boardCoordinates.charAt((boardCoordinates.length() == 3) ? 2 : 1);
+    }
+
     @Override
     public void drop(DropTargetDropEvent dropTargetDropEvent) {
         try {
@@ -43,17 +48,12 @@ public class BoardDropTargetListener extends DropTargetAdapter {
                     this.game.setStartingCoordinates(this.boardCoordinates);
                 }
 
-                System.out.println("INITIAL " +this.game.getStartingCoordinates().charAt(1) + " " +  boardCoordinates.charAt(1));
-
                 if ((this.game.getFirstPlayInTurn() == false) &&
-                        (this.game.getStartingCoordinates().charAt((this.game.getStartingCoordinates().length()
-                                == 3) ? 2 : 1) == boardCoordinates.charAt((boardCoordinates.length() == 3) ? 2: 1)))
+                        (determineCharacterSwap(this.game.getStartingCoordinates())
+                                == determineCharacterSwap(this.boardCoordinates)))
                 {
                     this.game.changeStartingCoordinatesToVertical();
-                    System.out.println(game.getStartingCoordinates());
                 }
-
-                System.out.println(boardCoordinates);
 
                 this.game.addToRemoveTilesFromHand(tile.getLetter().charAt(0));
 
