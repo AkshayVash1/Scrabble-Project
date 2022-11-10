@@ -21,6 +21,7 @@ public class Game {
     private List<ScrabbleView> views;
     private int activeCount;
     private ArrayList<Character> removeTilesFromHand;
+    private ArrayList<Character> exchangeTilesFromHand;
     private boolean firstPlayInTurn;
     private String startingCoordinates;
 
@@ -30,6 +31,7 @@ public class Game {
     public Game() throws FileNotFoundException {
         this.views = new ArrayList<>();
         this.removeTilesFromHand= new ArrayList<>();
+        this.exchangeTilesFromHand = new ArrayList<>();
         this.firstPlayInTurn = true;
 
         this.printRules();
@@ -77,6 +79,26 @@ public class Game {
         this.firstPlayInTurn = false;
     }
 
+    public void addToExchangeTilesFromHand(Character c)
+    {
+        this.exchangeTilesFromHand.add(c);
+    }
+
+    public void removeFromExchangeTilesFromHand(Character c)
+    {
+        this.exchangeTilesFromHand.remove(c);
+    }
+
+    public void clearRemoveFromExchangeTilesFromHand()
+    {
+        this.exchangeTilesFromHand.clear();
+    }
+
+    public ArrayList<Character> getExchangeTilesFromHand()
+    {
+        return this.exchangeTilesFromHand;
+    }
+
     public boolean getFirstPlayInTurn()
     {
         return this.firstPlayInTurn;
@@ -114,7 +136,7 @@ public class Game {
         return this.startingCoordinates;
     }
 
-    private String convertCharArrayListToString(ArrayList<Character> ar)
+    public static String convertCharArrayListToString(ArrayList<Character> ar)
     {
         StringBuilder sb = new StringBuilder();
 
@@ -163,28 +185,28 @@ public class Game {
         InHand inHand = null;
         placementCheck = true;
 
-        inHand = new InHand(convertCharArrayListToString(this.removeTilesFromHand), currentPlayer.getHand());
-        System.out.println(this.removeTilesFromHand + " HAND: " + currentPlayer.getHand().getHand().toString());
-        System.out.println(command.getPlacementAttempt() + " " + this.getStartingCoordinates());
-
         String action = command.getAction();
 
         switch (action) {
             case "exchange":
+                inHand = new InHand(convertCharArrayListToString(this.exchangeTilesFromHand), currentPlayer.getHand());
+
                 if (inHand.wordInHand()) {
-                    removeTilesFromHand = inHand.wordToList();
-                    addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
+                    this.exchangeTilesFromHand = inHand.wordToList();
+                    addTilesToHand = this.bag.removeTiles(this.exchangeTilesFromHand.size());
                     bag.placeTiles(currentPlayer.exchange((ArrayList<Tile>) addTilesToHand,
-                            removeTilesFromHand)); //only enter capital letters
-                    for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
+                            this.exchangeTilesFromHand)); //only enter capital letters
                 }
                 else {
                     System.out.println("All tiles not in hand");
                     return false;
                 }
+
+                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
                 break;
 
             case "play":
+                inHand = new InHand(convertCharArrayListToString(this.removeTilesFromHand), currentPlayer.getHand());
                 if (inHand.wordInHand()) {
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
