@@ -50,6 +50,7 @@ public class BoardPanel extends JPanel implements ScrabbleView{
                 Square thisSquare = new Square(row, col);
 
                 JPanel cell = new JPanel();
+
                 cell.setLayout(new BorderLayout());
 
                 // set the cell's background color according to square's multiplier type

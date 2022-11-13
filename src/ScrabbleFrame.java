@@ -17,7 +17,7 @@ public class ScrabbleFrame extends JFrame {
     /**
      * Dimensions of the frame.
      */
-    private final int frameWidth = 600;
+    private final int frameWidth = 1000;
     private final int frameHeight = 1000;
 
 
@@ -52,25 +52,39 @@ public class ScrabbleFrame extends JFrame {
     private void initializePanels(Game game) {
         // adding the BoardPanel
 
-        BoardPanel boardPanel = new BoardPanel(game);
-        this.add(boardPanel, BorderLayout.NORTH);
+        JPanel leftPanel = new JPanel();
 
+        leftPanel.setLayout(new BorderLayout());
+
+        JPanel rightPanel = new JPanel();
+
+        GameConsolePanel gameConsolePanel = new GameConsolePanel(game);
+        BoardPanel boardPanel = new BoardPanel(game);
         HandPanel handPanel = new HandPanel(game);
         GameCommandPanel gameCommandPanel = new GameCommandPanel(game);
+        StatusPanel statusPanel = new StatusPanel(game);
 
         // southPanel contains handPanel and gameCommandPanel
         JPanel southPanel = new JPanel();
-        this.add(southPanel, BorderLayout.SOUTH);
 
         //PlayerDisplayPanel playerDisplayPanel = new PlayerDisplayPanel(game);
         //this.add(playerDisplayPanel);
 
         // adding handPanel and gameCommandPanel to southPanel instead of adding to the frame directly
-        southPanel.add(handPanel, BorderLayout.WEST);
+        southPanel.add(handPanel, BorderLayout.CENTER);
         southPanel.add(gameCommandPanel,BorderLayout.CENTER);
         //southPanel.add(playerDisplayPanel, BorderLayout.EAST);
         //this.add(handPanel);
         //this.add(gameCommandPanel);
+        leftPanel.add(boardPanel, BorderLayout.PAGE_START);
+        leftPanel.add(southPanel, BorderLayout.PAGE_END);
+        //rightPanel.add(statusPanel, BorderLayout.NORTH);
+        rightPanel.add(gameConsolePanel, BorderLayout.SOUTH);
+
+
+        this.add(leftPanel);
+        //this.add(rightPanel);
+        //this.add(rightPanel, BorderLayout.EAST);
 
         this.revalidate();
     }

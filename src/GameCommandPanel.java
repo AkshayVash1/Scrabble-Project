@@ -134,6 +134,7 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
             try {
                 this.game.processCommand(new Command("exchange",
                         Game.convertCharArrayListToString(this.game.getExchangeTilesFromHand()), null));
+                        this.exchangeFrame.dispose();
             } catch (FileNotFoundException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             }
