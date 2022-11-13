@@ -14,8 +14,9 @@ public class PlayerSelectorPanel extends JPanel {
     private JComboBox oldJComboBox = new JComboBox();
     private String playerAmount;
     private Image backgroundImage;
-    private ScrabbleFrame scrabbleFrame;
+
     private StartMenuFrame startMenuFrame;
+    JLabel jlabel = new JLabel("Please Select Number of players");
 
     public PlayerSelectorPanel(StartMenuFrame startMenuFrame) {
         this.startMenuFrame = startMenuFrame;
@@ -26,13 +27,12 @@ public class PlayerSelectorPanel extends JPanel {
         try {
             backgroundImage = ImageIO.read(new File("src\\start_menu_background.jpg"));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            jlabel.setForeground(Color.black);
         }
 
         comboBox.setName("JComboBox");
         JPanel jComboBoxPanel = new JPanel(new GridLayout(2,0));
         jComboBoxPanel.setBackground(new Color(0, 0, 0, 0));
-        JLabel jlabel = new JLabel("Please Select Number of players");
         jlabel.setForeground(Color.white);
         comboBox.addItem("");
         for (int i = 2; i < 5; i++) {
@@ -57,28 +57,20 @@ public class PlayerSelectorPanel extends JPanel {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     comboBox.setName(String.valueOf(comboBox.getSelectedItem()));
-                    //if (comboBox.getName().equals(oldJComboBox.getName())) {}
                     if (comboBox.getSelectedItem().equals(2 + " players")) {
                         playerAmount = "2";
-                        System.out.println("2");
                         oldJComboBox.setName(String.valueOf(comboBox.getSelectedItem()));
                     } else if (comboBox.getSelectedItem().equals(3 + " players")) {
                         playerAmount = "3";
-                        System.out.println("3");
+
                         oldJComboBox.setName(String.valueOf(comboBox.getSelectedItem()));
                     } else if (comboBox.getSelectedItem().equals(4 + " players")) {
                         playerAmount = "4";
-                        System.out.println("4");
+
                         oldJComboBox.setName(String.valueOf(comboBox.getSelectedItem()));
                     }
 
                     startMenuFrame.createPlayers(playerAmount);
-                    try {
-                        scrabbleFrame = new ScrabbleFrame();
-                    } catch (FileNotFoundException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    scrabbleFrame.setVisible(true);
 
                 }
 
