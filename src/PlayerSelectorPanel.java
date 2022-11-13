@@ -14,7 +14,6 @@ public class PlayerSelectorPanel extends JPanel {
     private JComboBox oldJComboBox = new JComboBox();
     private String playerAmount;
     private Image backgroundImage;
-
     private ScrabbleFrame scrabbleFrame;
     private StartMenuFrame startMenuFrame;
 
@@ -31,9 +30,9 @@ public class PlayerSelectorPanel extends JPanel {
         }
 
         comboBox.setName("JComboBox");
-        JPanel jComboBoxPanel = new JPanel(new GridBagLayout());
+        JPanel jComboBoxPanel = new JPanel(new GridLayout(2,0));
         jComboBoxPanel.setBackground(new Color(0, 0, 0, 0));
-        JLabel jlabel = new JLabel("Please Select Amount of players");
+        JLabel jlabel = new JLabel("Please Select Number of players");
         jlabel.setForeground(Color.white);
         comboBox.addItem("");
         for (int i = 2; i < 5; i++) {

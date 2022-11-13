@@ -6,7 +6,7 @@ public class StartMenuFrame extends JFrame {
     int frameHeight = 400;
     private Game game = new Game();
 
-    public StartMenuFrame() {
+    public StartMenuFrame() throws FileNotFoundException { //TODO: Catch Exception
         super("Welcome to Scrabble!");
         this.initializeFrame();
         this.initializePanel();
@@ -28,7 +28,7 @@ public class StartMenuFrame extends JFrame {
         this.setVisible(false);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         StartMenuFrame startMenuFrame = new StartMenuFrame();
     }
 }

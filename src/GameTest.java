@@ -1,11 +1,11 @@
+import org.junit.jupiter.api.Test;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
-
 public class GameTest {
 
-    @org.junit.Test
+    @Test
     public void testExchangeHandOutputSize() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
         ArrayList<Tile> expectedOutput = new ArrayList<>();
@@ -31,7 +31,7 @@ public class GameTest {
         assert(player.getHand().getHandSize() == 7);
     }
 
-    @org.junit.Test
+    @Test
     public void testExchangeHandOutputValue() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
         ArrayList<Tile> expectedOutput = new ArrayList<>();
@@ -66,7 +66,7 @@ public class GameTest {
         assert(playerHand.toString().equals(expectedOutput.toString()));
     }
 
-    @org.junit.Test
+    @Test
     public void testExchangeHandExchangedTiles() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
         ArrayList<String> expectedOutput = new ArrayList<>();
@@ -97,7 +97,7 @@ public class GameTest {
         assert(game.getExchangeTilesFromHand().toString().equals(expectedOutput.toString()));
     }
 
-    @org.junit.Test
+    @Test
     public void testPlayMoveAndCheckHand() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
         ArrayList<Tile> expectedOutput = new ArrayList<>();
@@ -132,7 +132,7 @@ public class GameTest {
         assert(playerHand.toString().equals(expectedOutput.toString()));
     }
 
-    @org.junit.Test
+    @Test
     public void testPlayMoveValidPlacement() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
         boolean exp;
@@ -158,7 +158,7 @@ public class GameTest {
         assert(exp);
     }
 
-    @org.junit.Test
+    @Test
     public void testPlayMoveInvalidPlacement() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
         boolean exp;
@@ -184,7 +184,7 @@ public class GameTest {
         assert(!exp);
     }
 
-    @org.junit.Test
+    @Test
     public void testPlayMoveValidWord() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
         boolean exp;
@@ -210,7 +210,7 @@ public class GameTest {
         assert(exp);
     }
 
-    @org.junit.Test
+    @Test
     public void testPlayMoveInvalidWord() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
         boolean exp;
@@ -236,7 +236,7 @@ public class GameTest {
         assert(!exp);
     }
 
-    @org.junit.Test
+    @Test
     public void testPlayMoveLettersNotInHand() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
         boolean exp;
