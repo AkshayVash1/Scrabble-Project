@@ -250,6 +250,7 @@ public class Game {
 
             case "shuffle":
                 currentPlayer.shuffle();
+                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
                 break;
 
             case "pass":

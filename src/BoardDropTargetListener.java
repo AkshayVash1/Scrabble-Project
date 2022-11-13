@@ -35,7 +35,7 @@ public class BoardDropTargetListener extends DropTargetAdapter {
     public void drop(DropTargetDropEvent dropTargetDropEvent) {
         try {
             var tr = dropTargetDropEvent.getTransferable();
-            var tile = (Tile) tr.getTransferData(TransferableTile.tileFlavor);
+            Tile tile = (Tile) tr.getTransferData(TransferableTile.tileFlavor);
 
             if (dropTargetDropEvent.isDataFlavorSupported(TransferableTile.tileFlavor)) {
 
@@ -46,6 +46,7 @@ public class BoardDropTargetListener extends DropTargetAdapter {
                 if (this.game.getFirstPlayInTurn() == true)
                 {
                     this.game.setStartingCoordinates(this.boardCoordinates);
+                    
                 }
 
                 if ((this.game.getFirstPlayInTurn() == false) &&
