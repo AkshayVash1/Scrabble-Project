@@ -45,7 +45,7 @@ public class Game {
      * Creates number of players based on user input
      * @param input User input for number of players
      */
-    private void createPlayers(String input) {
+    public void createPlayers(String input) {
         int value = Integer.parseInt(input);
 
         for (int i = 0; i < value; i++) {

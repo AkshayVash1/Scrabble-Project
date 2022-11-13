@@ -1,11 +1,10 @@
+import org.junit.jupiter.api.Test;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-
-import static org.junit.Assert.*;
-
 public class PlayMoveTest {
 
-    @org.junit.Test
+    @Test
     public void getPlayedWordScore() {
         Board board = new Board();
         ArrayList<Tile> tilesToPlace = new ArrayList<>();
@@ -17,16 +16,16 @@ public class PlayMoveTest {
         assert(move.getPlayedWordScore() == 4);
     }
 
-    @org.junit.Test
+    @Test
     public void placeTile() {
 
     }
 
-    @org.junit.Test
+    @Test
     public void getUpdatedBoard() {
     }
 
-    @org.junit.Test
+    @Test
     public void checkWord() throws FileNotFoundException {
         Board board = new Board();
         ArrayList<Tile> tilesToPlace = new ArrayList<>();
