@@ -73,6 +73,11 @@ public class Game {
         for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
     }
 
+    public Player getCurrentPlayer()
+    {
+        return this.currentPlayer;
+    }
+
     public void addToRemoveTilesFromHand(Character c)
     {
         this.removeTilesFromHand.add(c);
@@ -184,6 +189,7 @@ public class Game {
         List<Tile> addTilesToHand = new ArrayList<>();
         InHand inHand = null;
         placementCheck = true;
+        boolean rc = true;
 
         String action = command.getAction();
 
@@ -199,7 +205,7 @@ public class Game {
                 }
                 else {
                     System.out.println("All tiles not in hand");
-                    return false;
+                    rc = false;
                 }
 
                 for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
@@ -222,6 +228,7 @@ public class Game {
                             System.out.println("Word is not valid.");
                             this.bag.placeTiles(addTilesToHand);
                             currentPlayer.rollBack();
+                            rc = false;
                         }
 
                     }
@@ -229,12 +236,13 @@ public class Game {
                         this.bag.placeTiles(addTilesToHand);
                         currentPlayer.rollBack();
                         placementCheck = false;
+                        rc = false;
                     }
                 }
                 else
                 {
                     System.out.println("All tiles not in hand");
-                    return false;
+                    rc = false;
                 }
 
                 for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
@@ -257,14 +265,14 @@ public class Game {
                 break;
         }
 
-        return false;
+        return rc;
     }
 
     /**
      * Board getter method
      * @return returns instance of board in game
      */
-    private Board getBoard() {
+    public Board getBoard() {
         return board;
     }
 

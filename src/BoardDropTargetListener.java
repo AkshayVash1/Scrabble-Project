@@ -63,7 +63,6 @@ public class BoardDropTargetListener extends DropTargetAdapter {
 
             dropTargetDropEvent.rejectDrop();
         } catch (Exception e) {
-
             e.printStackTrace();
             dropTargetDropEvent.rejectDrop();
         }
