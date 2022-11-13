@@ -42,6 +42,7 @@ public class GameCommandPanel extends JPanel implements ScrabbleView {
         this.game.addScrabbleView(this);
         this.player = new Player(10);
         this.hypotheticalHand = this.player.getHand().getHand();
+
         //JFrame hypotheticalFrame = new JFrame(); //Temp Frame
         //hypotheticalFrame.setSize(500, 300);
         //hypotheticalFrame.add(initializeGameCommands());
