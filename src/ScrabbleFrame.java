@@ -51,6 +51,7 @@ public class ScrabbleFrame extends JFrame {
      * @param game of type Game, passes the model to all the respective view Panels
      */
     private void initializePanels(Game game) {
+        // adding the BoardPanel
 
         BoardPanel boardPanel = new BoardPanel(game);
         this.add(boardPanel, BorderLayout.NORTH);
@@ -58,16 +59,22 @@ public class ScrabbleFrame extends JFrame {
         HandPanel handPanel = new HandPanel(game);
         GameCommandPanel gameCommandPanel = new GameCommandPanel(game);
 
+        // southPanel contains handPanel and gameCommandPanel
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new BorderLayout());
         southPanel.add(handPanel, BorderLayout.NORTH);
         southPanel.add(gameCommandPanel, BorderLayout.SOUTH);
         this.add(southPanel, BorderLayout.SOUTH);
 
+        // adding handPanel and gameCommandPanel to southPanel instead of adding to the frame directly
+
+        //this.add(handPanel);
+        //this.add(gameCommandPanel);
+
         this.revalidate();
     }
 
-    /**Main */
+    /*main function*/
     public static void main(String[] args) throws FileNotFoundException {
         ScrabbleFrame gameFrame = new ScrabbleFrame();
     }
