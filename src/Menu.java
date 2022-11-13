@@ -35,7 +35,6 @@ public class Menu extends JMenu implements ScrabbleView, ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch(e.getActionCommand()) {
             case "Help":
-                gameConsole.appendHelp();
                 break;
             case "Exit":
                 exitPopUp = new JFrame();
