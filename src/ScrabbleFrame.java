@@ -75,7 +75,6 @@ public class ScrabbleFrame extends JFrame {
         this.revalidate();
     }
 
-
     public static void main(String[] args) throws FileNotFoundException {
         ScrabbleFrame gameFrame = new ScrabbleFrame();
     }
