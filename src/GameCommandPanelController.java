@@ -52,6 +52,7 @@ public class GameCommandPanelController implements ActionListener{
             } catch (FileNotFoundException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             }
+
             this.game.nextPlayer();
             /**
              * Play the move set onto board

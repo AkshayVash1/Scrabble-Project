@@ -42,19 +42,12 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
                 "The goal of the game is to accumulate more than or equal to 50 points"  + NEWLINE2);
     }
 
+    public JTextArea getConsole() {
+        return console;
+    }
+
     @Override
     public void update(Player currentPlayer, Board board) {
         console.append("Player " + currentPlayer.getPlayerNumber() + "'s turn..." + NEWLINE2);
-
-        String action = game.getCommand();
-
-        switch(action) {
-            case "play":
-
-                break;
-            default:
-                break;
-
-        }
     }
 }
