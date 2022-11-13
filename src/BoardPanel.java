@@ -21,6 +21,7 @@ public class BoardPanel extends JPanel implements ScrabbleView{
      * Cells of the Scrabble board.
      */
     private JPanel cells[][];
+    private Board board;
 
     /**
      * Constructor for the class.
@@ -28,8 +29,9 @@ public class BoardPanel extends JPanel implements ScrabbleView{
     public BoardPanel(Game game) {
         this.game = game;
         this.game.addScrabbleView(this);
+        this.board = new Board();
 
-        cells = new JPanel[15][15];
+        cells = new JPanel[16][16];
         final int BOARD_SIZE = 600;
         this.setPreferredSize(new Dimension(BOARD_SIZE, BOARD_SIZE));
         this.setLayout(new GridLayout(cells.length, cells.length));
@@ -60,6 +62,8 @@ public class BoardPanel extends JPanel implements ScrabbleView{
 
                 // add label to cell
                 cell.add(cellLabel, BorderLayout.CENTER);
+
+                this.cells[row][col] = cell;
 
                 // add cell to this panel
                 this.add(cell);
@@ -101,8 +105,22 @@ public class BoardPanel extends JPanel implements ScrabbleView{
         return label;
     }
 
+    private void updateBoard()
+    {
+        for (int row = 1; row < 16; row++) {
+            for (int col = 1; col < 16; col++) {
+                for (Component jc : this.cells[row][col].getComponents()) {
+                    if ( jc instanceof JLabel ) {
+                        ((JLabel) jc).setText(this.board.getLetterAtSquare(row, col));
+                    }
+                }
+            }
+        }
+    }
+
     @Override
-    public void update(Player currentPlayer) {
-        //
+    public void update(Player currentPlayer, Board board) {
+        this.board = board;
+        updateBoard();
     }
 }

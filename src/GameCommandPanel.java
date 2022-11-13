@@ -91,9 +91,10 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
         if (tileButtons.get(col).getText().equals(button.getText())) {
             if (button.isSelected()) {
                 tilesToExchange.add(hypotheticalHand.get(col));
-                System.out.println(tilesToExchange);
+                this.game.addToExchangeTilesFromHand(button.getText().charAt(0));
             } else {
                 tilesToExchange.remove(hypotheticalHand.get(col));
+                this.game.removeFromExchangeTilesFromHand(button.getText().charAt(0));
             }
 
         }
@@ -111,32 +112,39 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
             /**
              * Play the move set onto board
              */
-            System.out.println("button00");
         } else if (e.getActionCommand().equals(EXCHANGE_BUTTON)) {
             exchangeFrame.setVisible(true);
         } else if (e.getActionCommand().equals(SHUFFLE)) {
+            try {
+                this.game.processCommand(new Command("shuffle", null, null));
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
             /**
              * Shuffle Hand change order of tiles within hand
              */
-            System.out.println("button10");
         } else if (e.getActionCommand().equals(PASS)) {
             this.game.nextPlayer();
             /**
              * Pass Turn go to next player
              */
-            System.out.println("button11");
         } else if (e.getActionCommand().contains("Letter")) {
             processToggleButtonAction(e);
         } else if (e.getActionCommand().contains(EXCHANGE_COMMAND)) {
-            /**
-             * Will grab tilesToExchange and send it to Game to exchange the tiles
-             */
+            try {
+                this.game.processCommand(new Command("exchange",
+                        Game.convertCharArrayListToString(this.game.getExchangeTilesFromHand()), null));
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
+
+            this.game.clearRemoveFromExchangeTilesFromHand();
         }
 
     }
 
     @Override
-    public void update(Player currentPlayer) {
+    public void update(Player currentPlayer, Board board) {
         this.player = currentPlayer;
         initializeExchangeFrame();
         this.revalidate();

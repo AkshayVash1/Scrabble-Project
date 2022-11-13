@@ -21,6 +21,7 @@ public class Game {
     private List<ScrabbleView> views;
     private int activeCount;
     private ArrayList<Character> removeTilesFromHand;
+    private ArrayList<Character> exchangeTilesFromHand;
     private boolean firstPlayInTurn;
     private String startingCoordinates;
 
@@ -30,13 +31,14 @@ public class Game {
     public Game() throws FileNotFoundException {
         this.views = new ArrayList<>();
         this.removeTilesFromHand= new ArrayList<>();
+        this.exchangeTilesFromHand = new ArrayList<>();
         this.firstPlayInTurn = true;
 
         this.printRules();
         this.createPlayers("2");
         this.activeCount = this.playerList.size();
         this.currentPlayer = this.playerList.get(0);
-        for(ScrabbleView v : this.views){v.update(this.currentPlayer);}
+        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
     }
 
     /**
@@ -68,13 +70,38 @@ public class Game {
         }
 
         this.firstPlayInTurn = true;
-        for(ScrabbleView v : this.views){v.update(this.currentPlayer);}
+        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
+    }
+
+    public Player getCurrentPlayer()
+    {
+        return this.currentPlayer;
     }
 
     public void addToRemoveTilesFromHand(Character c)
     {
         this.removeTilesFromHand.add(c);
         this.firstPlayInTurn = false;
+    }
+
+    public void addToExchangeTilesFromHand(Character c)
+    {
+        this.exchangeTilesFromHand.add(c);
+    }
+
+    public void removeFromExchangeTilesFromHand(Character c)
+    {
+        this.exchangeTilesFromHand.remove(c);
+    }
+
+    public void clearRemoveFromExchangeTilesFromHand()
+    {
+        this.exchangeTilesFromHand.clear();
+    }
+
+    public ArrayList<Character> getExchangeTilesFromHand()
+    {
+        return this.exchangeTilesFromHand;
     }
 
     public boolean getFirstPlayInTurn()
@@ -87,12 +114,34 @@ public class Game {
         this.startingCoordinates = startingCoordinates;
     }
 
+    public void changeStartingCoordinatesToVertical()
+    {
+        String num = " ";
+        char letter = ' ';
+        if (this.startingCoordinates.length() == 3) {
+            num = startingCoordinates.substring(0, 2);
+            letter = this.startingCoordinates.charAt(2);
+        }
+        else
+        {
+            num =startingCoordinates.substring(0, 1);
+            letter = this.startingCoordinates.charAt(1);
+
+        }
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(letter);
+        sb.append(num);
+
+        this.startingCoordinates = sb.toString();
+    }
+
     public String getStartingCoordinates()
     {
         return this.startingCoordinates;
     }
 
-    private String convertCharArrayListToString(ArrayList<Character> ar)
+    public static String convertCharArrayListToString(ArrayList<Character> ar)
     {
         StringBuilder sb = new StringBuilder();
 
@@ -140,29 +189,30 @@ public class Game {
         List<Tile> addTilesToHand = new ArrayList<>();
         InHand inHand = null;
         placementCheck = true;
-
-        inHand = new InHand(convertCharArrayListToString(this.removeTilesFromHand), currentPlayer.getHand());
-        System.out.println(this.removeTilesFromHand + " HAND: " + currentPlayer.getHand().getHand().toString());
-        System.out.println(command.getPlacementAttempt() + " " + this.getStartingCoordinates());
+        boolean rc = true;
 
         String action = command.getAction();
 
         switch (action) {
             case "exchange":
+                inHand = new InHand(convertCharArrayListToString(this.exchangeTilesFromHand), currentPlayer.getHand());
+
                 if (inHand.wordInHand()) {
-                    removeTilesFromHand = inHand.wordToList();
-                    addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
+                    this.exchangeTilesFromHand = inHand.wordToList();
+                    addTilesToHand = this.bag.removeTiles(this.exchangeTilesFromHand.size());
                     bag.placeTiles(currentPlayer.exchange((ArrayList<Tile>) addTilesToHand,
-                            removeTilesFromHand)); //only enter capital letters
-                    for(ScrabbleView v : this.views){v.update(this.currentPlayer);}
+                            this.exchangeTilesFromHand)); //only enter capital letters
                 }
                 else {
                     System.out.println("All tiles not in hand");
-                    return false;
+                    rc = false;
                 }
+
+                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
                 break;
 
             case "play":
+                inHand = new InHand(convertCharArrayListToString(this.removeTilesFromHand), currentPlayer.getHand());
                 if (inHand.wordInHand()) {
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
@@ -178,6 +228,7 @@ public class Game {
                             System.out.println("Word is not valid.");
                             this.bag.placeTiles(addTilesToHand);
                             currentPlayer.rollBack();
+                            rc = false;
                         }
 
                     }
@@ -185,15 +236,16 @@ public class Game {
                         this.bag.placeTiles(addTilesToHand);
                         currentPlayer.rollBack();
                         placementCheck = false;
+                        rc = false;
                     }
                 }
                 else
                 {
                     System.out.println("All tiles not in hand");
-                    return false;
+                    rc = false;
                 }
 
-                for(ScrabbleView v : this.views){v.update(this.currentPlayer);}
+                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
                 break;
 
             case "shuffle":
@@ -213,14 +265,14 @@ public class Game {
                 break;
         }
 
-        return false;
+        return rc;
     }
 
     /**
      * Board getter method
      * @return returns instance of board in game
      */
-    private Board getBoard() {
+    public Board getBoard() {
         return board;
     }
 

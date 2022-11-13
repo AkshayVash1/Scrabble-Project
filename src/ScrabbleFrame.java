@@ -62,14 +62,15 @@ public class ScrabbleFrame extends JFrame {
         JPanel southPanel = new JPanel();
         this.add(southPanel, BorderLayout.SOUTH);
 
+        //PlayerDisplayPanel playerDisplayPanel = new PlayerDisplayPanel(game);
+        //this.add(playerDisplayPanel);
+
         // adding handPanel and gameCommandPanel to southPanel instead of adding to the frame directly
         southPanel.add(handPanel, BorderLayout.WEST);
         southPanel.add(gameCommandPanel,BorderLayout.CENTER);
+        //southPanel.add(playerDisplayPanel, BorderLayout.EAST);
         //this.add(handPanel);
         //this.add(gameCommandPanel);
-
-        //PlayerDisplayPanel playerDisplayPanel = new PlayerDisplayPanel(game);
-        //this.add(playerDisplayPanel);
 
         this.revalidate();
     }

@@ -751,4 +751,9 @@ public class Board {
         return VerticalWords;
     }
 
+    public String getLetterAtSquare(int row, int col)
+    {
+        return this.cells[row][col];
+    }
+
 }
