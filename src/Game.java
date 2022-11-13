@@ -4,7 +4,9 @@
  * @Version 1.0
  */
 
+import javax.swing.text.View;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -14,12 +16,30 @@ public class Game {
     private Bag bag = new Bag();
     private Board board = new Board();
     private ArrayList<Player> playerList = new ArrayList<Player>();
+    private Player currentPlayer;
     private boolean placementCheck;
+    private List<ScrabbleView> views;
+    private int activeCount;
+    private ArrayList<Character> removeTilesFromHand;
+    private ArrayList<Character> exchangeTilesFromHand;
+    private boolean firstPlayInTurn;
+    private String startingCoordinates;
 
     /**
      * Public constructor for class game.
      */
-    public Game() {}
+    public Game() throws FileNotFoundException {
+        this.views = new ArrayList<>();
+        this.removeTilesFromHand= new ArrayList<>();
+        this.exchangeTilesFromHand = new ArrayList<>();
+        this.firstPlayInTurn = true;
+
+        this.printRules();
+        this.createPlayers("2");
+        this.activeCount = this.playerList.size();
+        this.currentPlayer = this.playerList.get(0);
+        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
+    }
 
     /**
      * Creates number of players based on user input
@@ -34,6 +54,104 @@ public class Game {
         }
     }
 
+    public void addScrabbleView(ScrabbleView sv)
+    {
+        this.views.add(sv);
+    }
+
+    public void nextPlayer()
+    {
+        this.removeTilesFromHand.clear();
+        if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
+            this.currentPlayer = this.playerList.get(0);
+        }
+        else {
+            this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+        }
+
+        this.firstPlayInTurn = true;
+        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
+    }
+
+    public Player getCurrentPlayer()
+    {
+        return this.currentPlayer;
+    }
+
+    public void addToRemoveTilesFromHand(Character c)
+    {
+        this.removeTilesFromHand.add(c);
+        this.firstPlayInTurn = false;
+    }
+
+    public void addToExchangeTilesFromHand(Character c)
+    {
+        this.exchangeTilesFromHand.add(c);
+    }
+
+    public void removeFromExchangeTilesFromHand(Character c)
+    {
+        this.exchangeTilesFromHand.remove(c);
+    }
+
+    public void clearRemoveFromExchangeTilesFromHand()
+    {
+        this.exchangeTilesFromHand.clear();
+    }
+
+    public ArrayList<Character> getExchangeTilesFromHand()
+    {
+        return this.exchangeTilesFromHand;
+    }
+
+    public boolean getFirstPlayInTurn()
+    {
+        return this.firstPlayInTurn;
+    }
+
+    public void setStartingCoordinates(String startingCoordinates)
+    {
+        this.startingCoordinates = startingCoordinates;
+    }
+
+    public void changeStartingCoordinatesToVertical()
+    {
+        String num = " ";
+        char letter = ' ';
+        if (this.startingCoordinates.length() == 3) {
+            num = startingCoordinates.substring(0, 2);
+            letter = this.startingCoordinates.charAt(2);
+        }
+        else
+        {
+            num =startingCoordinates.substring(0, 1);
+            letter = this.startingCoordinates.charAt(1);
+
+        }
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(letter);
+        sb.append(num);
+
+        this.startingCoordinates = sb.toString();
+    }
+
+    public String getStartingCoordinates()
+    {
+        return this.startingCoordinates;
+    }
+
+    public static String convertCharArrayListToString(ArrayList<Character> ar)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (Character c : ar)
+        {
+            sb.append(c);
+        }
+
+        return sb.toString();
+    }
 
     /**
      * Prints rules for the game
@@ -65,34 +183,36 @@ public class Game {
     /**
      * Takes in a command from a given player and performs an action based on the command
      * @param command Contains the different parts of the command the user entered
-     * @param currentPlayer The current player playing their turn
      * @return returns true of false (Should be void)
      */
-    private boolean processCommand(Command command, Player currentPlayer) throws FileNotFoundException {
-        ArrayList<Character> removeTilesFromHand = new ArrayList<>();
+    public boolean processCommand(Command command) throws FileNotFoundException {
         List<Tile> addTilesToHand = new ArrayList<>();
         InHand inHand = null;
         placementCheck = true;
-
-        inHand = new InHand(command.getWordAttempt(), currentPlayer.getHand());
+        boolean rc = true;
 
         String action = command.getAction();
 
         switch (action) {
             case "exchange":
+                inHand = new InHand(convertCharArrayListToString(this.exchangeTilesFromHand), currentPlayer.getHand());
+
                 if (inHand.wordInHand()) {
-                    removeTilesFromHand = inHand.wordToList();
-                    addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
+                    this.exchangeTilesFromHand = inHand.wordToList();
+                    addTilesToHand = this.bag.removeTiles(this.exchangeTilesFromHand.size());
                     bag.placeTiles(currentPlayer.exchange((ArrayList<Tile>) addTilesToHand,
-                            removeTilesFromHand)); //only enter capital letters
+                            this.exchangeTilesFromHand)); //only enter capital letters
                 }
                 else {
                     System.out.println("All tiles not in hand");
-                    return false;
+                    rc = false;
                 }
+
+                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
                 break;
 
             case "play":
+                inHand = new InHand(convertCharArrayListToString(this.removeTilesFromHand), currentPlayer.getHand());
                 if (inHand.wordInHand()) {
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
@@ -108,6 +228,7 @@ public class Game {
                             System.out.println("Word is not valid.");
                             this.bag.placeTiles(addTilesToHand);
                             currentPlayer.rollBack();
+                            rc = false;
                         }
 
                     }
@@ -115,17 +236,21 @@ public class Game {
                         this.bag.placeTiles(addTilesToHand);
                         currentPlayer.rollBack();
                         placementCheck = false;
+                        rc = false;
                     }
                 }
                 else
                 {
                     System.out.println("All tiles not in hand");
-                    return false;
+                    rc = false;
                 }
+
+                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
                 break;
 
             case "shuffle":
                 currentPlayer.shuffle();
+                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
                 break;
 
             case "pass":
@@ -141,25 +266,24 @@ public class Game {
                 break;
         }
 
-        return false;
+        return rc;
     }
 
     /**
      * Board getter method
      * @return returns instance of board in game
      */
-    private Board getBoard() {
+    public Board getBoard() {
         return board;
     }
 
     /**
-     * Main method
-     * @param args
+     * gameLoop()
      * @throws FileNotFoundException
      */
-    public static void main(String[] args) throws FileNotFoundException {
+    public void gameLoop() throws FileNotFoundException {
 
-        Game game = new Game();
+        //Game game = new Game();
         Scanner scanner = new Scanner(System.in);
         String userInput;
         Player currentPlayer;
@@ -169,13 +293,13 @@ public class Game {
 
         boolean running = true;
 
-        game.printRules();
+        this.printRules();
 
         while(!flag) {
             System.out.println("Type number of players (2, 3, or 4):");
             userInput = scanner.nextLine();
             if (userInput.equals("2") | userInput.equals("3") | userInput.equals("4") ) {
-                game.createPlayers(userInput);
+                this.createPlayers(userInput);
                 flag = true;
             }
             else {
@@ -199,20 +323,20 @@ public class Game {
             }
         }
 
-        currentPlayer = game.playerList.get(0);
+        currentPlayer = this.playerList.get(0);
         Command command = null;
         flag = false;
 
         GAME:
         do {
-            activeCount = game.playerList.size();;
+            activeCount = this.playerList.size();
 
             if (currentPlayer.getPoints() >= 50) {
                 System.out.println("Player " + currentPlayer.getPlayerNumber() + " wins with "
                         + currentPlayer.getPoints()+ "!");
             }
-            for (int i = 0; i < game.playerList.size(); i++) {
-                if (!game.playerList.get(i).isActive()) {
+            for (int i = 0; i < this.playerList.size(); i++) {
+                if (!this.playerList.get(i).isActive()) {
                     activeCount--;
                 }
             }
@@ -222,10 +346,10 @@ public class Game {
                 running = false;
             }
             else if (!currentPlayer.isActive()) {
-                currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber() + 1);
+                currentPlayer = this.playerList.get(currentPlayer.getPlayerNumber() + 1);
             }
             else {
-                game.getBoard().printBoard();
+                this.getBoard().printBoard();
 
                 System.out.println("It is Player " + (currentPlayer.getPlayerNumber() + 1) + "'s turn");
                 System.out.println("Current Player Points: " + currentPlayer.getPoints());
@@ -253,17 +377,17 @@ public class Game {
                 }
                 flag = false;
 
-                game.processCommand(command, currentPlayer);
+                //this.processCommand(command, currentPlayer);
 
                 if (!command.getAction().equals("shuffle")) {;
-                    if (!game.placementCheck) {
+                    if (!this.placementCheck) {
                         System.out.println("Try again");
                     }
-                    if (currentPlayer.getPlayerNumber() == (game.playerList.size()-1)) {
-                        currentPlayer = game.playerList.get(0);
+                    if (currentPlayer.getPlayerNumber() == (this.playerList.size()-1)) {
+                        currentPlayer = this.playerList.get(0);
                     }
                     else {
-                        currentPlayer = game.playerList.get(currentPlayer.getPlayerNumber()+1);
+                        currentPlayer = this.playerList.get(currentPlayer.getPlayerNumber()+1);
                     }
                 }
             }

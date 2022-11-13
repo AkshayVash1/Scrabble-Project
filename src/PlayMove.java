@@ -66,6 +66,7 @@ public class PlayMove {
         }
         else
         {
+
             if (this.placementAttempt.length() == DOUBLE_DIGIT_DETECTION) {
                 return Integer.parseInt(placementAttempt.substring(PlayMove.PARSE_CHAR_AT_ONE,
                         PARSE_CHAR_AT_THREE));
