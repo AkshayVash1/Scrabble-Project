@@ -9,9 +9,6 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 
@@ -20,16 +17,15 @@ public class GameCommandPanel extends JPanel implements ScrabbleView {
     public static final String EXCHANGE_BUTTON = "Button:" + 0 + ":" + 1;
     public static final String SHUFFLE = "Button:" + 1 + ":" + 0;
     public static final String PASS = "Button:" + 1 + ":" + 1;
-    public static final String RESET_SELECTION = "Reset Selection";
     public static final String EXCHANGE_COMMAND = "Exchange";
     private final JButton[][] buttons = new JButton[2][2];
     private Player player;
-    ArrayList<Tile> hypotheticalHand = new ArrayList<>();
-    JFrame exchangeFrame = new JFrame();
-    JPanel tilePanel = new JPanel(new GridLayout(0, 7));
-    JPanel resetButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    ArrayList<JToggleButton> tileButtons = new ArrayList<>();
-    ArrayList<Tile> tilesToExchange = new ArrayList<>();
+    private ArrayList<Tile> playerHand;
+    private JFrame exchangeFrame = new JFrame();
+    private JPanel tilePanel = new JPanel(new GridLayout(0, 7));
+    private JPanel resetButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    private ArrayList<JToggleButton> tileButtons = new ArrayList<>();
+    private ArrayList<Tile> tilesToExchange = new ArrayList<>();
 
     private Game game;
 
@@ -41,12 +37,7 @@ public class GameCommandPanel extends JPanel implements ScrabbleView {
         this.game = game;
         this.game.addScrabbleView(this);
         this.player = new Player(10);
-        this.hypotheticalHand = this.player.getHand().getHand();
-
-        //JFrame hypotheticalFrame = new JFrame(); //Temp Frame
-        //hypotheticalFrame.setSize(500, 300);
-        //hypotheticalFrame.add(initializeGameCommands());
-        //hypotheticalFrame.setVisible(true);
+        this.playerHand = this.player.getHand().getHand();
         this.setPreferredSize(new Dimension(500,300));
         this.add(initializeGameCommands());
         initializeExchangeFrame();
@@ -59,7 +50,7 @@ public class GameCommandPanel extends JPanel implements ScrabbleView {
     private JPanel initializeGameCommands() {
         GameCommandPanelController controller = new GameCommandPanelController(this.player, this.tileButtons,
                 this.tilesToExchange, this.game, this.exchangeFrame);
-        this.hypotheticalHand = this.player.getHand().getHand();
+        this.playerHand = this.player.getHand().getHand();
         JPanel gameButtonsPanel = new JPanel(new GridLayout(2, 2));
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
@@ -83,16 +74,16 @@ public class GameCommandPanel extends JPanel implements ScrabbleView {
      * */
     private void initializeExchangeFrame() {
         int counter = 0;
-        this.hypotheticalHand = this.player.getHand().getHand();
+        this.playerHand = this.player.getHand().getHand();
         GameCommandPanelController controller = new GameCommandPanelController(this.player, this.tileButtons,
                 this.tilesToExchange, this.game, this.exchangeFrame);
 
         tilePanel.removeAll();
         this.resetButtonPanel.removeAll();
-        for (Tile tile : this.hypotheticalHand) {
+        for (Tile tile : this.playerHand) {
             JToggleButton tileButton = new JToggleButton(tile.getLetter());
             tileButton.setActionCommand("Letter:" + counter);
-            tileButton.setName(String.valueOf(hypotheticalHand.get(counter)));
+            tileButton.setName(String.valueOf(playerHand.get(counter)));
             tileButton.addActionListener(controller);
             tilePanel.add(tileButton);
             tileButtons.add(counter, tileButton);
