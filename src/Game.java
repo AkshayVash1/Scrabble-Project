@@ -73,6 +73,11 @@ public class Game {
         for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
     }
 
+    public void clearRemoveTilesFromHand()
+    {
+        this.removeTilesFromHand.clear();
+    }
+
     public Player getCurrentPlayer()
     {
         return this.currentPlayer;
