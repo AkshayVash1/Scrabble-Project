@@ -71,17 +71,8 @@ public class PlayerSelectorPanel extends JPanel {
                     }
 
                     startMenuFrame.createPlayers(playerAmount);
-
                 }
-
             }
         });
-    }
-
-    public String getPlayerAmount() {
-        return playerAmount;
-    }
-
-    public static void main(String[] args) throws FileNotFoundException {
     }
 }

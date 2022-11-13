@@ -38,11 +38,9 @@ public class ScrabbleFrame extends JFrame {
     private void initializeFrame() {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setSize(frameWidth, frameHeight);
-        //this.setLayout(new GridLayout(2,2)); //todo revisit later
         this.setLayout(new BorderLayout()); //todo revisit later
-        //this.setVisible(true);
         this.setResizable(false);
-        //this.revalidate();
+
     }
 
 
@@ -65,20 +63,7 @@ public class ScrabbleFrame extends JFrame {
         southPanel.add(gameCommandPanel, BorderLayout.SOUTH);
         this.add(southPanel, BorderLayout.SOUTH);
 
-        // adding handPanel and gameCommandPanel to southPanel instead of adding to the frame directly
-
-        //this.add(handPanel);
-        //this.add(gameCommandPanel);
-
-        //PlayerDisplayPanel playerDisplayPanel = new PlayerDisplayPanel(game);
-        //this.add(playerDisplayPanel);
-
         this.revalidate();
-    }
-
-
-    public static void main(String[] args) {
-        ScrabbleFrame gameFrame = new ScrabbleFrame();
     }
 
     public void createPlayers(String playerAmount) {
