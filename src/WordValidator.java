@@ -15,7 +15,7 @@ import java.util.Scanner;
  */
 public class WordValidator {
     private final Map<Integer, String> wordsMap = new HashMap<>();
-    private static final String FILE = "./words.txt";
+    private static final String FILE = "src/words.txt";
 
     /**
      * Initializes the scanner
