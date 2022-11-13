@@ -26,6 +26,10 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
         console.setAutoscrolls(true);
     }
 
+    public void appendHelp() {
+        console.append("Help");
+    }
+
     @Override
     public void update(Player currentPlayer, Board board) {
 

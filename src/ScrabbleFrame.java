@@ -53,6 +53,7 @@ public class ScrabbleFrame extends JFrame {
         // adding the BoardPanel
 
         JPanel leftPanel = new JPanel();
+        leftPanel.setMinimumSize(new Dimension(600, 1000));
 
         leftPanel.setLayout(new BorderLayout());
 
