@@ -77,6 +77,11 @@ public class Game {
         return this.currentPlayer;
     }
 
+    public void clearRemoveTilesFromHand()
+    {
+        removeTilesFromHand.clear();
+    }
+
     public void addToRemoveTilesFromHand(Character c)
     {
         this.removeTilesFromHand.add(c);

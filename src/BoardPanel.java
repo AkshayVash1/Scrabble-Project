@@ -10,8 +10,6 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetListener;
 
 public class BoardPanel extends JPanel implements ScrabbleView{
 
@@ -79,7 +77,7 @@ public class BoardPanel extends JPanel implements ScrabbleView{
      */
     private JLabel createCellLabel(Square square) {
         JLabel label = new JLabel();
-        BoardDropTargetListener dtl = new BoardDropTargetListener(label, square.getStringCoordinates(), this.game);
+        BoardDropTargetController dtl = new BoardDropTargetController(label, square.getStringCoordinates(), this.game);
 
         // center the label's alignment
         label.setHorizontalAlignment(SwingConstants.CENTER);
