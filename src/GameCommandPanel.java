@@ -1,3 +1,12 @@
+/**
+ * This class extends JPanel and acts as the storage and functionality maintenance of the shuffle, exchange, play
+ * and pass options that are implemented within the model. The view gets updated when the current player hand
+ * in the case of the exchange menu.
+ *
+ * @author Jaydon Haghighi
+ * @version 2022.10.25
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -6,7 +15,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 
-public class GameCommandPanel extends JPanel implements ActionListener, ScrabbleView {
+public class GameCommandPanel extends JPanel implements ScrabbleView {
     public static final String PLAY = "Button:" + 0 + ":" + 0;
     public static final String EXCHANGE_BUTTON = "Button:" + 0 + ":" + 1;
     public static final String SHUFFLE = "Button:" + 1 + ":" + 0;
@@ -24,6 +33,10 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
 
     private Game game;
 
+    /**
+     * Initializes the panel with the passed in game model.
+     * @param game the Game is the model.
+     * */
     public GameCommandPanel(Game game) {
         this.game = game;
         this.game.addScrabbleView(this);
@@ -38,14 +51,20 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
         initializeExchangeFrame();
     }
 
+    /**
+     * Initializes the game commands by setting values to the buttons and initializing the individual gameButtonPanels
+     * @return JPanel with the buttons.
+     * */
     private JPanel initializeGameCommands() {
+        GameCommandPanelController controller = new GameCommandPanelController(this.player, this.tileButtons,
+                this.tilesToExchange, this.game, this.exchangeFrame);
         this.hypotheticalHand = this.player.getHand().getHand();
         JPanel gameButtonsPanel = new JPanel(new GridLayout(2, 2));
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
                 JButton button = new JButton();
                 button.setActionCommand("Button:" + i + ":" + j); //setting actionCommand of each button based on i and j
-                button.addActionListener(this);
+                button.addActionListener(controller);
                 buttons[i][j] = button; //adding button to buttons
                 gameButtonsPanel.add(button); //adding button to buttonPanel
             }
@@ -57,9 +76,15 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
         return gameButtonsPanel;
     }
 
+    /**
+     * Initializes aspects of the pop-up JFrame containing the possible tiles to be exchanged and also the select
+     * buttons for each individual tile available in player's hand.
+     * */
     private void initializeExchangeFrame() {
         int counter = 0;
         this.hypotheticalHand = this.player.getHand().getHand();
+        GameCommandPanelController controller = new GameCommandPanelController(this.player, this.tileButtons,
+                this.tilesToExchange, this.game, this.exchangeFrame);
 
         tilePanel.removeAll();
         this.resetButtonPanel.removeAll();
@@ -67,81 +92,19 @@ public class GameCommandPanel extends JPanel implements ActionListener, Scrabble
             JToggleButton tileButton = new JToggleButton(tile.getLetter());
             tileButton.setActionCommand("Letter:" + counter);
             tileButton.setName(String.valueOf(hypotheticalHand.get(counter)));
-            tileButton.addActionListener(this);
+            tileButton.addActionListener(controller);
             tilePanel.add(tileButton);
             tileButtons.add(counter, tileButton);
             counter++;
         }
         JButton exchangeButton = new JButton(EXCHANGE_COMMAND);
         resetButtonPanel.add(exchangeButton);
-        exchangeButton.addActionListener(this);
+        exchangeButton.addActionListener(controller);
         exchangeFrame.add(tilePanel);
         exchangeFrame.add(resetButtonPanel, BorderLayout.SOUTH);
         exchangeFrame.setSize(900, 180);
         exchangeFrame.setResizable(false);
         exchangeFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    }
-
-    private void processToggleButtonAction(ActionEvent e) {
-        this.hypotheticalHand = this.player.getHand().getHand();
-
-        JToggleButton button = (JToggleButton) e.getSource();
-        final String[] split = button.getActionCommand().split(":");
-        int col = Integer.parseInt(split[1]);
-        if (tileButtons.get(col).getText().equals(button.getText())) {
-            if (button.isSelected()) {
-                tilesToExchange.add(hypotheticalHand.get(col));
-                this.game.addToExchangeTilesFromHand(button.getText().charAt(0));
-            } else {
-                tilesToExchange.remove(hypotheticalHand.get(col));
-                this.game.removeFromExchangeTilesFromHand(button.getText().charAt(0));
-            }
-
-        }
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals(PLAY)) {
-            try {
-                this.game.processCommand(new Command("play", " ", this.game.getStartingCoordinates()));
-            } catch (FileNotFoundException fileNotFoundException) {
-                fileNotFoundException.printStackTrace();
-            }
-            this.game.nextPlayer();
-            /**
-             * Play the move set onto board
-             */
-        } else if (e.getActionCommand().equals(EXCHANGE_BUTTON)) {
-            exchangeFrame.setVisible(true);
-        } else if (e.getActionCommand().equals(SHUFFLE)) {
-            try {
-                this.game.processCommand(new Command("shuffle", null, null));
-            } catch (FileNotFoundException fileNotFoundException) {
-                fileNotFoundException.printStackTrace();
-            }
-            /**
-             * Shuffle Hand change order of tiles within hand
-             */
-        } else if (e.getActionCommand().equals(PASS)) {
-            this.game.nextPlayer();
-            /**
-             * Pass Turn go to next player
-             */
-        } else if (e.getActionCommand().contains("Letter")) {
-            processToggleButtonAction(e);
-        } else if (e.getActionCommand().contains(EXCHANGE_COMMAND)) {
-            try {
-                this.game.processCommand(new Command("exchange",
-                        Game.convertCharArrayListToString(this.game.getExchangeTilesFromHand()), null));
-                this.exchangeFrame.dispose();
-            } catch (FileNotFoundException fileNotFoundException) {
-                fileNotFoundException.printStackTrace();
-            }
-
-            this.game.clearRemoveFromExchangeTilesFromHand();
-        }
-
     }
 
     @Override

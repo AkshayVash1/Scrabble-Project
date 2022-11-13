@@ -1,3 +1,14 @@
+/**
+ * This class is part of the "Scrabble" application.
+ *
+ * GameTest is primarily used to test particular logical streams of the model using JUnit5. 12 different play
+ * cases with calling processCommand are called in order to ensure all possible error paths and playable paths are
+ * covered. Point counting is also taken into account.
+ *
+ * @author Mohamed Kaddour
+ * @date 2022.11.13
+ */
+
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
