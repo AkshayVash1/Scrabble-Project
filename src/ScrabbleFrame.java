@@ -6,6 +6,7 @@
  * @date 2022-11-05
  * @version 0.0
  */
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -19,15 +20,14 @@ public class ScrabbleFrame extends JFrame {
      */
     private final int frameWidth = 600;
     private final int frameHeight = 1000;
-
+    private Game game = new Game();
 
     /**
      * Constructor for the class.
      */
-    public ScrabbleFrame() throws FileNotFoundException{
+    public ScrabbleFrame() {
         super("Welcome to Scrabble!");
         this.initializeFrame();
-        Game game = new Game();
         this.initializePanels(game);
     }
 
@@ -40,7 +40,7 @@ public class ScrabbleFrame extends JFrame {
         this.setSize(frameWidth, frameHeight);
         //this.setLayout(new GridLayout(2,2)); //todo revisit later
         this.setLayout(new BorderLayout()); //todo revisit later
-        this.setVisible(true);
+        //this.setVisible(true);
         this.setResizable(false);
         //this.revalidate();
     }
@@ -77,7 +77,11 @@ public class ScrabbleFrame extends JFrame {
     }
 
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
         ScrabbleFrame gameFrame = new ScrabbleFrame();
+    }
+
+    public void createPlayers(String playerAmount) {
+        game.createPlayers(playerAmount);
     }
 }

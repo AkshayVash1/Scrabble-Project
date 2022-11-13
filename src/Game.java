@@ -28,17 +28,12 @@ public class Game {
     /**
      * Public constructor for class game.
      */
-    public Game() throws FileNotFoundException {
+    public Game() {
         this.views = new ArrayList<>();
         this.removeTilesFromHand= new ArrayList<>();
         this.exchangeTilesFromHand = new ArrayList<>();
         this.firstPlayInTurn = true;
-
         this.printRules();
-        this.createPlayers("2");
-        this.activeCount = this.playerList.size();
-        this.currentPlayer = this.playerList.get(0);
-        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
     }
 
     /**
@@ -48,10 +43,14 @@ public class Game {
     public void createPlayers(String input) {
         int value = Integer.parseInt(input);
 
+        playerList.clear();
         for (int i = 0; i < value; i++) {
             playerList.add(new Player(i));
             playerList.get(i).initializePlayerHand((ArrayList<Tile>) bag.removeTiles(7));
         }
+        this.activeCount = this.playerList.size();
+        this.currentPlayer = this.playerList.get(0);
+        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
     }
 
     public void addScrabbleView(ScrabbleView sv)
