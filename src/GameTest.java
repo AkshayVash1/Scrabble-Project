@@ -322,7 +322,7 @@ public class GameTest {
         game.addToRemoveTilesFromHand('O');
 
         game.processCommand(new Command("play", "DO", "8H"));
-        game.clearRemoveTilesFromHand();
+        //game.clearRemoveTilesFromHand();
 
         game.addToRemoveTilesFromHand('A');
         game.addToRemoveTilesFromHand('R');
@@ -359,7 +359,7 @@ public class GameTest {
 
         game.processCommand(new Command("play", "OR", "8H"));
 
-        game.clearRemoveTilesFromHand();
+        //game.clearRemoveTilesFromHand();
 
         game.addToRemoveTilesFromHand('A');
         game.addToRemoveTilesFromHand('R');

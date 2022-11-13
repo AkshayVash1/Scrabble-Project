@@ -48,6 +48,6 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
 
     @Override
     public void update(Player currentPlayer, Board board) {
-        console.append("Player " + currentPlayer.getPlayerNumber() + "'s turn..." + NEWLINE2);
+        console.append("Player " + (currentPlayer.getPlayerNumber()+1) + "'s turn..." + NEWLINE2);
     }
 }
