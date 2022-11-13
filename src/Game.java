@@ -47,7 +47,7 @@ public class Game {
      * Creates number of players based on user input
      * @param input User input for number of players
      */
-    private void createPlayers(String input) {
+    public void createPlayers(String input) {
         int value = Integer.parseInt(input);
 
         for (int i = 0; i < value; i++) {
@@ -73,6 +73,11 @@ public class Game {
 
         this.firstPlayInTurn = true;
         for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
+    }
+
+    public void clearRemoveTilesFromHand()
+    {
+        this.removeTilesFromHand.clear();
     }
 
     public Player getCurrentPlayer()

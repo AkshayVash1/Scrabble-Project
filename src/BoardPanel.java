@@ -3,7 +3,7 @@
  * The boardPanel gets updated following each valid play move.
  *
  * @author Mahtab Ameli
- * @date 2022-11-04
+ * @date 2022-11-13
  * @version 0.0
  */
 
@@ -105,6 +105,10 @@ public class BoardPanel extends JPanel implements ScrabbleView{
         return label;
     }
 
+    /**
+     * helper method that iterates through the rows and columns of the board and updates each square with
+     * the respective value of the model board.
+     * */
     private void updateBoard()
     {
         for (int row = 1; row < 16; row++) {
@@ -118,6 +122,11 @@ public class BoardPanel extends JPanel implements ScrabbleView{
         }
     }
 
+    /**
+     * Inherited from the ScrabbleView interface to update the state of the board in various different locations
+     * within the model.
+     * @return none
+     * */
     @Override
     public void update(Player currentPlayer, Board board) {
         this.board = board;
