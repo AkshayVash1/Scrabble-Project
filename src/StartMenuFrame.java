@@ -4,14 +4,16 @@ import java.io.FileNotFoundException;
 public class StartMenuFrame extends JFrame {
     int frameWidth = 400;
     int frameHeight = 400;
-    private Game game = new Game();
+    private ScrabbleFrame scrabbleFrame;
 
-    public StartMenuFrame() throws FileNotFoundException { //TODO: Catch Exception
+    public StartMenuFrame() { //TODO: Catch Exception
         super("Welcome to Scrabble!");
         this.initializeFrame();
         this.initializePanel();
         this.setVisible(true);
         this.setResizable(false);
+        scrabbleFrame = new ScrabbleFrame();
+
     }
 
     private void initializeFrame() {
@@ -24,9 +26,11 @@ public class StartMenuFrame extends JFrame {
     }
 
     public void createPlayers(String playerAmount) {
-        game.createPlayers(playerAmount);
-        this.setVisible(false);
+        scrabbleFrame.createPlayers(playerAmount);
+        //this.setVisible(false);
+        scrabbleFrame.setVisible(true);
     }
+
 
     public static void main(String[] args) throws FileNotFoundException {
         StartMenuFrame startMenuFrame = new StartMenuFrame();

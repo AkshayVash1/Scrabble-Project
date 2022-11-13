@@ -6,6 +6,7 @@
  * @date 2022-11-05
  * @version 0.0
  */
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -17,17 +18,16 @@ public class ScrabbleFrame extends JFrame {
     /**
      * Dimensions of the frame.
      */
-    private final int frameWidth = 1025;
+    private final int frameWidth = 600;
     private final int frameHeight = 1000;
-
+    private Game game = new Game();
 
     /**
      * Constructor for the class.
      */
-    public ScrabbleFrame() throws FileNotFoundException{
+    public ScrabbleFrame() {
         super("Welcome to Scrabble!");
         this.initializeFrame();
-        Game game = new Game();
         this.initializePanels(game);
     }
 
@@ -38,9 +38,9 @@ public class ScrabbleFrame extends JFrame {
     private void initializeFrame() {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setSize(frameWidth, frameHeight);
-        //this.setLayout(new GridLayout(2,1)); //todo revisit later
+        //this.setLayout(new GridLayout(2,2)); //todo revisit later
         this.setLayout(new BorderLayout()); //todo revisit later
-        this.setVisible(true);
+        //this.setVisible(true);
         this.setResizable(false);
         //this.revalidate();
     }
@@ -52,51 +52,36 @@ public class ScrabbleFrame extends JFrame {
     private void initializePanels(Game game) {
         // adding the BoardPanel
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
-
-        JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new BorderLayout());
-
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BorderLayout());
-
-        GameConsolePanel gameConsolePanel = new GameConsolePanel(game);
         BoardPanel boardPanel = new BoardPanel(game);
+        this.add(boardPanel, BorderLayout.NORTH);
+
         HandPanel handPanel = new HandPanel(game);
         GameCommandPanel gameCommandPanel = new GameCommandPanel(game);
-        StatusPanel statusPanel = new StatusPanel(game);
 
         // southPanel contains handPanel and gameCommandPanel
         JPanel southPanel = new JPanel();
+        southPanel.setLayout(new BorderLayout());
+        southPanel.add(handPanel, BorderLayout.NORTH);
+        southPanel.add(gameCommandPanel, BorderLayout.SOUTH);
+        this.add(southPanel, BorderLayout.SOUTH);
+
+        // adding handPanel and gameCommandPanel to southPanel instead of adding to the frame directly
+
+        //this.add(handPanel);
+        //this.add(gameCommandPanel);
 
         //PlayerDisplayPanel playerDisplayPanel = new PlayerDisplayPanel(game);
         //this.add(playerDisplayPanel);
 
-        // adding handPanel and gameCommandPanel to southPanel instead of adding to the frame directly
-        //southPanel.add(handPanel, BorderLayout.NORTH);
-        southPanel.add(gameCommandPanel,BorderLayout.CENTER);
-        //southPanel.add(playerDisplayPanel, BorderLayout.EAST);
-        //this.add(handPanel);
-        //this.add(gameCommandPanel);
-        leftPanel.add(boardPanel, BorderLayout.NORTH);
-        leftPanel.add(handPanel, BorderLayout.CENTER);
-        leftPanel.add(gameCommandPanel, BorderLayout.SOUTH);
-        //rightPanel.add(statusPanel, BorderLayout.NORTH);
-        rightPanel.add(gameConsolePanel, BorderLayout.CENTER);
-        rightPanel.add(statusPanel, BorderLayout.NORTH);
-
-
-        mainPanel.add(leftPanel, BorderLayout.WEST);
-        mainPanel.add(rightPanel, BorderLayout.EAST);
-        //this.add(rightPanel);
-        //this.add(rightPanel, BorderLayout.EAST);
-
-        this.add(mainPanel);
-
         this.revalidate();
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+
+    public static void main(String[] args) {
         ScrabbleFrame gameFrame = new ScrabbleFrame();
+    }
+
+    public void createPlayers(String playerAmount) {
+        game.createPlayers(playerAmount);
     }
 }
