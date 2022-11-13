@@ -1,13 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class GameConsolePanel extends JFrame implements ScrabbleView {
+public class GameConsolePanel extends JPanel implements ScrabbleView {
 
     private JTextArea console;
     private Game game;
 
     public GameConsolePanel(Game game) {
-        super("Game Console");
+        super();
 
         this.game = game;
         this.game.addScrabbleView(this);
@@ -16,7 +16,7 @@ public class GameConsolePanel extends JFrame implements ScrabbleView {
     }
 
     private void initializePanel() {
-        this.setSize(400, 600);
+        this.setPreferredSize(new Dimension(400, 500));
         this.setBackground(Color.gray);
         this.setVisible(true);
 
@@ -27,7 +27,7 @@ public class GameConsolePanel extends JFrame implements ScrabbleView {
     }
 
     @Override
-    public void update(Player currentPlayer) {
+    public void update(Player currentPlayer, Board board) {
 
     }
 }
