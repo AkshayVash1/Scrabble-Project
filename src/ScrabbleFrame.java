@@ -58,7 +58,7 @@ public class ScrabbleFrame extends JFrame {
         leftPanel.setLayout(new BorderLayout());
 
         JPanel rightPanel = new JPanel();
-        //rightPanel.setLayout(new BorderLayout());
+        rightPanel.setLayout(new BorderLayout());
 
         GameConsolePanel gameConsolePanel = new GameConsolePanel(game);
         BoardPanel boardPanel = new BoardPanel(game);
@@ -82,7 +82,8 @@ public class ScrabbleFrame extends JFrame {
         leftPanel.add(handPanel, BorderLayout.CENTER);
         leftPanel.add(gameCommandPanel, BorderLayout.SOUTH);
         //rightPanel.add(statusPanel, BorderLayout.NORTH);
-        rightPanel.add(gameConsolePanel, BorderLayout.SOUTH);
+        rightPanel.add(gameConsolePanel, BorderLayout.CENTER);
+        rightPanel.add(statusPanel, BorderLayout.NORTH);
 
 
         mainPanel.add(leftPanel, BorderLayout.WEST);
