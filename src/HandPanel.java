@@ -20,6 +20,17 @@ public class HandPanel extends JPanel implements ScrabbleView {
     public HandPanel(Game game)
     {
         this.player = new Player(10);
+        ArrayList <Tile> placeHolder = new ArrayList<>();
+        placeHolder.add(new Tile("X", 1));
+        placeHolder.add(new Tile("X", 1));
+        placeHolder.add(new Tile("X", 1));
+        placeHolder.add(new Tile("X", 1));
+        placeHolder.add(new Tile("X", 1));
+        placeHolder.add(new Tile("X", 1));
+        placeHolder.add(new Tile("X", 1));
+        player.getHand().addTiles(placeHolder, false);
+
+        this.setPreferredSize(new Dimension(400,30));
         this.game = game;
         refreshHand();
         game.addScrabbleView(this);

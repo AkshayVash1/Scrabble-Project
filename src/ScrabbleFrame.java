@@ -17,7 +17,7 @@ public class ScrabbleFrame extends JFrame {
     /**
      * Dimensions of the frame.
      */
-    private final int frameWidth = 1000;
+    private final int frameWidth = 1025;
     private final int frameHeight = 1000;
 
 
@@ -52,11 +52,13 @@ public class ScrabbleFrame extends JFrame {
     private void initializePanels(Game game) {
         // adding the BoardPanel
 
-        JPanel leftPanel = new JPanel();
+        JPanel mainPanel = new JPanel(new BorderLayout());
 
+        JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
 
         JPanel rightPanel = new JPanel();
+        //rightPanel.setLayout(new BorderLayout());
 
         GameConsolePanel gameConsolePanel = new GameConsolePanel(game);
         BoardPanel boardPanel = new BoardPanel(game);
@@ -71,20 +73,24 @@ public class ScrabbleFrame extends JFrame {
         //this.add(playerDisplayPanel);
 
         // adding handPanel and gameCommandPanel to southPanel instead of adding to the frame directly
-        southPanel.add(handPanel, BorderLayout.CENTER);
+        //southPanel.add(handPanel, BorderLayout.NORTH);
         southPanel.add(gameCommandPanel,BorderLayout.CENTER);
         //southPanel.add(playerDisplayPanel, BorderLayout.EAST);
         //this.add(handPanel);
         //this.add(gameCommandPanel);
-        leftPanel.add(boardPanel, BorderLayout.PAGE_START);
-        leftPanel.add(southPanel, BorderLayout.PAGE_END);
+        leftPanel.add(boardPanel, BorderLayout.NORTH);
+        leftPanel.add(handPanel, BorderLayout.CENTER);
+        leftPanel.add(gameCommandPanel, BorderLayout.SOUTH);
         //rightPanel.add(statusPanel, BorderLayout.NORTH);
         rightPanel.add(gameConsolePanel, BorderLayout.SOUTH);
 
 
-        this.add(leftPanel);
+        mainPanel.add(leftPanel, BorderLayout.WEST);
+        mainPanel.add(rightPanel, BorderLayout.EAST);
         //this.add(rightPanel);
         //this.add(rightPanel, BorderLayout.EAST);
+
+        this.add(mainPanel);
 
         this.revalidate();
     }
