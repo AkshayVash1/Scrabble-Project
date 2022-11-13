@@ -32,6 +32,15 @@ public class Board {
     private boolean isFirstPlay;
 
     /**
+     * Most recently played word
+     */
+    private String playedWord = "";
+
+    public String getPlayedWord() {
+        return playedWord;
+    }
+
+    /**
      * Direction of word placement on the board
      */
     public enum Direction{HORIZONTAL, VERTICAL}
@@ -659,6 +668,7 @@ public class Board {
             }
         }
         wordScore = calculateWordScore(wordToScore);
+        playedWord = wordToScore;
         System.out.println("score for word " + wordToScore + ": " + wordScore);
         return wordScore;
     }

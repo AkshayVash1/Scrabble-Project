@@ -1,3 +1,14 @@
+/**
+ * This class is part of the "Scrabble" application.
+ *
+ * GameTest is primarily used to test particular logical streams of the model using JUnit5. 12 different play
+ * cases with calling processCommand are called in order to ensure all possible error paths and playable paths are
+ * covered. Point counting is also taken into account.
+ *
+ * @author Mohamed Kaddour
+ * @date 2022.11.13
+ */
+
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
@@ -228,6 +239,7 @@ public class GameTest {
         playerHand.add(new Tile("R", 1));
         player.getHand().addTiles(playerHand, false);
 
+        //Not a valid word
         game.addToRemoveTilesFromHand('E');
         game.addToRemoveTilesFromHand('O');
 
@@ -259,6 +271,101 @@ public class GameTest {
         game.addToRemoveTilesFromHand('R');
 
         exp = game.processCommand(new Command("play", "OR", "8H"));
+
+        assert(!exp);
+    }
+
+    @Test
+    public void testPlayMoveGetPlayedPoints() throws FileNotFoundException {
+        ArrayList<Tile> playerHand = new ArrayList<>();
+
+        Game game = new Game();
+        game.nextPlayer();
+        Player player = game.getCurrentPlayer();
+        player.getHand().getHand().clear();
+        playerHand.add(new Tile("A", 1));
+        playerHand.add(new Tile("B", 1));
+        playerHand.add(new Tile("C", 1));
+        playerHand.add(new Tile("D", 1));
+        playerHand.add(new Tile("E", 1));
+        playerHand.add(new Tile("O", 1));
+        playerHand.add(new Tile("R", 1));
+        player.getHand().addTiles(playerHand, false);
+
+        game.addToRemoveTilesFromHand('D');
+        game.addToRemoveTilesFromHand('O');
+
+        game.processCommand(new Command("play", "DO", "8H"));
+
+        //D has two points and O has one point
+        assert(player.getPoints() == 3);
+    }
+
+    @Test
+    public void testPlayMoveGetPlayedPointsAfterTwoPlays() throws FileNotFoundException {
+        ArrayList<Tile> playerHand = new ArrayList<>();
+
+        Game game = new Game();
+        game.nextPlayer();
+        Player player = game.getCurrentPlayer();
+        player.getHand().getHand().clear();
+        playerHand.add(new Tile("A", 1));
+        playerHand.add(new Tile("B", 1));
+        playerHand.add(new Tile("C", 1));
+        playerHand.add(new Tile("D", 1));
+        playerHand.add(new Tile("E", 1));
+        playerHand.add(new Tile("O", 1));
+        playerHand.add(new Tile("R", 1));
+        player.getHand().addTiles(playerHand, false);
+
+        game.addToRemoveTilesFromHand('D');
+        game.addToRemoveTilesFromHand('O');
+
+        game.processCommand(new Command("play", "DO", "8H"));
+        //game.clearRemoveTilesFromHand();
+
+        game.addToRemoveTilesFromHand('A');
+        game.addToRemoveTilesFromHand('R');
+        game.addToRemoveTilesFromHand('E');
+
+        game.processCommand(new Command("play", "ARE", "H9"));
+
+        //D has two points and O has one point to make 3 points
+        //D has two points, A has one point, E has one point, R has one point to make 5 points
+        //Total 8 points
+        assert(player.getPoints() == 8);
+    }
+
+    @Test
+    public void testPlayMoveOnAlreadyPlacedTilePosition() throws FileNotFoundException {
+        ArrayList<Tile> playerHand = new ArrayList<>();
+        boolean exp;
+
+        Game game = new Game();
+        game.nextPlayer();
+        Player player = game.getCurrentPlayer();
+        player.getHand().getHand().clear();
+        playerHand.add(new Tile("A", 1));
+        playerHand.add(new Tile("B", 1));
+        playerHand.add(new Tile("C", 1));
+        playerHand.add(new Tile("D", 1));
+        playerHand.add(new Tile("E", 1));
+        playerHand.add(new Tile("O", 1));
+        playerHand.add(new Tile("R", 1));
+        player.getHand().addTiles(playerHand, false);
+
+        game.addToRemoveTilesFromHand('D');
+        game.addToRemoveTilesFromHand('O');
+
+        game.processCommand(new Command("play", "OR", "8H"));
+
+        //game.clearRemoveTilesFromHand();
+
+        game.addToRemoveTilesFromHand('A');
+        game.addToRemoveTilesFromHand('R');
+        game.addToRemoveTilesFromHand('E');
+
+        exp = game.processCommand(new Command("play", "ARE", "H8"));
 
         assert(!exp);
     }

@@ -17,9 +17,8 @@ public class StatusPanel extends JPanel implements ScrabbleView {
 
     private void initializePanel() {
         this.setPreferredSize(new Dimension(400, 100));
-        this.setBackground(Color.black);
+        this.setBackground(Color.gray);
         this.setVisible(true);
-
     }
 
 
