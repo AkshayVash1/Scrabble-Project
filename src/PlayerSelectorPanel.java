@@ -31,7 +31,7 @@ public class PlayerSelectorPanel extends JPanel {
         }
 
         comboBox.setName("JComboBox");
-        JPanel jComboBoxPanel = new JPanel(new GridLayout(2,0));
+        JPanel jComboBoxPanel = new JPanel(new GridLayout(2, 0));
         jComboBoxPanel.setBackground(new Color(0, 0, 0, 0));
         jlabel.setForeground(Color.white);
         comboBox.addItem("");
@@ -76,12 +76,5 @@ public class PlayerSelectorPanel extends JPanel {
 
             }
         });
-    }
-
-    public String getPlayerAmount() {
-        return playerAmount;
-    }
-
-    public static void main(String[] args) throws FileNotFoundException {
     }
 }
