@@ -1,34 +1,62 @@
-/**
- * Unit test for the class Board.
- *
- * @author Mahtab Ameli
- * @date 2022-11-09
- * @version 0.0
- */
 
 import junit.framework.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import static org.junit.Assert.*;
 
-
+/**
+ * Unit test for the class Board.
+ *
+ * @author Mahtab Ameli
+ * @date 2022-11-13
+ * @version 0.0
+ */
 public class BoardTest {
 
+    /**
+     * The board to be tested.
+     */
     private Board board = new Board();
+
+    /**
+     * Array of cells in the board.
+     */
     private String[][] testCells;
+
+    /**
+     * The length of the 2D array testCells.
+     */
     private int cellsLength;
+
+    /**
+     * Mapping of String coordinates to Squares of the board.
+     */
     private HashMap<String, Square> testSquares;
+
+    /**
+     * Mapping of String coordinates to Tiles placed at that coordinate of the board.
+     */
     private HashMap<String, Tile> testTiles;
-    private ArrayList<Tile> testWord_1, testWord_2, testWord_3;
-    // some useful tiles for testing
+
+    /**
+     * Useful words (each word is list of tiles) to use in different tests.
+     */
+    private ArrayList<Tile> testWord_ONE, testWord_TWO, testWord_THREE;
+
+
+    /**
+     * Useful tiles to be used in different tests.
+     */
     private Tile T_tile, E_tile, H_tile, M_tile;
 
 
+    /**
+     * Initializes attributes before each test.
+     * @throws Exception
+     */
     @Before
     public void setUp() throws Exception {
         testCells = board.getCells();
@@ -46,37 +74,34 @@ public class BoardTest {
         // creating testWord_1
         Tile O_tile = new Tile("O", 1);
         Tile N_tile = new Tile("N", 1);
-        testWord_1 = new ArrayList();
+        testWord_ONE = new ArrayList();
 
-        testWord_1.add(O_tile);
-        testWord_1.add(N_tile);
-        testWord_1.add(E_tile);
+        testWord_ONE.add(O_tile);
+        testWord_ONE.add(N_tile);
+        testWord_ONE.add(E_tile);
 
         // creating testWord_2 "TWO"
 
         Tile W_tile = new Tile("W", 4);
-        testWord_2 = new ArrayList();
+        testWord_TWO = new ArrayList();
 
-        testWord_2.add(T_tile);
-        testWord_2.add(W_tile);
-        testWord_2.add(O_tile);
+        testWord_TWO.add(T_tile);
+        testWord_TWO.add(W_tile);
+        testWord_TWO.add(O_tile);
 
         // creating testWord3 "THREE"
         Tile R_tile = new Tile("R", 1);
 
-        testWord_3 = new ArrayList();
+        testWord_THREE = new ArrayList();
 
         //testWord_3.add(T_tile);
-        testWord_3.add(H_tile);
-        testWord_3.add(R_tile);
-        testWord_3.add(E_tile);
-        testWord_3.add(E_tile);
+        testWord_THREE.add(H_tile);
+        testWord_THREE.add(R_tile);
+        testWord_THREE.add(E_tile);
+        testWord_THREE.add(E_tile);
 
     }
 
-/*    @After
-    public void tearDown() throws Exception {
-    }*/
 
     /**
      * Test Case: new instance of Board is created and all cells are "blank".
@@ -145,7 +170,6 @@ public class BoardTest {
     }
 
 
-
     /**
      * Test Case: The board has been created but no player has started playing yet.
      *
@@ -170,7 +194,6 @@ public class BoardTest {
     public void testWordPlacement_Horizontal() {
 
         //creating letter tiles for the word "H"
-        Tile H_tile = new Tile("H", 4);
         //creating word's arraylist of tiles
         ArrayList<Tile> H_word = new ArrayList();
         H_word.add(H_tile);
@@ -222,7 +245,6 @@ public class BoardTest {
     public void testFirstWordScore_Valid() {
 
         //creating letter tiles for the word "H"
-        Tile H_tile = new Tile("H", 4);
         //creating word's arraylist of tiles
         ArrayList<Tile> H_word = new ArrayList();
         H_word.add(H_tile);
@@ -264,9 +286,8 @@ public class BoardTest {
      *
      */
     @Test
-    public void testWordScore_Appended_Valid() {
+    public void testWordScore_Appended_Vertical_Valid() {
         //creating letter tiles for the word "H"
-        Tile H_tile = new Tile("H", 4);
         //creating word's arraylist of tiles
         ArrayList<Tile> H_word = new ArrayList();
         H_word.add(H_tile);
@@ -283,13 +304,45 @@ public class BoardTest {
         HARP_word.add(R_tile);
         HARP_word.add(P_tile);
 
-        Boolean placed = false;
-
         int wordScore = board.getWordScore(9, 8, HARP_word, Board.Direction.VERTICAL);
 
         // the score for HARP should be 9.
         assertEquals(9, wordScore);
     }
+
+
+    /**
+     * Test Case: The horizontal word "ARP" is appended to "H" on row8, col8. The word "HARP" is to be scored.
+     *
+     * Tests whether the valid word "HARP" is correctly detected horizontally and correctly scored as 4 + 1 + 1 + 3 = 9.
+     *
+     * Methods covered: placeWord(), adjacentConditionMet(), placeTileAt()
+     *
+     */
+    @Test
+    public void testWordScore_Appended_Horizontal_Valid() {
+        //creating letter tiles for the word "H"
+        //creating word's arraylist of tiles
+        ArrayList<Tile> H_word = new ArrayList();
+        H_word.add(H_tile);
+        board.placeWord(8,8,H_word, Board.Direction.HORIZONTAL);
+
+        //creating letter tiles for the word "ARP" to append to "H" and make "HARP"
+        Tile A_tile = new Tile("A", 1);
+        Tile R_tile = new Tile("R", 1);
+        Tile P_tile = new Tile("P", 3);
+        ArrayList<Tile> HARP_word = new ArrayList();
+
+        HARP_word.add(A_tile);
+        HARP_word.add(R_tile);
+        HARP_word.add(P_tile);
+
+        int wordScore = board.getWordScore(9, 8, HARP_word, Board.Direction.HORIZONTAL);
+
+        // the score for HARP should be 9.
+        assertEquals(9, wordScore);
+    }
+
 
     /**
      * Test Case: The vertical word "M" is appended to "H" on row8, col8. The INVALID word "HM" is to be scored.
@@ -302,7 +355,6 @@ public class BoardTest {
     @Test
     public void testWordScore_Appended_Vertical_Invalid() {
         //creating letter tiles for the word "H"
-        Tile H_tile = new Tile("H", 4);
         //creating "H" word's arraylist of tiles
         ArrayList<Tile> H_word = new ArrayList();
         H_word.add(H_tile);
@@ -326,6 +378,39 @@ public class BoardTest {
 
 
     /**
+     * Test Case: The horizontal word "M" is appended to "H" on row8, col8. The INVALID word "HM" is to be scored.
+     *
+     * Tests whether the invalid word "HM" is correctly scored to 0.
+     *
+     * Methods covered: placeWord(), adjacentConditionMet(), placeTileAt()
+     *
+     */
+    @Test
+    public void testWordScore_Appended_Horizontal_Invalid() {
+        //creating letter tiles for the word "H"
+        //creating "H" word's arraylist of tiles
+        ArrayList<Tile> H_word = new ArrayList();
+        H_word.add(H_tile);
+
+        //creating letter tiles for the word "M"
+        Tile M_tile = new Tile("M", 3);
+        //creating "m" word's arraylist of tiles
+        ArrayList<Tile> HM_word = new ArrayList();
+        HM_word.add(M_tile);
+
+
+        board.placeWord(8,8,H_word, Board.Direction.HORIZONTAL);
+        board.placeWord(9,8,H_word, Board.Direction.HORIZONTAL);
+
+
+        int wordScore = board.getWordScore(9, 8, HM_word, Board.Direction.HORIZONTAL);
+
+        // the score for the invalid word should be 0.
+        assertEquals(0, wordScore);
+    }
+
+
+    /**
      * Test Case: The vertical word "M" is appended to "H" on row8, col8. The INVALID word "HM" is to be detected vertically.
      *
      * Tests whether the invalid word "HM" is correctly placed on the board.
@@ -335,7 +420,6 @@ public class BoardTest {
     @Test
     public void testTilesPlaced_Vertical() {
         //creating letter tiles for the word "H"
-        Tile H_tile = new Tile("H", 4);
         //creating "H" word's arraylist of tiles
         ArrayList<Tile> H_word = new ArrayList();
         H_word.add(H_tile);
@@ -370,7 +454,6 @@ public class BoardTest {
     @Test
     public void testTilesPlaced_Horizontal() {
         //creating letter tiles for the word "H"
-        Tile H_tile = new Tile("H", 4);
         //creating "H" word's arraylist of tiles
         ArrayList<Tile> H_word = new ArrayList();
         H_word.add(H_tile);
@@ -422,6 +505,7 @@ public class BoardTest {
         assertEquals(16, premiumScore);
     }
 
+
     /**
      * Test Case: The INVALID word "LB" is to be scored, based on letter values and the DW multiplier of the centre square.
      *
@@ -449,8 +533,6 @@ public class BoardTest {
     }
 
 
-
-
     /**
      * Test Case: No words have been placed on the word yet.
      *
@@ -466,6 +548,7 @@ public class BoardTest {
 
         assertEquals(0,wordCount);
     }
+
 
     /**
      * Test Case: No words have been placed on the word yet.
@@ -494,8 +577,8 @@ public class BoardTest {
      */
     @Test
     public void testGetHorizontalWords() {
-        board. placeWord(8, 8, testWord_2, Board.Direction.HORIZONTAL);
-        board. placeWord(9, 8, testWord_3, Board.Direction.VERTICAL);
+        board. placeWord(8, 8, testWord_TWO, Board.Direction.HORIZONTAL);
+        board. placeWord(9, 8, testWord_THREE, Board.Direction.VERTICAL);
 
         ArrayList<String> words = board.getHorizontalWords();
         int wordCount = words.size();
@@ -514,8 +597,8 @@ public class BoardTest {
      */
     @Test
     public void testGetVerticalWords() {
-        board. placeWord(8, 8, testWord_2, Board.Direction.HORIZONTAL);
-        board. placeWord(9, 8, testWord_3, Board.Direction.VERTICAL);
+        board. placeWord(8, 8, testWord_TWO, Board.Direction.HORIZONTAL);
+        board. placeWord(9, 8, testWord_THREE, Board.Direction.VERTICAL);
 
         ArrayList<String> words = board.getVerticalWords();
         int wordCount = words.size();
