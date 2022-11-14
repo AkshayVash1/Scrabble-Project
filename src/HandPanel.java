@@ -40,6 +40,7 @@ public class HandPanel extends JPanel implements ScrabbleView {
     {
         //MouseController controller = new MouseController(this.game);
         this.removeAll();
+        DragGestureController dg = new DragGestureController(this.player);
 
         for (Tile t : this.player.getHand().getHand())
         {
@@ -47,7 +48,7 @@ public class HandPanel extends JPanel implements ScrabbleView {
             p.setBackground(new Color(Square.Multiplier.NONE.getRGB_color()));
             JLabel l = new JLabel(t.toString());
             DragSource ds = new DragSource();
-            ds.createDefaultDragGestureRecognizer(l, 1, this::dragGestureRecognized);
+            ds.createDefaultDragGestureRecognizer(l, 1, dg::dragGestureRecognized);
             l.setSize(10,10);
             l.setFont(new Font(Font.MONOSPACED, Font.BOLD,18));
             p.add(l);
@@ -56,34 +57,9 @@ public class HandPanel extends JPanel implements ScrabbleView {
     }
 
     @Override
-    public void update(Player currentPlayer, Board board, boolean status) {
-        this.player = currentPlayer;
+    public void update(ScrabbleEvent e) {
+        this.player = e.getCurrentPlayer();
         refreshHand();
     }
 
-    private Tile retrieveTile(String s)
-    {
-        for (Tile t : this.player.getHand().getHand()) {
-            if ( t.getLetter().equals(Character.toString(s.charAt(0))))
-            {
-                return t;
-            }
-        }
-
-        return null;
-    }
-
-    public void dragGestureRecognized(DragGestureEvent event) {
-
-        var cursor = Cursor.getDefaultCursor();
-
-        if (event.getDragAction() == DnDConstants.ACTION_COPY) {
-
-            cursor = DragSource.DefaultCopyDrop;
-        }
-
-        JLabel src = (JLabel) event.getComponent();
-
-        event.startDrag(cursor, new TransferableTile((retrieveTile(src.getText()))));
-    }
 }

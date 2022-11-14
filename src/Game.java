@@ -51,7 +51,7 @@ public class Game {
         }
         this.activeCount = this.playerList.size();
         this.currentPlayer = this.playerList.get(0);
-        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board, this.gameFinished);}
+        for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
     }
 
     public void addScrabbleView(ScrabbleView sv)
@@ -75,7 +75,7 @@ public class Game {
         }
 
         this.firstPlayInTurn = true;
-        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board, this.gameFinished);}
+        for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
     }
 
     public Player getCurrentPlayer()
@@ -191,7 +191,7 @@ public class Game {
                     rc = false;
                 }
 
-                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board, this.gameFinished);}
+                for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
                 break;
 
             case "play":
@@ -228,12 +228,12 @@ public class Game {
                     rc = false;
                 }
 
-                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board, this.gameFinished);}
+                for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
                 break;
 
             case "shuffle":
                 currentPlayer.shuffle();
-                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board, this.gameFinished);}
+                for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
                 break;
 
             case "pass":

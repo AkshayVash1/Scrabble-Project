@@ -126,8 +126,8 @@ public class BoardPanel extends JPanel implements ScrabbleView{
      * @return none
      * */
     @Override
-    public void update(Player currentPlayer, Board board, boolean status) {
-        this.board = board;
+    public void update(ScrabbleEvent e) {
+        this.board = e.getBoard();
         updateBoard();
     }
 }

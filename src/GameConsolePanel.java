@@ -53,7 +53,7 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
     }
 
     @Override
-    public void update(Player currentPlayer, Board board, boolean status) {
+    public void update(ScrabbleEvent e) {
         if (textCount > 12) {
             console.setText("");
             textCount = 0;
@@ -62,12 +62,12 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
             textCount++;
         }
 
-        console.append("Player " + (currentPlayer.getPlayerNumber()+1) + "'s turn..." +  "Points:" +
-                currentPlayer.getPoints() + NEWLINE2);
+        console.append("Player " + (e.getCurrentPlayer().getPlayerNumber()+1) + "'s turn..." +  "Points:" +
+                e.getCurrentPlayer().getPoints() + NEWLINE2);
 
-        if (status == true)
+        if (e.isGameFinished() == true)
         {
-            console.append("GAME IS FINISHED! PLAYER " + (currentPlayer.getPlayerNumber()+1) + " WON!" + NEWLINE2 +
+            console.append("GAME IS FINISHED! PLAYER " + (e.getCurrentPlayer().getPlayerNumber()+1) + " WON!" + NEWLINE2 +
             "Please close game and play again");
         }
     }
