@@ -24,6 +24,7 @@ public class Game {
     private ArrayList<Character> exchangeTilesFromHand;
     private boolean firstPlayInTurn;
     private String startingCoordinates;
+    private String actionCommand;
 
     /**
      * Public constructor for class game.
@@ -196,6 +197,7 @@ public class Game {
         boolean rc = true;
 
         String action = command.getAction();
+        actionCommand = command.getAction();
 
         switch (action) {
             case "exchange":
