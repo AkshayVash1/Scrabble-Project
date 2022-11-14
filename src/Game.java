@@ -67,15 +67,15 @@ public class Game {
     public void nextPlayer()
     {
         this.removeTilesFromHand.clear();
-        if (currentPlayer.getPoints() >= 50)
-        {
-            this.gameFinished = true;
-        }
-        else {
-            if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
-                this.currentPlayer = this.playerList.get(0);
+        if (currentPlayer != null) {
+            if (currentPlayer.getPoints() >= 50) {
+                this.gameFinished = true;
             } else {
-                this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+                if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
+                    this.currentPlayer = this.playerList.get(0);
+                } else {
+                    this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+                }
             }
         }
 

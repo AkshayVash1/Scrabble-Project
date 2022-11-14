@@ -22,7 +22,7 @@ public class GameTest {
         ArrayList<Tile> expectedOutput = new ArrayList<>();
 
         Game game = new Game();
-        game.nextPlayer();
+        game.createPlayers("1");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -48,7 +48,7 @@ public class GameTest {
         ArrayList<Tile> expectedOutput = new ArrayList<>();
 
         Game game = new Game();
-        game.nextPlayer();
+        game.createPlayers("1");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -83,7 +83,7 @@ public class GameTest {
         ArrayList<String> expectedOutput = new ArrayList<>();
 
         Game game = new Game();
-        game.nextPlayer();
+        game.createPlayers("1");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -114,7 +114,7 @@ public class GameTest {
         ArrayList<Tile> expectedOutput = new ArrayList<>();
 
         Game game = new Game();
-        game.nextPlayer();
+        game.createPlayers("1");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -149,7 +149,7 @@ public class GameTest {
         boolean exp;
 
         Game game = new Game();
-        game.nextPlayer();
+        game.createPlayers("1");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -175,7 +175,7 @@ public class GameTest {
         boolean exp;
 
         Game game = new Game();
-        game.nextPlayer();
+        game.createPlayers("1");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -201,7 +201,7 @@ public class GameTest {
         boolean exp;
 
         Game game = new Game();
-        game.nextPlayer();
+        game.createPlayers("1");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -227,7 +227,7 @@ public class GameTest {
         boolean exp;
 
         Game game = new Game();
-        game.nextPlayer();
+        game.createPlayers("1");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -254,7 +254,7 @@ public class GameTest {
         boolean exp;
 
         Game game = new Game();
-        game.nextPlayer();
+        game.createPlayers("1");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -280,7 +280,7 @@ public class GameTest {
         ArrayList<Tile> playerHand = new ArrayList<>();
 
         Game game = new Game();
-        game.nextPlayer();
+        game.createPlayers("1");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -306,7 +306,7 @@ public class GameTest {
         ArrayList<Tile> playerHand = new ArrayList<>();
 
         Game game = new Game();
-        game.nextPlayer();
+        game.createPlayers("1");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -342,7 +342,7 @@ public class GameTest {
         boolean exp;
 
         Game game = new Game();
-        game.nextPlayer();
+        game.createPlayers("1");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
