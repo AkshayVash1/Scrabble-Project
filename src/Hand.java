@@ -76,6 +76,7 @@ public class Hand {
         if ((rc = (!removeTiles.isEmpty())) == false)
         {
             System.out.println("FAILED, PASSED IN ARRAY IS EMPTY");
+            rc = false;
         }
         else
         {

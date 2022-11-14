@@ -66,6 +66,7 @@ public class PlayMove {
         }
         else
         {
+
             if (this.placementAttempt.length() == DOUBLE_DIGIT_DETECTION) {
                 return Integer.parseInt(placementAttempt.substring(PlayMove.PARSE_CHAR_AT_ONE,
                         PARSE_CHAR_AT_THREE));
@@ -161,7 +162,13 @@ public class PlayMove {
     public boolean placeTile()
     {
         handleBlanks();
-        return this.board.placeWord(parseRow(), parseColumn(), this.wordTiles, this.direction);
+        if (this.direction != null && this.placementAttempt != null) {
+            return this.board.placeWord(parseRow(), parseColumn(), this.wordTiles, this.direction);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /**

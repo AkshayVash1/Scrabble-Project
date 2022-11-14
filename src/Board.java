@@ -6,8 +6,8 @@ import java.util.*;
  * The cells themselves store the value of the tile letter placed on them. Printing the board displays the state of the game.
  *
  * @author Mahtab Ameli
- * @date 2022-10-25
- * @version 0.0
+ * @date 2022-11-13
+ * @version 2.0
  */
 public class Board {
 
@@ -30,6 +30,15 @@ public class Board {
      * True if the current move is the first play of the game.
      */
     private boolean isFirstPlay;
+
+    /**
+     * Most recently played word
+     */
+    private String playedWord = "";
+
+    public String getPlayedWord() {
+        return playedWord;
+    }
 
     /**
      * Direction of word placement on the board
@@ -549,6 +558,13 @@ public class Board {
     }
 
     /**
+     * Returns the String letter placed on given coordinates.
+     */
+    public String getLetterAt(int row, int col) {
+        return cells[row][col];
+    }
+
+    /**
      * Returns list of all String words on given row of board.
      *
      * @param row the integer value of the row of given cell.
@@ -659,6 +675,7 @@ public class Board {
             }
         }
         wordScore = calculateWordScore(wordToScore);
+        playedWord = wordToScore;
         System.out.println("score for word " + wordToScore + ": " + wordScore);
         return wordScore;
     }
@@ -679,6 +696,20 @@ public class Board {
             //System.out.println("current character of word " + wordToScore + ": " + wordToScore.charAt(i));
         }
         return wordScore;
+    }
+
+    /**
+     * Returns the score for given word multiplied by corresponding premium scores' multipliers.
+     *
+     * @param row the integer value of the row of given cell.
+     * @param col the integer value of the column of given cell.
+     * @param tilesList list of tiles of the word to be scored.
+     * @param direction placement direction of the word to be scored.
+     * @return the multiplied score of the word.
+     */
+    public int calculatePremiumScore(int row, int col, ArrayList<Tile> tilesList, Direction direction) {
+        int premiumScore = 0;
+        return premiumScore;
     }
 
     /**
@@ -749,6 +780,11 @@ public class Board {
         }
         //System.out.println("number of words " + VerticalWords.size());
         return VerticalWords;
+    }
+
+    public String getLetterAtSquare(int row, int col)
+    {
+        return this.cells[row][col];
     }
 
 }
