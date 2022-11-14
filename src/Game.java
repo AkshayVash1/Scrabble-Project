@@ -24,7 +24,7 @@ public class Game {
     private ArrayList<Character> exchangeTilesFromHand;
     private boolean firstPlayInTurn;
     private String startingCoordinates;
-    private String actionCommand;
+    private boolean gameFinished;
 
     /**
      * Public constructor for class game.
@@ -34,6 +34,7 @@ public class Game {
         this.removeTilesFromHand= new ArrayList<>();
         this.exchangeTilesFromHand = new ArrayList<>();
         this.firstPlayInTurn = true;
+        this.gameFinished = false;
     }
 
     /**
@@ -50,7 +51,7 @@ public class Game {
         }
         this.activeCount = this.playerList.size();
         this.currentPlayer = this.playerList.get(0);
-        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
+        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board, this.gameFinished);}
     }
 
     public void addScrabbleView(ScrabbleView sv)
@@ -61,15 +62,20 @@ public class Game {
     public void nextPlayer()
     {
         this.removeTilesFromHand.clear();
-        if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
-            this.currentPlayer = this.playerList.get(0);
+        if (currentPlayer.getPoints() >= 50)
+        {
+            this.gameFinished = true;
         }
         else {
-            this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+            if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
+                this.currentPlayer = this.playerList.get(0);
+            } else {
+                this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+            }
         }
 
         this.firstPlayInTurn = true;
-        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
+        for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board, this.gameFinished);}
     }
 
     public Player getCurrentPlayer()
@@ -169,7 +175,6 @@ public class Game {
         boolean rc = true;
 
         String action = command.getAction();
-        actionCommand = command.getAction();
 
         switch (action) {
             case "exchange":
@@ -186,7 +191,7 @@ public class Game {
                     rc = false;
                 }
 
-                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
+                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board, this.gameFinished);}
                 break;
 
             case "play":
@@ -223,12 +228,12 @@ public class Game {
                     rc = false;
                 }
 
-                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
+                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board, this.gameFinished);}
                 break;
 
             case "shuffle":
                 currentPlayer.shuffle();
-                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board);}
+                for(ScrabbleView v : this.views){v.update(this.currentPlayer, this.board, this.gameFinished);}
                 break;
 
             case "pass":
