@@ -162,7 +162,13 @@ public class PlayMove {
     public boolean placeTile()
     {
         handleBlanks();
-        return this.board.placeWord(parseRow(), parseColumn(), this.wordTiles, this.direction);
+        if (this.direction != null && this.placementAttempt != null) {
+            return this.board.placeWord(parseRow(), parseColumn(), this.wordTiles, this.direction);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /**
