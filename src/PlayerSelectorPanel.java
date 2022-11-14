@@ -1,10 +1,19 @@
+/**
+ * This class is part of the "Scrabble" application.
+ *
+ * This panel initializes the game by creating a Selector Panel with the choice for the number of players needed to
+ * start the game.
+ *
+ * @author Jaydon Haghighi
+ * @date 2022.11.13
+ */
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class PlayerSelectorPanel extends JPanel {

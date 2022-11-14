@@ -13,6 +13,15 @@ public class GameCommandPanelController implements ActionListener{
     private Game game;
     private JFrame exchangeFrame;
 
+    /**
+     * Constructor for GameCommandPanelController
+     *
+     * @param player
+     * @param tileButtons
+     * @param tilesToExchange
+     * @param game
+     * @param exchangeFrame
+     */
     public GameCommandPanelController (Player player,
                                        ArrayList<JToggleButton> tileButtons,
                                        ArrayList<Tile> tilesToExchange,
@@ -26,6 +35,11 @@ public class GameCommandPanelController implements ActionListener{
         this.exchangeFrame = exchangeFrame;
     }
 
+    /**
+     * Method responsible for the toggle functionality when exchanging tiles
+     *
+     * @param e
+     */
     private void processToggleButtonAction(ActionEvent e) {
         this.hypotheticalHand = this.player.getHand().getHand();
 

@@ -1,4 +1,6 @@
 /**
+ * Contains all information regarding the current points per player, the players turn and printing messages to the user
+ *
  * @Author Akshay Vashisht
  * @Date 2022-11-13
  * @Version 1.0
@@ -17,6 +19,7 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
     private boolean firstUpdate;
 
     /**
+     * Public constructor for class GameConsolePanel
      *
      * @param game
      */
@@ -31,6 +34,9 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
         this.add(console);
     }
 
+    /**
+     * Initializes the panel
+     */
     private void initializePanel() {
         console = new JTextArea(31, 20);
 
@@ -50,6 +56,9 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
         this.setVisible(true);
     }
 
+    /**
+     * Appends a help message to the console when prompted
+     */
     public void appendHelp()
     {
         console.append("Scrabble is a word game with 2-4 players. The goal of the game is to accumulate more than or equal to 50 points \n" +

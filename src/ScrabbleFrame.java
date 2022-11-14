@@ -87,12 +87,13 @@ public class ScrabbleFrame extends JFrame implements ActionListener {
         this.revalidate();
     }
 
+    /**
+     * Creates the players for the game
+     *
+     * @param playerAmount
+     */
     public void createPlayers(String playerAmount) {
         game.createPlayers(playerAmount);
-    }
-
-    public static void main(String[] args) {
-        ScrabbleFrame scrabbleFrame = new ScrabbleFrame();
     }
 
     @Override

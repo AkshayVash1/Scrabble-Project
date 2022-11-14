@@ -1,3 +1,11 @@
+/**
+ * The frame for the PlayerSelectorPanel class.
+ *
+ * @Author Jaydon Haghighi
+ * @Date 2022-11-13
+ * @Version 1.0
+ */
+
 import javax.swing.*;
 import java.io.FileNotFoundException;
 
@@ -6,6 +14,9 @@ public class StartMenuFrame extends JFrame {
     int frameHeight = 400;
     private ScrabbleFrame scrabbleFrame;
 
+    /**
+     * Public constructor for StartMenuFrame class
+     */
     public StartMenuFrame() { //TODO: Catch Exception
         super("Welcome to Scrabble!");
         this.initializeFrame();
@@ -16,15 +27,26 @@ public class StartMenuFrame extends JFrame {
 
     }
 
+    /**
+     * Initializes the frame
+     */
     private void initializeFrame() {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setSize(frameWidth, frameHeight);
     }
 
+    /**
+     * Initializes the panel
+     */
     private void initializePanel() {
         this.add(new PlayerSelectorPanel(this));
     }
 
+    /**
+     * Creates the players for the game
+     *
+     * @param playerAmount
+     */
     public void createPlayers(String playerAmount) {
         scrabbleFrame.createPlayers(playerAmount);
         //this.setVisible(false);
@@ -32,6 +54,12 @@ public class StartMenuFrame extends JFrame {
     }
 
 
+    /**
+     * Main method
+     *
+     * @param args
+     * @throws FileNotFoundException
+     */
     public static void main(String[] args) throws FileNotFoundException {
         StartMenuFrame startMenuFrame = new StartMenuFrame();
     }

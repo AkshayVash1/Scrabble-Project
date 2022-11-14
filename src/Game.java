@@ -94,7 +94,7 @@ public class Game {
     }
 
     /**
-     * Clears the array list RemoveTiles
+     * Clears the array list RemoveTilesFromHand
      */
     public void clearRemoveTilesFromHand()
     {
@@ -102,7 +102,7 @@ public class Game {
     }
 
     /**
-     * Adds a character to RemoveTiles array list
+     * Adds a character to RemoveTilesFromHand array list
      *
      * @param c
      */
@@ -112,36 +112,67 @@ public class Game {
         this.firstPlayInTurn = false;
     }
 
+    /**
+     * Adds a character to ExchangeTilesFromHand array list
+     *
+     * @param c
+     */
     public void addToExchangeTilesFromHand(Character c)
     {
         this.exchangeTilesFromHand.add(c);
     }
 
+    /**
+     * Removes a character from ExchangeTilesFromHand array list
+     *
+     * @param c
+     */
     public void removeFromExchangeTilesFromHand(Character c)
     {
         this.exchangeTilesFromHand.remove(c);
     }
 
+    /**
+     * Clears the RemoveFromExchangeTilesFromHand array list
+     */
     public void clearRemoveFromExchangeTilesFromHand()
     {
         this.exchangeTilesFromHand.clear();
     }
 
+    /**
+     * Returns ExchangeTilesFromHand array list
+     *
+     * @return exchangeTilesFromHand
+     */
     public ArrayList<Character> getExchangeTilesFromHand()
     {
         return this.exchangeTilesFromHand;
     }
 
+    /**
+     * Returns FirstPlayInTurn
+     *
+     * @return firstPlayInTurn
+     */
     public boolean getFirstPlayInTurn()
     {
         return this.firstPlayInTurn;
     }
 
+    /**
+     * Initializes the starting coordinates for the game
+     *
+     * @param startingCoordinates
+     */
     public void setStartingCoordinates(String startingCoordinates)
     {
         this.startingCoordinates = startingCoordinates;
     }
 
+    /**
+     * Converts starting coordinate code from Horizontal direction to vertical direction
+     */
     public void changeStartingCoordinatesToVertical()
     {
         String num = " ";
@@ -164,11 +195,22 @@ public class Game {
         this.startingCoordinates = sb.toString();
     }
 
+    /**
+     * Returns the starting coordinate for the game
+     *
+     * @return startingCoordinate
+     */
     public String getStartingCoordinates()
     {
         return this.startingCoordinates;
     }
 
+    /**
+     * Converts the characters in an array to a single string
+     *
+     * @param ar
+     * @return arraylist String
+     */
     public static String convertCharArrayListToString(ArrayList<Character> ar)
     {
         StringBuilder sb = new StringBuilder();
