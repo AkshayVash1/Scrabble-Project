@@ -17,6 +17,9 @@ import java.util.ArrayList;
 public class GameTest {
 
     @Test
+    /**
+     * Tests the scenario to ensure that the hand size will always remain 7 no matter what
+     * */
     public void testExchangeHandOutputSize() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
         ArrayList<Tile> expectedOutput = new ArrayList<>();
@@ -42,6 +45,9 @@ public class GameTest {
         assert(player.getHand().getHandSize() == 7);
     }
 
+    /**
+     * Tests the scenario of exchanging tiles and making sure that the non-selected tiles aren't removed but
+     * */
     @Test
     public void testExchangeHandOutputValue() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -77,6 +83,9 @@ public class GameTest {
         assert(playerHand.toString().equals(expectedOutput.toString()));
     }
 
+    /**
+     * Tests the scenario of exchanging tiles and making sure that the selected tiles are removed
+     * */
     @Test
     public void testExchangeHandExchangedTiles() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -108,6 +117,9 @@ public class GameTest {
         assert(game.getExchangeTilesFromHand().toString().equals(expectedOutput.toString()));
     }
 
+    /**
+     * Tests the scenario where a player plays something and checks the hand is as expected
+     * */
     @Test
     public void testPlayMoveAndCheckHand() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -143,6 +155,9 @@ public class GameTest {
         assert(playerHand.toString().equals(expectedOutput.toString()));
     }
 
+    /**
+     * Tests the scenario where the placement is valid
+     * */
     @Test
     public void testPlayMoveValidPlacement() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -169,6 +184,9 @@ public class GameTest {
         assert(exp);
     }
 
+    /**
+     * Tests the scenario where the placement is not valid
+     * */
     @Test
     public void testPlayMoveInvalidPlacement() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -195,6 +213,9 @@ public class GameTest {
         assert(!exp);
     }
 
+    /**
+     * Tests the scenario where the word played is valid
+     * */
     @Test
     public void testPlayMoveValidWord() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -221,6 +242,9 @@ public class GameTest {
         assert(exp);
     }
 
+    /**
+     * Tests the scenario where the word played is not valid
+     * */
     @Test
     public void testPlayMoveInvalidWord() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -248,6 +272,9 @@ public class GameTest {
         assert(!exp);
     }
 
+    /**
+     * Tests the scenario where the player tries to play a tile not in hand
+     * */
     @Test
     public void testPlayMoveLettersNotInHand() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -275,6 +302,9 @@ public class GameTest {
         assert(!exp);
     }
 
+    /**
+     * Tests the scenario where the player plays and then calculate expected points
+     * */
     @Test
     public void testPlayMoveGetPlayedPoints() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -301,6 +331,9 @@ public class GameTest {
         assert(player.getPoints() == 3);
     }
 
+    /**
+     * Tests the scenario where the player plays twice and then calculate expected points
+     * */
     @Test
     public void testPlayMoveGetPlayedPointsAfterTwoPlays() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
@@ -336,6 +369,9 @@ public class GameTest {
         assert(player.getPoints() == 8);
     }
 
+    /**
+     * Tests the scenario where the player plays on an already occupied squared.
+     * */
     @Test
     public void testPlayMoveOnAlreadyPlacedTilePosition() throws FileNotFoundException {
         ArrayList<Tile> playerHand = new ArrayList<>();
