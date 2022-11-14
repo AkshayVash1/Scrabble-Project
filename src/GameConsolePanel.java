@@ -38,7 +38,7 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
     }
 
     public void appendHelp() {
-        console.setText("Welcome to Scrabble! Scrabble is a word game for 2 to 4 Players." + NEWLINE +
+        console.append("Welcome to Scrabble! Scrabble is a word game for 2 to 4 Players." + NEWLINE +
                 "The goal of the game is to accumulate more than or equal to 50 points"  + NEWLINE2);
     }
 

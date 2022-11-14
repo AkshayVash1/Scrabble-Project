@@ -8,12 +8,12 @@
  */
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
-import java.io.FileNotFoundException;
-import java.net.NoRouteToHostException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
-public class ScrabbleFrame extends JFrame {
+public class ScrabbleFrame extends JFrame implements ActionListener {
 
     /**
      * Dimensions of the frame.
@@ -21,7 +21,7 @@ public class ScrabbleFrame extends JFrame {
     private final int frameWidth = 1025;
     private final int frameHeight = 1000;
     private Game game = new Game();
-
+    private GameConsolePanel gameConsolePanel;
     /**
      * Constructor for the class.
      */
@@ -57,13 +57,22 @@ public class ScrabbleFrame extends JFrame {
 
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());
+        JPanel southPanel = new JPanel();
 
-        GameConsolePanel gameConsolePanel = new GameConsolePanel(game);
+        gameConsolePanel = new GameConsolePanel(game);
         BoardPanel boardPanel = new BoardPanel(game);
         HandPanel handPanel = new HandPanel(game);
         GameCommandPanel gameCommandPanel = new GameCommandPanel(game);
         StatusPanel statusPanel = new StatusPanel(game);
-        JPanel southPanel = new JPanel();
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Menu");
+        JMenuItem help = new JMenuItem("Help");
+        JMenuItem exit = new JMenuItem("Exit");
+        help.addActionListener(this);
+        exit.addActionListener(this);
+        menu.add(help);
+        menu.add(exit);
+        menuBar.add(menu);
 
         southPanel.add(gameCommandPanel,BorderLayout.CENTER);
         leftPanel.add(boardPanel, BorderLayout.NORTH);
@@ -77,11 +86,26 @@ public class ScrabbleFrame extends JFrame {
         mainPanel.add(rightPanel, BorderLayout.EAST);
 
         this.add(mainPanel);
-
+        this.setJMenuBar(menuBar);
         this.revalidate();
     }
 
     public void createPlayers(String playerAmount) {
         game.createPlayers(playerAmount);
+    }
+
+    public static void main(String[] args) {
+        ScrabbleFrame scrabbleFrame = new ScrabbleFrame();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        switch(e.getActionCommand()) {
+            case "Help":
+                gameConsolePanel.appendHelp();
+                break;
+            case "Exit":
+                this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        }
     }
 }
