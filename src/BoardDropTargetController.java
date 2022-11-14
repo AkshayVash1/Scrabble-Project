@@ -65,7 +65,7 @@ public class BoardDropTargetController extends DropTargetAdapter {
     @Override
     public void drop(DropTargetDropEvent dropTargetDropEvent) {
         try {
-            var tr = dropTargetDropEvent.getTransferable();
+            Transferable tr = dropTargetDropEvent.getTransferable();
             Tile tile = (Tile) tr.getTransferData(TransferableTile.tileFlavor);
 
             if (dropTargetDropEvent.isDataFlavorSupported(TransferableTile.tileFlavor)) {

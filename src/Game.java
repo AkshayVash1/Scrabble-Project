@@ -1,5 +1,10 @@
 /**
+ * Primary model of the game. Contains logic relating to the board and player hand management. This class also
+ * initializes the Bag that will be used to communicate with the player's hand. The players are also initialized
+ * within this class. Since it's a model this class also manages updating the views.
  * @Author Akshay Vashisht
+ * @Author Mohamed Kaddour
+ * @Author Jaydon Haghighi
  * @Date 2022-11-13
  * @Version 2.0
  */
@@ -52,7 +57,7 @@ public class Game {
     }
 
     /**
-     * Adds ScrableView object to list of views
+     * Adds ScrabbleView object to list of views
      *
      * @param sv
      */
