@@ -1,3 +1,9 @@
+/**
+ * @Author Akshay Vashisht
+ * @Date 2022-11-13
+ * @Version 1.0
+ */
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,6 +16,10 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
     private int textCount;
     private boolean firstUpdate;
 
+    /**
+     *
+     * @param game
+     */
     public GameConsolePanel(Game game) {
         super();
 

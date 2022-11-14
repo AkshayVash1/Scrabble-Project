@@ -6,8 +6,8 @@ import java.util.*;
  * The cells themselves store the value of the tile letter placed on them. Printing the board displays the state of the game.
  *
  * @author Mahtab Ameli
- * @date 2022-10-25
- * @version 0.0
+ * @date 2022-11-13
+ * @version 2.0
  */
 public class Board {
 

@@ -1,15 +1,12 @@
 /**
  * @Author Akshay Vashisht
- * @Date 2022-10-25
- * @Version 1.0
+ * @Date 2022-11-13
+ * @Version 2.0
  */
 
-import javax.swing.text.View;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Game {
 
@@ -54,11 +51,19 @@ public class Game {
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
     }
 
+    /**
+     * Adds ScrableView object to list of views
+     *
+     * @param sv
+     */
     public void addScrabbleView(ScrabbleView sv)
     {
         this.views.add(sv);
     }
 
+    /**
+     * Logic for changing the turn order from current player to next player
+     */
     public void nextPlayer()
     {
         this.removeTilesFromHand.clear();
@@ -78,16 +83,29 @@ public class Game {
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
     }
 
+    /**
+     * Returns current player
+     *
+     * @return currentPlayer
+     */
     public Player getCurrentPlayer()
     {
         return this.currentPlayer;
     }
 
+    /**
+     * Clears the array list RemoveTiles
+     */
     public void clearRemoveTilesFromHand()
     {
         removeTilesFromHand.clear();
     }
 
+    /**
+     * Adds a character to RemoveTiles array list
+     *
+     * @param c
+     */
     public void addToRemoveTilesFromHand(Character c)
     {
         this.removeTilesFromHand.add(c);
