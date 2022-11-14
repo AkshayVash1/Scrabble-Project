@@ -558,6 +558,13 @@ public class Board {
     }
 
     /**
+     * Returns the String letter placed on given coordinates.
+     */
+    public String getLetterAt(int row, int col) {
+        return cells[row][col];
+    }
+
+    /**
      * Returns list of all String words on given row of board.
      *
      * @param row the integer value of the row of given cell.
@@ -689,6 +696,20 @@ public class Board {
             //System.out.println("current character of word " + wordToScore + ": " + wordToScore.charAt(i));
         }
         return wordScore;
+    }
+
+    /**
+     * Returns the score for given word multiplied by corresponding premium scores' multipliers.
+     *
+     * @param row the integer value of the row of given cell.
+     * @param col the integer value of the column of given cell.
+     * @param tilesList list of tiles of the word to be scored.
+     * @param direction placement direction of the word to be scored.
+     * @return the multiplied score of the word.
+     */
+    public int calculatePremiumScore(int row, int col, ArrayList<Tile> tilesList, Direction direction) {
+        int premiumScore = 0;
+        return premiumScore;
     }
 
     /**
