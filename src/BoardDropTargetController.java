@@ -22,6 +22,7 @@ import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
 import java.io.IOException;
+import java.util.Locale;
 
 public class BoardDropTargetController extends DropTargetAdapter {
 
@@ -89,7 +90,14 @@ public class BoardDropTargetController extends DropTargetAdapter {
 
                 if (tile.getLetter() == "_")
                 {
-                    tile.setLetter(JOptionPane.showInputDialog(null, "Enter letter"));
+                    String input = " ";
+                    boolean flag = false;
+                    while (!flag) {
+                        input = JOptionPane.showInputDialog(null, "Enter A Letter Please");
+                        flag = (checkBlankTileInput(input.toUpperCase(Locale.ROOT))) ? true : false;
+                    }
+
+                    tile.setLetter(input);
                     this.label.setText(tile.getLetter());
                 }
 
@@ -104,5 +112,15 @@ public class BoardDropTargetController extends DropTargetAdapter {
             e.printStackTrace();
             dropTargetDropEvent.rejectDrop();
         }
+    }
+
+    private boolean checkBlankTileInput(String input)
+    {
+        return (input.length() == 1) && (checkLowerCaseAndUpperCase(input.charAt(0)));
+    }
+
+    private boolean checkLowerCaseAndUpperCase(char letter)
+    {
+        return (letter >= 'A' && letter <= 'Z') || (letter >= 'a' && letter <= 'z');
     }
 }

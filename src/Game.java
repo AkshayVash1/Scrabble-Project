@@ -263,7 +263,6 @@ public class Game {
             case "play":
                 inHand = new InHand(convertCharArrayListToString(this.removeTilesFromHand), currentPlayer.getHand());
                 if (inHand.wordInHand()) {
-                    System.out.println(this.removeTilesFromHand + " " + this.currentPlayer.getHand().getHand().toString());
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
                     PlayMove playMove = new PlayMove(command.getPlacementAttempt(),
