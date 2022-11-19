@@ -10,7 +10,6 @@
  * @Version 2.0
  */
 
-import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,10 +114,6 @@ public class Game {
      */
     public void addToRemoveTilesFromHand(Character c)
     {
-        if (c == '_')
-        {
-            c = JOptionPane.showInputDialog(null, "Enter letter").charAt(0);
-        }
         this.removeTilesFromHand.add(c);
         this.firstPlayInTurn = false;
     }
@@ -268,6 +263,7 @@ public class Game {
             case "play":
                 inHand = new InHand(convertCharArrayListToString(this.removeTilesFromHand), currentPlayer.getHand());
                 if (inHand.wordInHand()) {
+                    System.out.println(this.removeTilesFromHand + " " + this.currentPlayer.getHand().getHand().toString());
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
                     PlayMove playMove = new PlayMove(command.getPlacementAttempt(),

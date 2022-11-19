@@ -87,6 +87,12 @@ public class BoardDropTargetController extends DropTargetAdapter {
                     this.game.changeStartingCoordinatesToVertical();
                 }
 
+                if (tile.getLetter() == "_")
+                {
+                    tile.setLetter(JOptionPane.showInputDialog(null, "Enter letter"));
+                    this.label.setText(tile.getLetter());
+                }
+
                 this.game.addToRemoveTilesFromHand(tile.getLetter().charAt(0));
 
                 dropTargetDropEvent.dropComplete(true);

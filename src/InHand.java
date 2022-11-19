@@ -38,6 +38,18 @@ public class InHand {
 
         int initialSize = mockHand.size();
 
+        /*
+        if (blankTilePlayed == true) {
+            for (Tile t : mockHand) {
+                if (t.getLetter().charAt(Hand.PARSE_CHAR_AT_ZERO) == '_') {
+                    System.out.println("Removed " + t.getLetter());
+                    mockHand.remove(t);
+                    this.blankTilePlayed = false;
+                    break;
+                }
+            }
+        } */
+
         for (Character c : this.wordAttempt.toCharArray())
         {
             for (Tile t : mockHand)
@@ -50,6 +62,7 @@ public class InHand {
             }
         }
 
+        System.out.println(mockHand.size() + " " + this.wordAttempt.length());
         return (mockHand.size() == (initialSize - this.wordAttempt.length()));
     }
 
