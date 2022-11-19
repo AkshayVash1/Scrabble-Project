@@ -1,15 +1,18 @@
 /**
+ * Primary model of the game. Contains logic relating to the board and player hand management. This class also
+ * initializes the Bag that will be used to communicate with the player's hand. The players are also initialized
+ * within this class. Since it's a model this class also manages updating the views.
  * @Author Akshay Vashisht
- * @Date 2022-10-25
- * @Version 1.0
+ * @Author Mohamed Kaddour
+ * @Author Jaydon Haghighi
+ * @Author Mahtab Ameli
+ * @Date 2022-11-13
+ * @Version 2.0
  */
 
-import javax.swing.text.View;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Game {
 
@@ -54,23 +57,31 @@ public class Game {
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
     }
 
+    /**
+     * Adds ScrabbleView object to list of views
+     *
+     * @param sv
+     */
     public void addScrabbleView(ScrabbleView sv)
     {
         this.views.add(sv);
     }
 
+    /**
+     * Logic for changing the turn order from current player to next player
+     */
     public void nextPlayer()
     {
         this.removeTilesFromHand.clear();
-        if (currentPlayer.getPoints() >= 50)
-        {
-            this.gameFinished = true;
-        }
-        else {
-            if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
-                this.currentPlayer = this.playerList.get(0);
+        if (currentPlayer != null) {
+            if (currentPlayer.getPoints() >= 50) {
+                this.gameFinished = true;
             } else {
-                this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+                if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
+                    this.currentPlayer = this.playerList.get(0);
+                } else {
+                    this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+                }
             }
         }
 
@@ -78,52 +89,96 @@ public class Game {
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
     }
 
+    /**
+     * Returns current player
+     *
+     * @return currentPlayer
+     */
     public Player getCurrentPlayer()
     {
         return this.currentPlayer;
     }
 
+    /**
+     * Clears the array list RemoveTilesFromHand
+     */
     public void clearRemoveTilesFromHand()
     {
         removeTilesFromHand.clear();
     }
 
+    /**
+     * Adds a character to RemoveTilesFromHand array list
+     *
+     * @param c
+     */
     public void addToRemoveTilesFromHand(Character c)
     {
         this.removeTilesFromHand.add(c);
         this.firstPlayInTurn = false;
     }
 
+    /**
+     * Adds a character to ExchangeTilesFromHand array list
+     *
+     * @param c
+     */
     public void addToExchangeTilesFromHand(Character c)
     {
         this.exchangeTilesFromHand.add(c);
     }
 
+    /**
+     * Removes a character from ExchangeTilesFromHand array list
+     *
+     * @param c
+     */
     public void removeFromExchangeTilesFromHand(Character c)
     {
         this.exchangeTilesFromHand.remove(c);
     }
 
+    /**
+     * Clears the RemoveFromExchangeTilesFromHand array list
+     */
     public void clearRemoveFromExchangeTilesFromHand()
     {
         this.exchangeTilesFromHand.clear();
     }
 
+    /**
+     * Returns ExchangeTilesFromHand array list
+     *
+     * @return exchangeTilesFromHand
+     */
     public ArrayList<Character> getExchangeTilesFromHand()
     {
         return this.exchangeTilesFromHand;
     }
 
+    /**
+     * Returns FirstPlayInTurn
+     *
+     * @return firstPlayInTurn
+     */
     public boolean getFirstPlayInTurn()
     {
         return this.firstPlayInTurn;
     }
 
+    /**
+     * Initializes the starting coordinates for the game
+     *
+     * @param startingCoordinates
+     */
     public void setStartingCoordinates(String startingCoordinates)
     {
         this.startingCoordinates = startingCoordinates;
     }
 
+    /**
+     * Converts starting coordinate code from Horizontal direction to vertical direction
+     */
     public void changeStartingCoordinatesToVertical()
     {
         String num = " ";
@@ -146,11 +201,22 @@ public class Game {
         this.startingCoordinates = sb.toString();
     }
 
+    /**
+     * Returns the starting coordinate for the game
+     *
+     * @return startingCoordinate
+     */
     public String getStartingCoordinates()
     {
         return this.startingCoordinates;
     }
 
+    /**
+     * Converts the characters in an array to a single string
+     *
+     * @param ar
+     * @return arraylist String
+     */
     public static String convertCharArrayListToString(ArrayList<Character> ar)
     {
         StringBuilder sb = new StringBuilder();

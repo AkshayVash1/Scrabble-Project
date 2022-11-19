@@ -1,3 +1,12 @@
+/**
+ * Describes an Event which is the result of a users action. This event is used in the functional interface to update
+ * all views of the model.
+ *
+ * @Author Mohamed Kaddour
+ * @Date 2022-11-13
+ * @Version 1.0
+ */
+
 import java.util.EventObject;
 
 public class ScrabbleEvent {
