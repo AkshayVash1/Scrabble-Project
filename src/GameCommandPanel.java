@@ -100,8 +100,8 @@ public class GameCommandPanel extends JPanel implements ScrabbleView {
     }
 
     @Override
-    public void update(Player currentPlayer, Board board) {
-        this.player = currentPlayer;
+    public void update(ScrabbleEvent e) {
+        this.player = e.getCurrentPlayer();
         initializeExchangeFrame();
         this.revalidate();
     }
