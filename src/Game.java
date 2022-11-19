@@ -332,10 +332,10 @@ public class Game {
         return board;
     }
 
-    public void refreshHandPanelView(Tile tile) {
+    public void refreshHandPanelView(Tile tile, boolean tileIsBlank) {
         for(ScrabbleView v : this.views) {
             if (v instanceof HandPanel) {
-                ((HandPanel)v).removeTile(tile);
+                ((HandPanel) v).removeTile(tile, tileIsBlank);
             }
         }
     }

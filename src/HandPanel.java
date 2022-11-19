@@ -64,11 +64,12 @@ public class HandPanel extends JPanel implements ScrabbleView {
         refreshHand();
     }
 
-    public void removeTile(Tile tile) {
+    public void removeTile(Tile tile, boolean tileIsBlank) {
         ABC: for (Component component : this.getComponents()) {
             JPanel panel = (JPanel) component;
             for (Component panelComponent : panel.getComponents()) {
-                if (((JLabel)panelComponent).getText().equals((tile.toString()))) {
+                if (removeATile(tileIsBlank, panelComponent, tile)) {
+                    System.out.println("REMOVED");
                     this.remove(panel);
                     removedPanels.add(panel);
                     break ABC;
@@ -77,5 +78,11 @@ public class HandPanel extends JPanel implements ScrabbleView {
         }
 
         this.repaint();
+    }
+
+    private boolean removeATile(boolean tileIsBlank, Component panelComponent, Tile tile)
+    {
+        return (tileIsBlank && ((JLabel)panelComponent).getText().charAt(0) == '_') ||
+                ((JLabel)panelComponent).getText().equals((tile.toString()));
     }
 }

@@ -69,7 +69,19 @@ public class BoardDropTargetController extends DropTargetAdapter {
             Transferable tr = dropTargetDropEvent.getTransferable();
             Tile tile = (Tile) tr.getTransferData(TransferableTile.tileFlavor);
 
+            boolean tileIsBlank = false;
+
             if (dropTargetDropEvent.isDataFlavorSupported(TransferableTile.tileFlavor)) {
+
+                Component c = dropTargetDropEvent.getDropTargetContext().getDropTarget().getComponent();
+
+                // Do not allow drag into a filled cell
+                if (c instanceof JLabel) {
+                    if (!((JLabel)c).getText().equals(" ")) {
+                        dropTargetDropEvent.rejectDrop();
+                        return;
+                    }
+                }
 
                 dropTargetDropEvent.acceptDrop(DnDConstants.ACTION_COPY);
                 this.label.setText(tile.getLetter());
@@ -99,11 +111,13 @@ public class BoardDropTargetController extends DropTargetAdapter {
 
                     tile.setLetter(input);
                     this.label.setText(tile.getLetter());
+                    tileIsBlank = true;
                 }
 
                 this.game.addToRemoveTilesFromHand(tile.getLetter().charAt(0));
 
                 dropTargetDropEvent.dropComplete(true);
+                this.game.refreshHandPanelView(tile, tileIsBlank);
                 return;
             }
 
