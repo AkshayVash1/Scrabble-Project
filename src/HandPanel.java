@@ -69,7 +69,6 @@ public class HandPanel extends JPanel implements ScrabbleView {
             JPanel panel = (JPanel) component;
             for (Component panelComponent : panel.getComponents()) {
                 if (removeATile(tileIsBlank, panelComponent, tile)) {
-                    System.out.println("REMOVED");
                     this.remove(panel);
                     removedPanels.add(panel);
                     break ABC;
