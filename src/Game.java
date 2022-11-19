@@ -257,7 +257,9 @@ public class Game {
                     rc = false;
                 }
 
-                for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+                for(ScrabbleView v : this.views){
+                    v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
+                }
                 break;
 
             case "play":
@@ -294,12 +296,16 @@ public class Game {
                     rc = false;
                 }
 
-                for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+                for(ScrabbleView v : this.views) {
+                    v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
+                }
                 break;
 
             case "shuffle":
                 currentPlayer.shuffle();
-                for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+                for(ScrabbleView v : this.views) {
+                    v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
+                }
                 break;
 
             case "pass":
@@ -326,4 +332,11 @@ public class Game {
         return board;
     }
 
+    public void refreshHandPanelView(Tile tile) {
+        for(ScrabbleView v : this.views) {
+            if (v instanceof HandPanel) {
+                ((HandPanel)v).removeTile(tile);
+            }
+        }
+    }
 }

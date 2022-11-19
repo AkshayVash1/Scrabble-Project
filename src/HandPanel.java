@@ -13,11 +13,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.dnd.DragSource;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HandPanel extends JPanel implements ScrabbleView {
 
     private Player player;
     private Game game;
+
+    private List<JPanel> removedPanels = new ArrayList<>();
 
     /**
      * Public constructor for HandPanel class
@@ -26,20 +29,8 @@ public class HandPanel extends JPanel implements ScrabbleView {
      */
     public HandPanel(Game game)
     {
-        this.player = new Player(10);
-        ArrayList <Tile> placeHolder = new ArrayList<>();
-        placeHolder.add(new Tile("X", 1));
-        placeHolder.add(new Tile("X", 1));
-        placeHolder.add(new Tile("X", 1));
-        placeHolder.add(new Tile("X", 1));
-        placeHolder.add(new Tile("X", 1));
-        placeHolder.add(new Tile("X", 1));
-        placeHolder.add(new Tile("X", 1));
-        player.getHand().addTiles(placeHolder, false);
-
         this.setPreferredSize(new Dimension(400,30));
         this.game = game;
-        refreshHand();
         game.addScrabbleView(this);
     }
 
@@ -51,9 +42,9 @@ public class HandPanel extends JPanel implements ScrabbleView {
         //MouseController controller = new MouseController(this.game);
         this.removeAll();
         DragGestureController dg = new DragGestureController(this.player);
+        removedPanels.clear();
 
-        for (Tile t : this.player.getHand().getHand())
-        {
+        for (Tile t : this.player.getHand().getHand()) {
             JPanel p = new JPanel();
             p.setBackground(new Color(Square.Multiplier.NONE.getRGB_color()));
             JLabel l = new JLabel(t.toString());
@@ -64,6 +55,7 @@ public class HandPanel extends JPanel implements ScrabbleView {
             p.add(l);
             this.add(p);
         }
+        this.repaint();
     }
 
     @Override
@@ -72,4 +64,18 @@ public class HandPanel extends JPanel implements ScrabbleView {
         refreshHand();
     }
 
+    public void removeTile(Tile tile) {
+        ABC: for (Component component : this.getComponents()) {
+            JPanel panel = (JPanel) component;
+            for (Component panelComponent : panel.getComponents()) {
+                if (((JLabel)panelComponent).getText().equals((tile.toString()))) {
+                    this.remove(panel);
+                    removedPanels.add(panel);
+                    break ABC;
+                }
+            }
+        }
+
+        this.repaint();
+    }
 }
