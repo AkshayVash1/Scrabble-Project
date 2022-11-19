@@ -16,12 +16,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
-import java.io.IOException;
 
 public class BoardDropTargetController extends DropTargetAdapter {
 
@@ -70,6 +68,16 @@ public class BoardDropTargetController extends DropTargetAdapter {
 
             if (dropTargetDropEvent.isDataFlavorSupported(TransferableTile.tileFlavor)) {
 
+                Component c = dropTargetDropEvent.getDropTargetContext().getDropTarget().getComponent();
+
+                // Do not allow drag into a filled cell
+                if (c instanceof JLabel) {
+                    if (!((JLabel)c).getText().equals(" ")) {
+                        dropTargetDropEvent.rejectDrop();
+                        return;
+                    }
+                }
+
                 dropTargetDropEvent.acceptDrop(DnDConstants.ACTION_COPY);
                 this.label.setText(tile.getLetter());
                 this.label.setForeground(Color.black);
@@ -90,6 +98,7 @@ public class BoardDropTargetController extends DropTargetAdapter {
                 this.game.addToRemoveTilesFromHand(tile.getLetter().charAt(0));
 
                 dropTargetDropEvent.dropComplete(true);
+                this.game.refreshHandPanelView(tile);
                 return;
             }
 

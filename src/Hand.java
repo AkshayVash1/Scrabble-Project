@@ -107,7 +107,7 @@ public class Hand {
     }
 
     /**
-     * Returns a set of the recently added Tiles in order to be remove from hand if play not valid.
+     * Returns a set of the recently added Tiles in order to be removed from hand if play not valid.
      * @return the set of recently removed Tiles as a Tile ArrayList
      * */
     public ArrayList<Tile> getRecentlyAdded()
