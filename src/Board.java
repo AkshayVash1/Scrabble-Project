@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -239,6 +240,27 @@ public class Board {
             return true;
         }
         return false;
+    }
+
+    public ArrayList<String> getAIPlayableCoordinates(){
+        ArrayList<String> playableCoordinates = new ArrayList<>();
+
+        for (int ROW = 1; ROW < cells.length - 1; ROW++) {
+            for (int COL = 1; COL < cells.length - 1; COL++) {
+                if(!cells[ROW][COL].equals(" ")) {
+                    if(cells[ROW+1][COL].equals(" "))
+                    {
+                        playableCoordinates.add(getStringCoords(ROW + 1, COL));
+                    }
+                    if(cells[ROW][COL+1].equals(" "))
+                    {
+                        playableCoordinates.add(getStringCoords(ROW, COL+1));
+                    }
+                }
+            }
+        }
+
+        return playableCoordinates;
     }
 
     /**
