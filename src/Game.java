@@ -250,7 +250,7 @@ public class Game {
                     this.exchangeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(this.exchangeTilesFromHand.size());
                     bag.placeTiles(currentPlayer.exchange((ArrayList<Tile>) addTilesToHand,
-                            this.exchangeTilesFromHand)); //only enter capital letters
+                            this.exchangeTilesFromHand));
                 }
                 else {
                     System.out.println("All tiles not in hand");
