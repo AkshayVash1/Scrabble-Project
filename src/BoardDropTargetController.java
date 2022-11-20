@@ -22,6 +22,7 @@ import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
 import java.io.IOException;
+import java.util.Locale;
 
 public class BoardDropTargetController extends DropTargetAdapter {
 
@@ -68,7 +69,19 @@ public class BoardDropTargetController extends DropTargetAdapter {
             Transferable tr = dropTargetDropEvent.getTransferable();
             Tile tile = (Tile) tr.getTransferData(TransferableTile.tileFlavor);
 
+            boolean tileIsBlank = false;
+
             if (dropTargetDropEvent.isDataFlavorSupported(TransferableTile.tileFlavor)) {
+
+                Component c = dropTargetDropEvent.getDropTargetContext().getDropTarget().getComponent();
+
+                // Do not allow drag into a filled cell
+                if (c instanceof JLabel) {
+                    if (!((JLabel)c).getText().equals(" ")) {
+                        dropTargetDropEvent.rejectDrop();
+                        return;
+                    }
+                }
 
                 dropTargetDropEvent.acceptDrop(DnDConstants.ACTION_COPY);
                 this.label.setText(tile.getLetter());
@@ -87,9 +100,36 @@ public class BoardDropTargetController extends DropTargetAdapter {
                     this.game.changeStartingCoordinatesToVertical();
                 }
 
+                if (tile.getLetter() == "_")
+                {
+                    JPanel panel = new JPanel(new GridLayout(2, 1));
+                    JLabel label = new JLabel("Enter a Letter Please");
+                    JTextField answer = new JTextField();
+                    panel.add(label);
+                    panel.add(answer);
+
+                    String input = " ";
+                    boolean flag = false;
+                    while (!flag) {
+                        int result = JOptionPane.showOptionDialog(null, panel, "Enter A Letter Please",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null ,
+                                null, null );
+                        if (result == JOptionPane.OK_OPTION)
+                        {
+                            input = answer.getText();
+                        }
+                        flag = (checkBlankTileInput(input.toUpperCase(Locale.ROOT))) ? true : false;
+                    }
+
+                    tile.setLetter(input);
+                    this.label.setText(tile.getLetter());
+                    tileIsBlank = true;
+                }
+
                 this.game.addToRemoveTilesFromHand(tile.getLetter().charAt(0));
 
                 dropTargetDropEvent.dropComplete(true);
+                this.game.refreshHandPanelView(tile, tileIsBlank);
                 return;
             }
 
@@ -98,5 +138,15 @@ public class BoardDropTargetController extends DropTargetAdapter {
             e.printStackTrace();
             dropTargetDropEvent.rejectDrop();
         }
+    }
+
+    private boolean checkBlankTileInput(String input)
+    {
+        return (input.length() == 1) && (checkLowerCaseAndUpperCase(input.charAt(0)));
+    }
+
+    private boolean checkLowerCaseAndUpperCase(char letter)
+    {
+        return (letter >= 'A' && letter <= 'Z') || (letter >= 'a' && letter <= 'z');
     }
 }

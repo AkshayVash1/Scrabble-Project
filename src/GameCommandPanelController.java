@@ -98,6 +98,7 @@ public class GameCommandPanelController implements ActionListener{
             }
 
             this.game.clearRemoveFromExchangeTilesFromHand();
+            this.game.nextPlayer();
         }
     }
 }

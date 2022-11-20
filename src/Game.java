@@ -250,14 +250,16 @@ public class Game {
                     this.exchangeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(this.exchangeTilesFromHand.size());
                     bag.placeTiles(currentPlayer.exchange((ArrayList<Tile>) addTilesToHand,
-                            this.exchangeTilesFromHand)); //only enter capital letters
+                            this.exchangeTilesFromHand));
                 }
                 else {
                     System.out.println("All tiles not in hand");
                     rc = false;
                 }
 
-                for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+                for(ScrabbleView v : this.views){
+                    v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
+                }
                 break;
 
             case "play":
@@ -294,12 +296,16 @@ public class Game {
                     rc = false;
                 }
 
-                for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+                for(ScrabbleView v : this.views) {
+                    v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
+                }
                 break;
 
             case "shuffle":
                 currentPlayer.shuffle();
-                for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+                for(ScrabbleView v : this.views) {
+                    v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
+                }
                 break;
 
             case "pass":
@@ -326,4 +332,11 @@ public class Game {
         return board;
     }
 
+    public void refreshHandPanelView(Tile tile, boolean tileIsBlank) {
+        for(ScrabbleView v : this.views) {
+            if (v instanceof HandPanel) {
+                ((HandPanel) v).removeTile(tile, tileIsBlank);
+            }
+        }
+    }
 }
