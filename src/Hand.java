@@ -65,9 +65,7 @@ public class Hand {
     public boolean removeTiles(ArrayList<Character> removeTiles, boolean clear)
     {
         boolean rc = true;
-        int sizeCounter = removeTiles.size();
-
-        System.out.println("START");
+        int sizeCounter = removeTiles.size() + 1;
 
         if (clear == true) {
             this.recentlyRemoved.clear();
@@ -84,11 +82,13 @@ public class Hand {
         else
         {
             clearLoop:
-            for (Character c : removeTiles) {
+            for (int i = 0; i < removeTiles.size(); i++) {
+                mockLoop:
                 for (Tile l : mock) {
-                    if (c.equals(l.getLetter().charAt(PARSE_CHAR_AT_ZERO)))
+                    if (removeTiles.get(i).equals(l.getLetter().charAt(PARSE_CHAR_AT_ZERO)))
                     {
                         this.hand.remove(l);
+                        mock.remove(l);
                         sizeCounter--;
                         if (clear == true) {
                             this.recentlyRemoved.add(l);
@@ -97,6 +97,7 @@ public class Hand {
                         {
                             break clearLoop;
                         }
+                        break mockLoop;
                     }
                 }
             }
