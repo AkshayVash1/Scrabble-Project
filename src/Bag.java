@@ -50,7 +50,7 @@ public class Bag {
                 tiles.add(new Tile(token[0], eachLetterPointMap.get(token[0])));
             }
         }
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 2; i++) {
             tiles.add(new Tile("_", 0));
         }
     }
