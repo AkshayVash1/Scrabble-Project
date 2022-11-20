@@ -102,10 +102,22 @@ public class BoardDropTargetController extends DropTargetAdapter {
 
                 if (tile.getLetter() == "_")
                 {
+                    JPanel panel = new JPanel(new GridLayout(2, 1));
+                    JLabel label = new JLabel("Enter a Letter Please");
+                    JTextField answer = new JTextField();
+                    panel.add(label);
+                    panel.add(answer);
+
                     String input = " ";
                     boolean flag = false;
                     while (!flag) {
-                        input = JOptionPane.showInputDialog(null, "Enter A Letter Please");
+                        int result = JOptionPane.showOptionDialog(null, panel, "Enter A Letter Please",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null ,
+                                null, null );
+                        if (result == JOptionPane.OK_OPTION)
+                        {
+                            input = answer.getText();
+                        }
                         flag = (checkBlankTileInput(input.toUpperCase(Locale.ROOT))) ? true : false;
                     }
 

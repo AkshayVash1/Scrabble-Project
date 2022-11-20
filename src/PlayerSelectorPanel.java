@@ -80,6 +80,7 @@ public class PlayerSelectorPanel extends JPanel {
                     }
 
                     startMenuFrame.createPlayers(playerAmount);
+                    startMenuFrame.setVisible(false);
 
                 }
 
