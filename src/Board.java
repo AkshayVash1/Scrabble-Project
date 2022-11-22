@@ -46,6 +46,16 @@ public class Board {
      */
     public enum Direction{HORIZONTAL, VERTICAL}
 
+
+    /**
+     * IF the word is invalid or not
+     */
+    private boolean invalidPlacement;
+
+    public boolean isInvalidPlacement() {
+        return invalidPlacement;
+    }
+
     /**
      * Colors and corresponding color codes used in this class's print statements.
      */
@@ -554,6 +564,7 @@ public class Board {
         if (!adjacentConditionMet) {
             System.out.println("ERROR: Placement is NOT valid." +
             "\nAt least one tile must be adjacent to an existing tile.");
+            invalidPlacement = true;
             return false;
         }
         else if ((adjacentConditionMet) && tilePlacedCount == tiles.size()){

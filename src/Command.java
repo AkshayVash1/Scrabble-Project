@@ -63,9 +63,8 @@ public class Command {
             return Character.isDigit(this.placementAttempt.charAt(0));
         } else {
             System.out.println("NULL PASSED IN");
+            return false;
         }
-
-        return false;
     }
 
     /**

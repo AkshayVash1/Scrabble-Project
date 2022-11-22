@@ -66,6 +66,15 @@ public class GameCommandPanelController implements ActionListener{
             } catch (FileNotFoundException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             }
+            if (!game.isNullDirecction()) {
+                JOptionPane.showMessageDialog(new JFrame(), "Please play tiles before selecting play.");
+            }
+            else if(game.isWordNotValid()) {
+                JOptionPane.showMessageDialog(new JFrame(), "Word is not valid.");
+            }
+            else if (game.getBoard().isInvalidPlacement()) {
+                JOptionPane.showMessageDialog(new JFrame(), "Placement is not valid.");
+            }
             this.game.nextPlayer();
             /**
              * Play the move set onto board

@@ -10,6 +10,7 @@
  * @Version 2.0
  */
 
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,8 @@ public class Game {
     private boolean firstPlayInTurn;
     private String startingCoordinates;
     private boolean gameFinished;
+    private boolean nullDirecction;
+    private boolean wordNotValid;
 
     /**
      * Public constructor for class game.
@@ -270,12 +273,14 @@ public class Game {
                     PlayMove playMove = new PlayMove(command.getPlacementAttempt(),
                             currentPlayer.exchange((ArrayList<Tile>) addTilesToHand, removeTilesFromHand),
                             this.board, command.getPlacementDirection());
+                    nullDirecction = command.getPlacementDirection();
                     if (playMove.placeTile()) {
                         if (playMove.checkWord()) {
                             this.board = playMove.getUpdatedBoard();
                             currentPlayer.addPoints(playMove.getPlayedWordScore());
                         }
                         else {
+                            wordNotValid = true;
                             System.out.println("Word is not valid.");
                             this.bag.placeTiles(addTilesToHand);
                             currentPlayer.rollBack();
@@ -338,5 +343,13 @@ public class Game {
                 ((HandPanel) v).removeTile(tile, tileIsBlank);
             }
         }
+    }
+
+    public boolean isNullDirecction() {
+        return nullDirecction;
+    }
+
+    public boolean isWordNotValid() {
+        return wordNotValid;
     }
 }
