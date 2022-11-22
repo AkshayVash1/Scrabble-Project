@@ -12,12 +12,19 @@ public class AIPlayer extends Player{
     private Board board;
     private boolean isAI;
     private HashMap<String, String> possiblePlays;
+    private ArrayList<String> playableCoordinates;
 
     public AIPlayer(int playerNumber, Board board) {
         super(playerNumber);
         this.board = board;
+        this.board.setCells(board.getCells());
+        this.board.setSquares(board.getSquares());
+        this.board.setTiles(board.getTiles());
+        this.board.setFirstPlay(board.isFirstPlay());
+
         this.isAI = true;
         this.possiblePlays = new HashMap<>();
+        this.playableCoordinates = new ArrayList<>();
     }
 
     public boolean isAI() {
@@ -26,7 +33,6 @@ public class AIPlayer extends Player{
 
     private void analyzeBoard()
     {
-        ArrayList<String> playableCoordinates = new ArrayList<>();
-        this.board.getAIPlayableCoordinates();
+        this.playableCoordinates = this.board.getAIPlayableCoordinates();
     }
 }
