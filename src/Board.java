@@ -767,9 +767,14 @@ public class Board {
         setCurrentStartCol(0);
         setCurrentStartRow(0);
 
+        if (word.length() <= 1) {
+            System.out.println("ERROR: the word played is only one letter long. Enter a longer word.");
+            return;
+        }
+
         if (direction == Direction.HORIZONTAL) {
             // iterate through columns of row until find matching word
-            for (int COL = col; COL < 16; COL++) {
+            for (int COL = 0; COL < 16; COL++) {
 
                 String letter = ((Character) word.charAt(0)).toString();
                 // if first letter matches iterate through rest of words to see if the whole word matches
@@ -796,7 +801,7 @@ public class Board {
 
         if (direction == Direction.VERTICAL) {
             // iterate through columns of row until find matching word
-            for (int ROW = row; ROW < 16; ROW++) {
+            for (int ROW = 0; ROW < 16; ROW++) {
 
                 String letter = ((Character) word.charAt(0)).toString();
                 // if first letter matches iterate through rest of words to see if the whole word matches
