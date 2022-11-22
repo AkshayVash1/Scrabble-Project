@@ -37,6 +37,11 @@ public class Board {
     private Direction direction;
 
     /**
+     * current active word's starting coordinates.
+     */
+    int currentStartRow = 0; int currentStartCol = 0;
+
+    /**
      * Most recently played word
      */
     private String playedWord = "";
@@ -613,6 +618,7 @@ public class Board {
         //iterate through columns of ROW == row
             for (int COL = 1; COL < cells.length - 1; COL++) {
                 if (!cellIsBlank(row, COL)) {   // if
+                    //setCurrentStartCol(COL); setCurrentStartRow(row);  // update starting coordinates of current word
                     currentLetter = cells[row][COL];
                     currentWord += currentLetter;
                     // if next cell in row is blank, store currentWord in horizontalWords list and move on to next word
@@ -687,11 +693,14 @@ public class Board {
      */
     public int getWordScore(int row, int col, ArrayList<Tile> tilesList, Direction direction) {
         String wordToScore = getLongestAdjacentWord(row,col);
-        //Direction DIR = getUpdatedDirection();
+        Direction DIR = getUpdatedDirection();
 
-        int score = calculateWordScore(wordToScore);
-        System.out.println("score for word " + wordToScore + ": " + score);
-        return score;
+        int wordScore = calculateWordScore(wordToScore);
+        int premiumScore = calculatePremiumScore(row, col, wordToScore, DIR);
+        System.out.println("WORD SCORE for " + wordToScore + ": " + wordScore);
+        System.out.println("PREMIUM SCORE for " + wordToScore + ": " + premiumScore);
+
+        return wordScore;
     }
 
     /**
@@ -738,12 +747,80 @@ public class Board {
         if (longestHorizontal.length() >= longestVertical.length()) {
             longestWord = longestHorizontal;
             updateDirection(Direction.HORIZONTAL);
+            updateStartingCoords(row, col, longestWord, Direction.HORIZONTAL); // update starting coordinates of current word
+
         } else {
             longestWord = longestVertical;
             updateDirection(Direction.VERTICAL);
+            updateStartingCoords(row, col, longestWord, Direction.VERTICAL); // update starting coordinates of current word
         }
-        System.out.println("LONGEST WORD FORMED BY TILE: " + longestWord);
+        System.out.println("LONGEST WORD FORMED BY TILE: " + longestWord
+                            + "\nstarting at: row " + getCurrentStartRow()
+                            + " col " + getCurrentStartCol());
          return longestWord;
+    }
+
+    // finds the starting coordinates of current active word and sets them.
+    private void updateStartingCoords(int row, int col, String word, Direction direction) {
+
+        //reset current word's starting coordinates to 0 before starting
+        setCurrentStartCol(0);
+        setCurrentStartRow(0);
+
+        if (direction == Direction.HORIZONTAL) {
+            // iterate through columns of row until find matching word
+            for (int COL = col; COL < 16; COL++) {
+
+                String letter = ((Character) word.charAt(0)).toString();
+                // if first letter matches iterate through rest of words to see if the whole word matches
+                if (cells[row][COL].equals(letter)) {
+                    setCurrentStartCol(COL);
+                    setCurrentStartRow(row);
+
+                    int COLUMN_current = COL + 1;
+                    for (int i = 1; i < word.length(); i++) {
+                        letter = ((Character) word.charAt(i)).toString();
+                        if (!cells[row][COLUMN_current].equals(letter)) {
+                            COLUMN_current++;
+                            if (COLUMN_current == word.length()-1) {
+                                // the whole word has matched
+                                return;
+                            }
+                        } else {break;}
+                    }
+                }
+
+            }
+
+        }
+
+        if (direction == Direction.VERTICAL) {
+            // iterate through columns of row until find matching word
+            for (int ROW = row; ROW < 16; ROW++) {
+
+                String letter = ((Character) word.charAt(0)).toString();
+                // if first letter matches iterate through rest of words to see if the whole word matches
+                if (cells[ROW][col].equals(letter)) {
+                    setCurrentStartCol(col);
+                    setCurrentStartRow(ROW);
+
+                    int ROW_current = ROW + 1;
+                    for (int i = 1; i < word.length(); i++) {
+                        letter = ((Character) word.charAt(i)).toString();
+                        if (!cells[ROW_current][col].equals(letter)) {
+                            ROW_current++;
+                            if (ROW_current == word.length() -1) {
+                                // the whole word has matched
+                                return;
+                            }
+                        } else {break;}
+                    }
+                }
+
+            }
+
+        }
+
     }
 
     /**
@@ -862,11 +939,18 @@ public class Board {
      *
      * @param row the integer value of the row of given cell.
      * @param col the integer value of the column of given cell.
-     * @param tilesList list of tiles of the word to be scored.
+     * @param word  the String word to score.
      * @param direction placement direction of the word to be scored.
      * @return the multiplied score of the word.
      */
-    public int calculatePremiumScore(int row, int col, ArrayList<Tile> tilesList, Direction direction) {
+    public int calculatePremiumScore(int row, int col, String word, Direction direction) {
+
+        int startingRow = row;
+        int startingCol = col;
+
+
+
+
         int premiumScore = 0;
         return premiumScore;
     }
@@ -955,6 +1039,22 @@ public class Board {
     public String getLetterAtSquare(int row, int col)
     {
         return this.cells[row][col];
+    }
+
+    public int getCurrentStartRow() {
+        return currentStartRow;
+    }
+
+    public void setCurrentStartRow(int currentStartRow) {
+        this.currentStartRow = currentStartRow;
+    }
+
+    public int getCurrentStartCol() {
+        return currentStartCol;
+    }
+
+    public void setCurrentStartCol(int currentStartCol) {
+        this.currentStartCol = currentStartCol;
     }
 
 }
