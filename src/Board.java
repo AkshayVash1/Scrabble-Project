@@ -719,7 +719,7 @@ public class Board {
      * @param wordToScore the String word to be scored.
      * @return score of word.
      */
-    private int calculateWordScore(String wordToScore) {
+    public static int calculateWordScore(String wordToScore) {
         int letterScore = 0;
         int wordScore = 0;
 

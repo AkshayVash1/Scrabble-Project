@@ -92,6 +92,11 @@ public class Game {
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
     }
 
+    public Bag getBag()
+    {
+        return this.bag;
+    }
+
     /**
      * Returns current player
      *
