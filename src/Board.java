@@ -696,7 +696,7 @@ public class Board {
         Direction DIR = getUpdatedDirection();
 
         int wordScore = calculateWordScore(wordToScore);
-        int premiumScore = calculatePremiumScore(row, col, wordToScore, DIR);
+        int premiumScore = calculatePremiumScore(wordToScore, DIR);
         System.out.println("WORD SCORE for " + wordToScore + ": " + wordScore);
         System.out.println("PREMIUM SCORE for " + wordToScore + ": " + premiumScore);
 
@@ -942,21 +942,65 @@ public class Board {
     /**
      * Returns the score for given word multiplied by corresponding premium scores' multipliers.
      *
-     * @param row the integer value of the row of given cell.
-     * @param col the integer value of the column of given cell.
      * @param word  the String word to score.
      * @param direction placement direction of the word to be scored.
      * @return the multiplied score of the word.
      */
-    public int calculatePremiumScore(int row, int col, String word, Direction direction) {
+    public int calculatePremiumScore(String word, Direction direction) {
 
-        int startingRow = row;
-        int startingCol = col;
-
-
-
-
+        int startingRow = getCurrentStartRow();
+        int startingCol = getCurrentStartCol();
+        int wordLength = word.length();
+        ArrayList<Square.Multiplier> multipliers = new ArrayList<>();
+        int wordScore = 0;
         int premiumScore = 0;
+        Bag b = new Bag();
+
+        //iterate through squares of the word and check for multiplier type
+        if (direction == Direction.HORIZONTAL) {
+            for (int col = startingCol; col < (startingCol + wordLength); col++) {
+                Square.Multiplier multiplier = squares.get(getStringCoords(startingRow,col)).getMultiplier();
+                if (multiplier != Square.Multiplier.NONE) {
+                    multipliers.add(multiplier);
+                }
+                int letterScore = b.getLetterValue(cells[startingRow][col]);
+
+                if ((multiplier == Square.Multiplier.DL) || (multiplier == Square.Multiplier.TL) || (multiplier == Square.Multiplier.NONE)) {
+                    letterScore = letterScore * multiplier.getValue();
+                }
+                wordScore += letterScore;
+
+                System.out.println("square's multiplier: " + squares.get(getStringCoords(startingRow,col)).getMultiplier());
+
+                if (col == (startingCol + wordLength - 1)) {
+                    if (multipliers.contains(Square.Multiplier.DW)) { premiumScore = wordScore * 2;}
+                    else if (multipliers.contains(Square.Multiplier.TW)) {premiumScore = wordScore * 3;}
+                    else {premiumScore = wordScore;}
+                }
+            }
+        }
+
+        //iterate through squares of the word and check for multiplier type
+        if (direction == Direction.VERTICAL) {
+            for (int row = startingRow; row < (startingRow + wordLength); row++) {
+                Square.Multiplier multiplier = squares.get(getStringCoords(row,startingCol)).getMultiplier();
+                if (multiplier != Square.Multiplier.NONE) {
+                    multipliers.add(multiplier);
+                }
+                int letterScore = b.getLetterValue(cells[row][startingCol]);
+
+                if ((multiplier == Square.Multiplier.DL) || (multiplier == Square.Multiplier.TL) || (multiplier == Square.Multiplier.NONE)) {
+                    letterScore = letterScore * multiplier.getValue();
+                }
+                wordScore += letterScore;
+                System.out.println("square's multiplier: " + squares.get(getStringCoords(row,startingCol)).getMultiplier());
+                if (row == (startingRow + wordLength - 1)) {
+                    if (multipliers.contains(Square.Multiplier.DW)) { premiumScore = wordScore * 2;}
+                    else if (multipliers.contains(Square.Multiplier.TW)) {premiumScore = wordScore * 3;}
+                    else {premiumScore = wordScore;}
+                }
+            }
+        }
         return premiumScore;
     }
 
