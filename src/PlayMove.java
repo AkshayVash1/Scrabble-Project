@@ -66,7 +66,6 @@ public class PlayMove {
         }
         else
         {
-
             if (this.placementAttempt.length() == DOUBLE_DIGIT_DETECTION) {
                 return Integer.parseInt(placementAttempt.substring(PlayMove.PARSE_CHAR_AT_ONE,
                         PARSE_CHAR_AT_THREE));
@@ -106,46 +105,6 @@ public class PlayMove {
     }
 
     /**
-     * Method to handle blanks. Detect whether a Tile in the Tile list is blank and if so enter a loop to ask the
-     * user to input what value they'd like the blank to be. Then assign the Tile letter value to the input from
-     * the user.
-     * */
-    public void handleBlanks()
-    {
-        Scanner scan = new Scanner(System.in);
-        String userValue = "";
-        boolean flag = false;
-
-        for (Tile t : this.wordTiles)
-        {
-            if (t.getLetter().equals("_"))
-            {
-                flag = false;
-                System.out.println("Enter blank replacement (1 Capital Letter)");
-                userValue = scan.nextLine();
-
-                while (!flag)
-                {
-                    if (!(userValue.length() == 1))
-                    {
-                        System.out.println("Enter one character");
-                        userValue = scan.nextLine();
-                    }
-                    else if (!(isLetter(userValue.charAt(0))))
-                    {
-                        System.out.println("Enter a capital letter");
-                        userValue = scan.nextLine();
-                    }
-                    else {
-                        flag = true;
-                        t.setLetter(userValue);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Gets the current board score related to the recently placed word and returns it.
      * @return int as the word score
      * */
@@ -161,7 +120,6 @@ public class PlayMove {
      * */
     public boolean placeTile()
     {
-        handleBlanks();
         if (this.direction != null && this.placementAttempt != null) {
             return this.board.placeWord(parseRow(), parseColumn(), this.wordTiles, this.direction);
         }
