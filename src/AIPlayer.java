@@ -2,6 +2,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 public class AIPlayer extends Player{
     /**
@@ -12,36 +13,25 @@ public class AIPlayer extends Player{
      */
 
     private Board board;
-    private boolean isAI;
+
     private HashMap<String, String> possiblePlays;
-    private ArrayList<String> playableCoordinates;
+    private HashMap<String, Boolean> playableCoordinates;
     private Game game;
 
     public AIPlayer(int playerNumber, Board board, Game game) {
         super(playerNumber);
-        this.board = board;
-        this.board.setCells(board.getCells());
-        this.board.setSquares(board.getSquares());
-        this.board.setTiles(board.getTiles());
-        this.board.setFirstPlay(board.isFirstPlay());
+        performBoardCopy(board);
 
-        this.isAI = true;
+        this.setAI(true);
         this.possiblePlays = new HashMap<>();
-        this.playableCoordinates = new ArrayList<>();
+        this.playableCoordinates = new HashMap<String, Boolean>();
         this.game = game;
     }
 
-    public void possiblePlays() {
-
-    }
-
-
-    public boolean isAI() {
-        return this.isAI;
-    }
-
-    private void analyzeBoard() throws FileNotFoundException {
+    public void analyzeBoard(Board board) throws FileNotFoundException {
+        performBoardCopy(board);
         this.playableCoordinates = this.board.getAIPlayableCoordinates();
+        System.out.println(this.playableCoordinates.toString());
         ArrayList<Tile> hand = this.getHand().getHand();
 
         for (int i = 0; i < hand.size(); i++)
@@ -49,30 +39,34 @@ public class AIPlayer extends Player{
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(hand.get(i).getLetter());
 
-            for (String s : this.playableCoordinates)
+            for (String s : this.playableCoordinates.keySet())
             {
-                attemptAiMove(stringBuilder.toString(), s, getDirection(s));
+                boolean direction = this.playableCoordinates.get(s);
+                attemptAiMove(stringBuilder.toString(), changeStartingCoordinatesToVertical(s, direction),
+                        direction);
             }
         }
 
         for (int i = 0; i < hand.size(); i++)
         {
-            for (int j = 0; i < hand.size(); j++)
+            for (int j = 0; j < hand.size(); j++)
             {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(hand.get(i).getLetter());
                 stringBuilder.append(hand.get(j).getLetter());
 
-                for (String s : this.playableCoordinates)
+                for (String s : this.playableCoordinates.keySet())
                 {
-                    attemptAiMove(stringBuilder.toString(), s, getDirection(s));
+                    boolean direction = this.playableCoordinates.get(s);
+                    attemptAiMove(stringBuilder.toString(), changeStartingCoordinatesToVertical(s, direction),
+                            direction);
                 }
             }
         }
 
         for (int i = 0; i < hand.size(); i++)
         {
-            for (int j = 0; i < hand.size(); j++)
+            for (int j = 0; j < hand.size(); j++)
             {
                 for (int k = 0; k < hand.size(); k++) {
                     StringBuilder stringBuilder = new StringBuilder();
@@ -80,8 +74,10 @@ public class AIPlayer extends Player{
                     stringBuilder.append(hand.get(j).getLetter());
                     stringBuilder.append(hand.get(k).getLetter());
 
-                    for (String s : this.playableCoordinates) {
-                        attemptAiMove(stringBuilder.toString(), s, getDirection(s));
+                    for (String s : this.playableCoordinates.keySet()) {
+                        boolean direction = this.playableCoordinates.get(s);
+                        attemptAiMove(stringBuilder.toString(), changeStartingCoordinatesToVertical(s, direction),
+                                direction);
                     }
                 }
             }
@@ -89,7 +85,7 @@ public class AIPlayer extends Player{
 
         for (int i = 0; i < hand.size(); i++)
         {
-            for (int j = 0; i < hand.size(); j++)
+            for (int j = 0; j < hand.size(); j++)
             {
                 for (int k = 0; k < hand.size(); k++)
                 {
@@ -100,8 +96,10 @@ public class AIPlayer extends Player{
                         stringBuilder.append(hand.get(k).getLetter());
                         stringBuilder.append(hand.get(l).getLetter());
 
-                        for (String s : this.playableCoordinates) {
-                            attemptAiMove(stringBuilder.toString(), s, getDirection(s));
+                        for (String s : this.playableCoordinates.keySet()) {
+                            boolean direction = this.playableCoordinates.get(s);
+                            attemptAiMove(stringBuilder.toString(), changeStartingCoordinatesToVertical(s, direction),
+                                    direction);
                         }
                     }
                 }
@@ -121,6 +119,7 @@ public class AIPlayer extends Player{
         if (playMove.placeTile()) {
             if (playMove.checkWord()) {
                 possiblePlays.put(currentAttempt, placementAttempt);
+                this.getHand().addTiles(this.getHand().getRecentlyRemoved(), false);
             }
         }
         else
@@ -147,8 +146,44 @@ public class AIPlayer extends Player{
         this.game.processCommand(new Command("play", this.possiblePlays.get(bestWord), bestWord));
     }
 
-    private boolean getDirection(String s)
+    private void performBoardCopy(Board board)
     {
-        return Character.isDigit(s.charAt(0));
+        this.board = board;
+        /*
+        this.board.setCells(board.getCells());
+        this.board.setSquares(board.getSquares());
+        this.board.setTiles(board.getTiles());
+        this.board.setFirstPlay(board.isFirstPlay());
+        */
+    }
+
+    public HashMap<String, String> getPossiblePlays() {
+        return possiblePlays;
+    }
+
+    private String changeStartingCoordinatesToVertical(String coordinates, boolean direction) {
+
+        if (!direction) {
+            String num = " ";
+            char letter = ' ';
+            if (coordinates.length() == 3) {
+                num = coordinates.substring(0, 2);
+                letter = coordinates.charAt(2);
+            } else {
+                num = coordinates.substring(0, 1);
+                letter = coordinates.charAt(1);
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.append(letter);
+            sb.append(num);
+
+            return sb.toString();
+        }
+        else
+        {
+            return coordinates;
+        }
     }
 }

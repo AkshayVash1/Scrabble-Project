@@ -39,7 +39,6 @@ public class HandPanel extends JPanel implements ScrabbleView {
      */
     private void refreshHand()
     {
-        //MouseController controller = new MouseController(this.game);
         this.removeAll();
         DragGestureController dg = new DragGestureController(this.player);
         removedPanels.clear();
@@ -50,7 +49,7 @@ public class HandPanel extends JPanel implements ScrabbleView {
             JLabel l = new JLabel(t.toString());
             DragSource ds = new DragSource();
             ds.createDefaultDragGestureRecognizer(l, 1, dg::dragGestureRecognized);
-            l.setSize(10,10);
+            l.setSize(10,15);
             l.setFont(new Font(Font.MONOSPACED, Font.BOLD,18));
             p.add(l);
             this.add(p);

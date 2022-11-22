@@ -61,6 +61,7 @@ public class PlayMove {
             }
             else
             {
+                System.out.println(this.placementAttempt);
                 return Integer.parseInt(String.valueOf(this.placementAttempt.charAt(Hand.PARSE_CHAR_AT_ZERO)));
             }
         }
@@ -72,6 +73,7 @@ public class PlayMove {
             }
             else
             {
+                System.out.println(this.placementAttempt);
                 return Integer.parseInt(String.valueOf(this.placementAttempt.charAt(PlayMove.PARSE_CHAR_AT_ONE)));
             }
         }

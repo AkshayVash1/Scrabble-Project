@@ -242,19 +242,19 @@ public class Board {
         return false;
     }
 
-    public ArrayList<String> getAIPlayableCoordinates(){
-        ArrayList<String> playableCoordinates = new ArrayList<>();
+    public HashMap<String, Boolean> getAIPlayableCoordinates(){
+        HashMap<String, Boolean> playableCoordinates = new HashMap<>();
 
         for (int ROW = 1; ROW < cells.length - 1; ROW++) {
             for (int COL = 1; COL < cells.length - 1; COL++) {
                 if(!cells[ROW][COL].equals(" ")) {
                     if(cells[ROW+1][COL].equals(" "))
                     {
-                        playableCoordinates.add(getStringCoords(ROW + 1, COL));
+                        playableCoordinates.put(getStringCoords(ROW + 1, COL), false);
                     }
                     if(cells[ROW][COL+1].equals(" "))
                     {
-                        playableCoordinates.add(getStringCoords(ROW, COL+1));
+                        playableCoordinates.put(getStringCoords(ROW, COL+1), true);
                     }
                 }
             }

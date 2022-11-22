@@ -52,10 +52,11 @@ public class Game {
             playerList.add(new Player(i));
             playerList.get(i).initializePlayerHand((ArrayList<Tile>) bag.removeTiles(7));
         }
-        for (int i = 0; i < AIValue; i++) {
+        for (int i = playerValue; i < AIValue + playerValue; i++) {
             playerList.add(new AIPlayer(i, board, this));
             playerList.get(i).initializePlayerHand((ArrayList<Tile>) bag.removeTiles(7));
         }
+
         this.activeCount = this.playerList.size();
         this.currentPlayer = this.playerList.get(0);
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
@@ -74,28 +75,43 @@ public class Game {
     /**
      * Logic for changing the turn order from current player to next player
      */
-    public void nextPlayer()
-    {
+    public void nextPlayer() throws FileNotFoundException {
         this.removeTilesFromHand.clear();
-        if (currentPlayer != null) {
-            if (currentPlayer.getPoints() >= 50) {
-                this.gameFinished = true;
-            } else {
-                if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
-                    this.currentPlayer = this.playerList.get(0);
+            if (currentPlayer != null) {
+                if (currentPlayer.getPoints() >= 50) {
+                    this.gameFinished = true;
                 } else {
-                    this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+                    if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
+                        this.currentPlayer = this.playerList.get(0);
+                    } else {
+                        this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+                    }
                 }
             }
-        }
 
-        this.firstPlayInTurn = true;
+            if (this.currentPlayer.isAI()) {
+                performAIPlay();
+            }
+
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+        this.firstPlayInTurn = true;
     }
 
     public Bag getBag()
     {
         return this.bag;
+    }
+
+    private void performAIPlay() throws FileNotFoundException {
+        AIPlayer aiPlayer = (AIPlayer) this.currentPlayer;
+        aiPlayer.analyzeBoard(this.board);
+        System.out.println(aiPlayer.getPossiblePlays().toString());
+
+        if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
+            this.currentPlayer = this.playerList.get(0);
+        } else {
+            this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+        }
     }
 
     /**

@@ -30,8 +30,9 @@ public class BoardPanel extends JPanel implements ScrabbleView{
         this.board = new Board();
 
         cells = new JPanel[16][16];
-        final int BOARD_SIZE = 600;
-        this.setPreferredSize(new Dimension(BOARD_SIZE, BOARD_SIZE));
+        final int BOARD_SIZE_X = 600;
+        final int BOARD_SIZE_Y = 580;
+        this.setPreferredSize(new Dimension(BOARD_SIZE_X, BOARD_SIZE_Y));
         this.setLayout(new GridLayout(cells.length, cells.length));
         this.setBorder(new LineBorder(Color.BLACK));
         this.addCells();

@@ -19,6 +19,7 @@ public class Player {
     private int points;
     private int playerNumber;
     private boolean active;
+    private boolean isAI;
 
     /**
      * Constructor to initialize player points to 0 when player is created. Constructor to initialize
@@ -31,7 +32,17 @@ public class Player {
         hand = new Hand();
         this.playerNumber = playerNumber;
         this.active = true;
+        this.isAI = false;
     }
+
+    public boolean isAI() {
+        return isAI;
+    }
+
+    public void setAI(boolean AI) {
+        isAI = AI;
+    }
+
 
     /**
      * Emulates the exchanging of Tiles by removing the Tile objects from hand and replacing with new TIle objects
