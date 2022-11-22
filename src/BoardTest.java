@@ -541,13 +541,13 @@ public class BoardTest {
      * Methods covered: getHorizontalWords()
      *
      */
-    @Test
+/*    @Test
     public void testGetHorizontalWords_EmptyBoard() {
         ArrayList<String> words = board.getHorizontalWords();
         int wordCount = words.size();
 
         assertEquals(0,wordCount);
-    }
+    }*/
 
 
     /**
@@ -558,13 +558,13 @@ public class BoardTest {
      * Methods covered: getVerticalWords()
      *
      */
-    @Test
+/*    @Test
     public void testGetVerticalWords_EmptyBoard() {
         ArrayList<String> words = board.getVerticalWords();
         int wordCount = words.size();
 
         assertEquals(0,wordCount);
-    }
+    }*/
 
 
     /**
@@ -575,7 +575,7 @@ public class BoardTest {
      * Methods covered: getHorizontalWords(), placeWord()
      *
      */
-    @Test
+/*    @Test
     public void testGetHorizontalWords() {
         board. placeWord(8, 8, testWord_TWO, Board.Direction.HORIZONTAL);
         board. placeWord(9, 8, testWord_THREE, Board.Direction.VERTICAL);
@@ -584,7 +584,7 @@ public class BoardTest {
         int wordCount = words.size();
 
         assertEquals(5,wordCount);
-    }
+    }*/
 
 
     /**
@@ -595,7 +595,7 @@ public class BoardTest {
      * Methods covered: getVerticalWords(), placeWord()
      *
      */
-    @Test
+/*    @Test
     public void testGetVerticalWords() {
         board. placeWord(8, 8, testWord_TWO, Board.Direction.HORIZONTAL);
         board. placeWord(9, 8, testWord_THREE, Board.Direction.VERTICAL);
@@ -604,6 +604,6 @@ public class BoardTest {
         int wordCount = words.size();
 
         assertEquals(3,wordCount);
-    }
+    }*/
 
 }

@@ -188,8 +188,8 @@ public class PlayMove {
     public boolean checkWord() throws FileNotFoundException {
         WordValidator wordValidator = new WordValidator();
         ArrayList<String> allWords = new ArrayList<>();
-        allWords.addAll(board.getHorizontalWords());
-        allWords.addAll(board.getVerticalWords());
+        //allWords.addAll(board.getHorizontalWords());
+        //allWords.addAll(board.getVerticalWords());
 
         return wordValidator.isWordsValid(allWords);
     }
