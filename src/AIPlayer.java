@@ -27,6 +27,11 @@ public class AIPlayer extends Player{
         this.playableCoordinates = new ArrayList<>();
     }
 
+    public void possiblePlays() {
+
+    }
+
+
     public boolean isAI() {
         return this.isAI;
     }
