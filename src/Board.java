@@ -552,8 +552,9 @@ public class Board {
         }
         // return true if adjacent Not empty condition was met and all the tiles were placed successfully
         if (!adjacentConditionMet) {
-            System.out.println("ERROR: Placement is NOT valid." +
-            "\nAt least one tile must be adjacent to an existing tile.");
+            //System.out.println(tiles.toString() + " " + row + col);
+            /*System.out.println("ERROR: Placement is NOT valid." +
+            "\nAt least one tile must be adjacent to an existing tile."); */
             return false;
         }
         else if ((adjacentConditionMet) && tilePlacedCount == tiles.size()){

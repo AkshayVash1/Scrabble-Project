@@ -1,4 +1,5 @@
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,10 +19,10 @@ public class AIPlayer extends Player{
     private HashMap<String, Boolean> playableCoordinates;
     private Game game;
 
-    public AIPlayer(int playerNumber, Board board, Game game) {
+    public AIPlayer(int playerNumber, Game game) {
         super(playerNumber);
-        performBoardCopy(board);
 
+        this.board = new Board();
         this.setAI(true);
         this.possiblePlays = new HashMap<>();
         this.playableCoordinates = new HashMap<String, Boolean>();
@@ -29,7 +30,12 @@ public class AIPlayer extends Player{
     }
 
     public void analyzeBoard(Board board) throws FileNotFoundException {
-        performBoardCopy(board);
+        this.board.setCells(board.getCells());
+        this.board.setSquares(board.getSquares());
+        this.board.setTiles(board.getTiles());
+        this.board.setFirstPlay(board.isFirstPlay());
+
+        System.out.println(this.getHand().getHand().toString());
         this.playableCoordinates = this.board.getAIPlayableCoordinates();
         System.out.println(this.playableCoordinates.toString());
         ArrayList<Tile> hand = this.getHand().getHand();
@@ -39,9 +45,12 @@ public class AIPlayer extends Player{
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(hand.get(i).getLetter());
 
+            //System.out.println(stringBuilder.toString());
+
             for (String s : this.playableCoordinates.keySet())
             {
                 boolean direction = this.playableCoordinates.get(s);
+                //System.out.println(stringBuilder.toString() + " " + changeStartingCoordinatesToVertical(s, direction));
                 attemptAiMove(stringBuilder.toString(), changeStartingCoordinatesToVertical(s, direction),
                         direction);
             }
@@ -51,28 +60,10 @@ public class AIPlayer extends Player{
         {
             for (int j = 0; j < hand.size(); j++)
             {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(hand.get(i).getLetter());
-                stringBuilder.append(hand.get(j).getLetter());
-
-                for (String s : this.playableCoordinates.keySet())
-                {
-                    boolean direction = this.playableCoordinates.get(s);
-                    attemptAiMove(stringBuilder.toString(), changeStartingCoordinatesToVertical(s, direction),
-                            direction);
-                }
-            }
-        }
-
-        for (int i = 0; i < hand.size(); i++)
-        {
-            for (int j = 0; j < hand.size(); j++)
-            {
-                for (int k = 0; k < hand.size(); k++) {
+                if (i != j) {
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(hand.get(i).getLetter());
                     stringBuilder.append(hand.get(j).getLetter());
-                    stringBuilder.append(hand.get(k).getLetter());
 
                     for (String s : this.playableCoordinates.keySet()) {
                         boolean direction = this.playableCoordinates.get(s);
@@ -87,14 +78,12 @@ public class AIPlayer extends Player{
         {
             for (int j = 0; j < hand.size(); j++)
             {
-                for (int k = 0; k < hand.size(); k++)
-                {
-                    for (int l = 0; l < hand.size(); l++) {
+                for (int k = 0; k < hand.size(); k++) {
+                    if ((i != j) && (i != k ) && (j != k)) {
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append(hand.get(i).getLetter());
                         stringBuilder.append(hand.get(j).getLetter());
                         stringBuilder.append(hand.get(k).getLetter());
-                        stringBuilder.append(hand.get(l).getLetter());
 
                         for (String s : this.playableCoordinates.keySet()) {
                             boolean direction = this.playableCoordinates.get(s);
@@ -112,49 +101,42 @@ public class AIPlayer extends Player{
         ArrayList<Character> currentAttemptArrayList = new ArrayList<>();
         for (Character c : currentAttempt.toCharArray()) { currentAttemptArrayList.add(c); }
 
-        this.getHand().removeTiles(currentAttemptArrayList,false);
-
-        PlayMove playMove = new PlayMove(placementAttempt, this.getHand().getRecentlyRemoved(),
+        PlayMove playMove = new PlayMove(placementAttempt, mapCharToTile(currentAttemptArrayList),
                 this.board, placementDirection);
         if (playMove.placeTile()) {
             if (playMove.checkWord()) {
                 possiblePlays.put(currentAttempt, placementAttempt);
-                this.getHand().addTiles(this.getHand().getRecentlyRemoved(), false);
+                System.out.println(this.getHand().getHand().toString());
             }
         }
         else
         {
-            this.getHand().addTiles(this.getHand().getRecentlyRemoved(), false);
+            System.out.println(this.getHand().getHand().toString());
         }
     }
 
     public void playHighestMove() throws FileNotFoundException {
-        String possiblePlaysArray[] = (String[]) this.possiblePlays.keySet().toArray();
+        ArrayList<String> possiblePlays = new ArrayList<>();
+        for (Object s : this.possiblePlays.keySet().toArray()) {possiblePlays.add((String)s);}
         String bestWord = " ";
         int bestWordPoints = 0;
         int currentWordPoints = 0;
-        for (int i = 0; i < possiblePlaysArray.length; i++)
+        for (int i = 0; i < possiblePlays.size(); i++)
         {
-            currentWordPoints = Board.calculateWordScore(possiblePlaysArray[i]);
+            currentWordPoints = Board.calculateWordScore(possiblePlays.get(i));
             if(currentWordPoints > bestWordPoints)
             {
                 bestWordPoints = currentWordPoints;
-                bestWord = possiblePlaysArray[i];
+                bestWord = possiblePlays.get(i);
             }
         }
 
-        this.game.processCommand(new Command("play", this.possiblePlays.get(bestWord), bestWord));
-    }
+        System.out.println(bestWord + " " + this.possiblePlays.get(bestWord));
 
-    private void performBoardCopy(Board board)
-    {
-        this.board = board;
-        /*
-        this.board.setCells(board.getCells());
-        this.board.setSquares(board.getSquares());
-        this.board.setTiles(board.getTiles());
-        this.board.setFirstPlay(board.isFirstPlay());
-        */
+        for (Character c : bestWord.toCharArray()){this.game.addToRemoveTilesFromHand(c);}
+
+        this.game.processCommand(new Command("play", bestWord, this.possiblePlays.get(bestWord)));
+        this.possiblePlays.clear();
     }
 
     public HashMap<String, String> getPossiblePlays() {
@@ -185,5 +167,24 @@ public class AIPlayer extends Player{
         {
             return coordinates;
         }
+    }
+
+    private ArrayList<Tile> mapCharToTile(ArrayList<Character> currentAttemptArrayList)
+    {
+        ArrayList<Tile> returnArray = new ArrayList<>();
+
+        for (Character c : currentAttemptArrayList)
+        {
+            for (Tile t : this.getHand().getHand())
+            {
+                if (t.getLetter().equals(Character.toString(c)))
+                {
+                    returnArray.add(t);
+                    break;
+                }
+            }
+        }
+
+        return returnArray;
     }
 }

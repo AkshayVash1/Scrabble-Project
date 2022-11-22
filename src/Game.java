@@ -11,6 +11,7 @@
  */
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class Game {
             playerList.get(i).initializePlayerHand((ArrayList<Tile>) bag.removeTiles(7));
         }
         for (int i = playerValue; i < AIValue + playerValue; i++) {
-            playerList.add(new AIPlayer(i, board, this));
+            playerList.add(new AIPlayer(i, this));
             playerList.get(i).initializePlayerHand((ArrayList<Tile>) bag.removeTiles(7));
         }
 
@@ -104,8 +105,26 @@ public class Game {
 
     private void performAIPlay() throws FileNotFoundException {
         AIPlayer aiPlayer = (AIPlayer) this.currentPlayer;
+
+        boolean flag = true;
+        while (flag) {
+            flag = false;
+
+            for (Tile t : aiPlayer.getHand().getHand())
+            {
+                if (t.getLetter().equals("_"))
+                {
+                    flag = true;
+                    this.addToExchangeTilesFromHand('_');
+                    this.processCommand(new Command("exchange", "_", null));
+                }
+            }
+        }
+
         aiPlayer.analyzeBoard(this.board);
-        System.out.println(aiPlayer.getPossiblePlays().toString());
+        System.out.println(aiPlayer.getPossiblePlays().toString() + " <- Possible words");
+        aiPlayer.playHighestMove();
+        this.clearRemoveTilesFromHand();
 
         if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
             this.currentPlayer = this.playerList.get(0);
@@ -270,7 +289,6 @@ public class Game {
         switch (action) {
             case "exchange":
                 inHand = new InHand(convertCharArrayListToString(this.exchangeTilesFromHand), currentPlayer.getHand());
-
                 if (inHand.wordInHand()) {
                     this.exchangeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(this.exchangeTilesFromHand.size());
@@ -288,10 +306,12 @@ public class Game {
                 break;
 
             case "play":
+                System.out.println(currentPlayer.getHand().getHand().toString());
                 inHand = new InHand(convertCharArrayListToString(this.removeTilesFromHand), currentPlayer.getHand());
                 if (inHand.wordInHand()) {
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
+                    System.out.println(removeTilesFromHand.toString() + " " + command.getPlacementAttempt());
                     PlayMove playMove = new PlayMove(command.getPlacementAttempt(),
                             currentPlayer.exchange((ArrayList<Tile>) addTilesToHand, removeTilesFromHand),
                             this.board, command.getPlacementDirection());
