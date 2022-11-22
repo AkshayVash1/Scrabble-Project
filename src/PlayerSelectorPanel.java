@@ -23,8 +23,10 @@ public class PlayerSelectorPanel extends JPanel implements ItemListener {
     JComboBox AIComboBox = new JComboBox();
     private JComboBox oldPlayerComboBox = new JComboBox();
     private JComboBox oldAIComboBox = new JComboBox();
-    private String playerAmount;
-    private String AIAmount;
+    private int playerAmount;
+    private int AILimit;
+    private int AIAmount;
+
     private Image backgroundImage;
 
     private StartMenuFrame startMenuFrame;
@@ -87,23 +89,35 @@ public class PlayerSelectorPanel extends JPanel implements ItemListener {
             playerComboBox.setName(String.valueOf(playerComboBox.getSelectedItem()));
             if (e.getSource().equals(playerComboBox)) {
                 if (playerComboBox.getSelectedItem().equals(2 + " players")) {
-                    playerAmount = "2";
-                    initializeAISelector(1);
+                    playerAmount = 2;
+                    AILimit = 2;
                     oldPlayerComboBox.setName(String.valueOf(playerComboBox.getSelectedItem()));
                 } else if (playerComboBox.getSelectedItem().equals(3 + " players")) {
-                    playerAmount = "3";
-                    initializeAISelector(2);
+                    playerAmount = 3;
+                    AILimit = 3;
                     oldPlayerComboBox.setName(String.valueOf(playerComboBox.getSelectedItem()));
                 } else if (playerComboBox.getSelectedItem().equals(4 + " players")) {
-                    playerAmount = "4";
-                    initializeAISelector(3);
+                    playerAmount = 4;
+                    AILimit = 4;
                     oldPlayerComboBox.setName(String.valueOf(playerComboBox.getSelectedItem()));
                 }
+                initializeAISelector(AILimit);
             } else if (e.getSource().equals(AIComboBox)) {
-                System.out.println("hello");
-
-                startMenuFrame.createPlayers(playerAmount);
-                startMenuFrame.setVisible(false);
+                if (AIComboBox.getSelectedItem().equals(0 + " AI players")) {
+                    AIAmount = 0;
+                    oldAIComboBox.setName(String.valueOf(AIComboBox.getSelectedItem()));
+                } else if (AIComboBox.getSelectedItem().equals(1 + " AI players")) {
+                    AIAmount = 1;
+                    oldAIComboBox.setName(String.valueOf(AIComboBox.getSelectedItem()));
+                } else if (AIComboBox.getSelectedItem().equals(2 + " AI players")) {
+                    AIAmount = 2;
+                    oldAIComboBox.setName(String.valueOf(AIComboBox.getSelectedItem()));
+                } else if (AIComboBox.getSelectedItem().equals(3 + " AI players")) {
+                    AIAmount = 3;
+                    oldAIComboBox.setName(String.valueOf(AIComboBox.getSelectedItem()));
+                }
+                playerAmount = playerAmount - AIAmount;
+                startMenuFrame.createPlayers(Integer.toString(playerAmount), Integer.toString(AIAmount));
             }
             this.revalidate();
             this.repaint();

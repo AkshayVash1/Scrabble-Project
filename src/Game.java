@@ -18,7 +18,7 @@ public class Game {
 
     private Bag bag = new Bag();
     private Board board = new Board();
-    private ArrayList<Player> playerList = new ArrayList<Player>();
+    private ArrayList<Player> playerList = new ArrayList<>();
     private Player currentPlayer;
     private boolean placementCheck;
     private List<ScrabbleView> views;
@@ -42,14 +42,18 @@ public class Game {
 
     /**
      * Creates number of players based on user input
-     * @param input User input for number of players
+     * @param playerAmount User input for number of players
      */
-    public void createPlayers(String input) {
-        int value = Integer.parseInt(input);
-
+    public void createPlayers(String playerAmount, String AIAmount) {
+        int playerValue = Integer.parseInt(playerAmount);
+        int AIValue = Integer.parseInt(AIAmount);
         playerList.clear();
-        for (int i = 0; i < value; i++) {
+        for (int i = 0; i < playerValue; i++) {
             playerList.add(new Player(i));
+            playerList.get(i).initializePlayerHand((ArrayList<Tile>) bag.removeTiles(7));
+        }
+        for (int i = 0; i < AIValue; i++) {
+            playerList.add(new AIPlayer(i, board, this));
             playerList.get(i).initializePlayerHand((ArrayList<Tile>) bag.removeTiles(7));
         }
         this.activeCount = this.playerList.size();
