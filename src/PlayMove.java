@@ -110,7 +110,7 @@ public class PlayMove {
      * */
     public int getPlayedWordScore()
     {
-        return this.board.getWordScore(parseRow(), parseColumn(), this.wordTiles, this.direction);
+        return this.board.getWordScore(parseRow(), parseColumn());
     }
 
     /**
