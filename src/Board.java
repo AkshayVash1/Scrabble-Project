@@ -598,7 +598,7 @@ public class Board {
         }
         else if ((adjacentConditionMet) && tilePlacedCount == tiles.size()){
             System.out.println("Placement is valid.");
-            getWordScore(row, col, tiles, direction);
+            getWordScore(row, col);
             return true;
         }
         return false;
@@ -709,16 +709,14 @@ public class Board {
      *
      * @param row the integer value of the row of given cell.
      * @param col the integer value of the column of given cell.
-     * @param tilesList list of tiles of the word to be scored.
-     * @param direction placement direction of the word to be scored.
      * @return sum score of values of tiles.
      */
-    public int getWordScore(int row, int col, ArrayList<Tile> tilesList, Direction direction) {
+    public int getWordScore(int row, int col) {
         String wordToScore = getLongestAdjacentWord(row,col);
         Direction DIR = getUpdatedDirection();
 
         int wordScore = calculateWordScore(wordToScore);
-        int premiumScore = calculatePremiumScore(wordToScore, tilesList, DIR);
+        int premiumScore = calculatePremiumScore(wordToScore);
         System.out.println("WORD SCORE for " + wordToScore + ": " + wordScore);
         System.out.println("PREMIUM SCORE for " + wordToScore + ": " + premiumScore);
 
@@ -782,8 +780,8 @@ public class Board {
             updateStartingCoords(row, col, longestWord, Direction.VERTICAL); // update starting coordinates of current word
         }
         System.out.println("LONGEST WORD FORMED BY TILE: " + longestWord
-                            + "\nstarting at: row " + getCurrentStartRow()
-                            + " col " + getCurrentStartCol());
+                            + "\nstarting at: row " + this.currentStartRow
+                            + " col " + this.currentStartCol);
          return longestWord;
     }
 
@@ -791,8 +789,10 @@ public class Board {
     private void updateStartingCoords(int row, int col, String word, Direction direction) {
 
         //reset current word's starting coordinates to 0 before starting
-        setCurrentStartCol(0);
-        setCurrentStartRow(0);
+        currentStartRow = 0;
+        currentStartCol = 0;
+/*        setCurrentStartCol(0);
+        setCurrentStartRow(0);*/
 
         if (word.length() <= 1) {
             System.out.println("ERROR: the word played is only one letter long. Enter a longer word.");
@@ -806,8 +806,10 @@ public class Board {
                 String letter = ((Character) word.charAt(0)).toString();
                 // if first letter matches iterate through rest of words to see if the whole word matches
                 if (cells[row][COL].equals(letter)) {
-                    setCurrentStartCol(COL);
-                    setCurrentStartRow(row);
+                    currentStartCol = COL;
+                    currentStartRow = row;
+/*                    setCurrentStartCol(COL);
+                    setCurrentStartRow(row);*/
 
                     int COLUMN_current = COL + 1;
                     for (int i = 1; i < word.length(); i++) {
@@ -833,8 +835,10 @@ public class Board {
                 String letter = ((Character) word.charAt(0)).toString();
                 // if first letter matches iterate through rest of words to see if the whole word matches
                 if (cells[ROW][col].equals(letter)) {
-                    setCurrentStartCol(col);
-                    setCurrentStartRow(ROW);
+                    currentStartCol = col;
+                    currentStartRow = ROW;
+/*                    setCurrentStartCol(col);
+                    setCurrentStartRow(ROW);*/
 
                     int ROW_current = ROW + 1;
                     for (int i = 1; i < word.length(); i++) {
@@ -970,16 +974,12 @@ public class Board {
      * Returns the score for given word multiplied by corresponding premium scores' multipliers.
      *
      * @param word  the String word to score.
-     * @param tilesList
-     * @param direction placement direction of the word to be scored.
      * @return the multiplied score of the word.
      */
-    public int calculatePremiumScore(String word, ArrayList<Tile> tilesList, Direction direction) {
-
-        int startingRow = getCurrentStartRow();
-        int startingCol = getCurrentStartCol();
+    public int calculatePremiumScore(String word) {
+        int startingRow = this.currentStartRow;
+        int startingCol = this.currentStartCol;
         int wordLength = word.length();
-        ArrayList<Tile> newTilesAdded = tilesList;
         ArrayList<Square.Multiplier> multipliers = new ArrayList<>();
         int wordScore = 0;
         int premiumScore = 0;
@@ -1039,21 +1039,6 @@ public class Board {
         return this.cells[row][col];
     }
 
-    public int getCurrentStartRow() {
-        return currentStartRow;
-    }
-
-    public void setCurrentStartRow(int currentStartRow) {
-        this.currentStartRow = currentStartRow;
-    }
-
-    public int getCurrentStartCol() {
-        return currentStartCol;
-    }
-
-    public void setCurrentStartCol(int currentStartCol) {
-        this.currentStartCol = currentStartCol;
-    }
 
     public ArrayList<String> getNewWords() {
         return this.newWords;
