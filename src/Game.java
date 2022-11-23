@@ -78,21 +78,20 @@ public class Game {
      */
     public void nextPlayer() throws FileNotFoundException {
         this.removeTilesFromHand.clear();
-            if (currentPlayer != null) {
-                if (currentPlayer.getPoints() >= 50) {
-                    this.gameFinished = true;
+        if (currentPlayer != null) {
+            if (currentPlayer.getPoints() >= 50) {
+                this.gameFinished = true;
+            } else {
+                if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
+                    this.currentPlayer = this.playerList.get(0);
                 } else {
-                    if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
-                        this.currentPlayer = this.playerList.get(0);
-                    } else {
-                        this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+                    this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+                    if (this.currentPlayer.isAI()) {
+                        performAIPlay();
                     }
                 }
             }
-
-            if (this.currentPlayer.isAI()) {
-                performAIPlay();
-            }
+        }
 
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
         this.firstPlayInTurn = true;
@@ -126,11 +125,7 @@ public class Game {
         aiPlayer.playHighestMove();
         this.clearRemoveTilesFromHand();
 
-        if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
-            this.currentPlayer = this.playerList.get(0);
-        } else {
-            this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
-        }
+        this.nextPlayer();
     }
 
     /**
