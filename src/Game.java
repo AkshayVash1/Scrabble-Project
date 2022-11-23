@@ -121,7 +121,6 @@ public class Game {
         }
 
         aiPlayer.analyzeBoard(this.board);
-        System.out.println(aiPlayer.getPossiblePlays().toString() + " <- Possible words");
         aiPlayer.playHighestMove();
         this.clearRemoveTilesFromHand();
 
