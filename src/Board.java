@@ -6,7 +6,7 @@ import java.util.*;
  * The cells themselves store the value of the tile letter placed on them. Printing the board displays the state of the game.
  *
  * @author Mahtab Ameli
- * @date 2022-11-13
+ * @date 2022-11-22
  * @version 2.0
  */
 public class Board {
@@ -42,12 +42,6 @@ public class Board {
     int currentStartRow = 0; int currentStartCol = 0;
 
     /**
-     * Most recently played word
-     */
-    private String playedWord = "";
-
-
-    /**
      * Direction of word placement on the board
      */
     public enum Direction{HORIZONTAL, VERTICAL}
@@ -63,6 +57,11 @@ public class Board {
     ArrayList<String> newWords;
 
     /**
+     * Most recently played word
+     */
+    private String playedWord = "";
+
+    /**
      * Colors and corresponding color codes used in this class's print statements.
      */
     public enum TextColor{
@@ -74,7 +73,6 @@ public class Board {
             this.code = colorCode;
         }
     }
-
 
     /**
      * Constructor for the class.
@@ -188,7 +186,6 @@ public class Board {
             }
         }
     }
-
 
     /**
      * Prints the state of the board, displaying each square's corresponding color, and each cell's letter value.
@@ -588,8 +585,6 @@ public class Board {
         return false;
     }
 
-
-
     /**
      * Concatenates and returns String combination of letters from given tiles.
      *
@@ -713,8 +708,8 @@ public class Board {
     /**
      * Given a single square coordinate, finds all words containing that cell.
      * Returns the longest one to be scored.
-     * @param row
-     * @param col
+     * @param row the integer value of the row of given cell.
+     * @param col the integer value of the column of given cell.
      * @return
      */
     private String getLongestAdjacentWord(int row, int col) {
@@ -768,13 +763,20 @@ public class Board {
     }
 
     // finds the starting coordinates of current active word and sets them.
+
+    /**
+     * Finds the coordinates of the first letter of the given word and updates
+     * currentStartRow and currentStartCol.
+     * @param row the integer value of the row of given cell.
+     * @param col the integer value of the column of given cell.
+     * @param word the word to find the starting cell of.
+     * @param direction direction of word's placement.
+     */
     private void updateStartingCoords(int row, int col, String word, Direction direction) {
 
         //reset current word's starting coordinates to 0 before starting
         currentStartRow = 0;
         currentStartCol = 0;
-/*        setCurrentStartCol(0);
-        setCurrentStartRow(0);*/
 
         if (word.length() <= 1) {
             System.out.println("ERROR: the word played is only one letter long. Enter a longer word.");
@@ -842,28 +844,26 @@ public class Board {
     }
 
     /**
-     * updates direction of last word played.
+     * Updates direction of last word played.
      * @return
      */
     private void updateDirection(Direction updatedDirection) {
         this.direction = updatedDirection;
     }
 
-
     /**
      * Returns direction of last word played.
-     * @return
+     * @return the direction of current word's placement.
      */
     private Direction getUpdatedDirection() {
         return this.direction;
     }
 
-
     /**
      * Calculates score of the given word.
      *
      * @param wordToScore the String word to be scored.
-     * @return score of word.
+     * @return int score of word.
      */
     private int calculateWordScore(String wordToScore) {
         int letterScore = 0;
@@ -952,11 +952,21 @@ public class Board {
         return premiumScore;
     }
 
+    /**
+     * Returns the String letter stored in cell at given coordinates.
+     * @param row the integer value of the row of given cell.
+     * @param col the integer value of the column of given cell.
+     * @return the letter stored in cell at given row and col.
+     */
     public String getLetterAtSquare(int row, int col)
     {
         return this.cells[row][col];
     }
 
+    /**
+     * Returns the list of all new words formed on board as a result of the last play move.
+     * @return list of new words on board.
+     */
     public ArrayList<String> getNewWords() {
         return this.newWords;
     }

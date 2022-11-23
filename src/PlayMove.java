@@ -151,7 +151,8 @@ public class PlayMove {
      * */
     public int getPlayedWordScore()
     {
-        return this.board.getWordScore(parseRow(), parseColumn(), this.wordTiles, this.direction);
+        //return this.board.getWordScore(parseRow(), parseColumn(), this.wordTiles, this.direction);
+        return this.board.getWordScore(parseRow(), parseColumn());
     }
 
     /**
@@ -187,10 +188,7 @@ public class PlayMove {
      * */
     public boolean checkWord() throws FileNotFoundException {
         WordValidator wordValidator = new WordValidator();
-        ArrayList<String> allWords = new ArrayList<>();
-        //allWords.addAll(board.getHorizontalWords());
-        //allWords.addAll(board.getVerticalWords());
-
+        ArrayList<String> allWords = board.getNewWords();
         return wordValidator.isWordsValid(allWords);
     }
 }
