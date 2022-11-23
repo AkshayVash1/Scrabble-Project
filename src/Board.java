@@ -46,10 +46,6 @@ public class Board {
      */
     private String playedWord = "";
 
-    public String getPlayedWord() {
-        return playedWord;
-    }
-
 
     /**
      * Direction of word placement on the board
@@ -322,12 +318,6 @@ public class Board {
                     }
                 }
             }
-
-
-
-/*            System.out.println("ERROR: Cannot place tile " + tile.getLetter()
-                    + " on non-empty cell: " + "row: " + row + ", col: " + col);
-            System.out.println("occupied cell contains letter: " + cells[row][col]);*/
             return false;
         }
 
@@ -573,16 +563,10 @@ public class Board {
             this.isFirstPlay = false;
         }
 
-        //todo
-        // if only one tile is being added, determine direction from adjacent tiles based on longest word formed
-/*        if (tiles.size() == 1) {
-
-        }*/
-
         for (Tile tile: tiles) {
             tilePlaced = this.placeTileAt(ROW, COL, tile, direction);
             //if (tilePlaced) {tilePlacedCount++; }
-            if (!tilePlaced) {break;} // todo check again
+            if (!tilePlaced) {break;}
             tilePlacedCount++;
             if (direction == Direction.VERTICAL) {  // placement direction is vertical
                 ROW++;
@@ -603,6 +587,8 @@ public class Board {
         }
         return false;
     }
+
+
 
     /**
      * Concatenates and returns String combination of letters from given tiles.
@@ -724,9 +710,6 @@ public class Board {
     }
 
 
-
-
-
     /**
      * Given a single square coordinate, finds all words containing that cell.
      * Returns the longest one to be scored.
@@ -766,7 +749,6 @@ public class Board {
                 }
             }
         }
-
         //choose longer word between vertical longest and horizontal longest
         // if there's a tie, pick horizontal by convention
         if (longestHorizontal.length() >= longestVertical.length()) {
@@ -877,70 +859,6 @@ public class Board {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    /*    *//**
-     * Returns the score for given word.
-     *
-     * @param row the integer value of the row of given cell.
-     * @param col the integer value of the column of given cell.
-     * @param tilesList list of tiles of the word to be scored.
-     * @param direction placement direction of the word to be scored.
-     * @return sum score of values of tiles.
-     *//*
-    public int getWordScore(int row, int col, ArrayList<Tile> tilesList, Direction direction) {
-        ArrayList<Tile> wordTiles = tilesList;
-        String lettersPlayed = getWordFromTiles(wordTiles);
-
-
-
-        // we want to get the word from the board not from tiles based on first tile provided
-
-
-        String wordToScore = lettersPlayed;
-        ArrayList<String> wordsOnRow ;
-        ArrayList<String> wordsOnCol;
-
-        int wordScore = 0;
-        if (direction == Direction.HORIZONTAL) {
-            // we want to check which word on row contains horizontal wordFromTiles
-            wordsOnRow = getWordsOnRow(row);
-            for (String w: wordsOnRow) {
-                if (w.contains(lettersPlayed) && w.length() > 1) {
-                    wordToScore = w;
-                    System.out.println("horizontal word, " + w + " contains letters played: " + lettersPlayed);
-                    break;
-                }
-            }
-        }
-        // else direction == Direction.VERTICAL
-        else {
-            // we want to check which word on column contains vertical wordFromTiles
-            wordsOnCol = getWordsOnCol(col);
-            for (String w: wordsOnCol) {
-                if (w.contains(lettersPlayed) && w.length() > 1) {
-                    wordToScore = w;
-                    System.out.println("vertical word, " + w + " contains letters played: " + lettersPlayed);
-                    break;
-                }
-            }
-        }
-        wordScore = calculateWordScore(wordToScore);
-        playedWord = wordToScore;
-        System.out.println("score for word " + wordToScore + ": " + wordScore);
-        return wordScore;
-    }*/
-
     /**
      * Calculates score of the given word.
      *
@@ -1038,7 +956,6 @@ public class Board {
     {
         return this.cells[row][col];
     }
-
 
     public ArrayList<String> getNewWords() {
         return this.newWords;
