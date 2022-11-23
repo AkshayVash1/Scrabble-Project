@@ -66,7 +66,11 @@ public class GameCommandPanelController implements ActionListener{
             } catch (FileNotFoundException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             }
-            this.game.nextPlayer();
+            try {
+                this.game.nextPlayer();
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
             /**
              * Play the move set onto board
              */
@@ -82,7 +86,11 @@ public class GameCommandPanelController implements ActionListener{
              * Shuffle Hand change order of tiles within hand
              */
         } else if (e.getActionCommand().equals(GameCommandPanel.PASS)) {
-            this.game.nextPlayer();
+            try {
+                this.game.nextPlayer();
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
             /**
              * Pass Turn go to next player
              */
@@ -98,7 +106,11 @@ public class GameCommandPanelController implements ActionListener{
             }
 
             this.game.clearRemoveFromExchangeTilesFromHand();
-            this.game.nextPlayer();
+            try {
+                this.game.nextPlayer();
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
         }
     }
 }

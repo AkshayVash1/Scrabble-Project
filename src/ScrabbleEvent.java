@@ -15,20 +15,38 @@ public class ScrabbleEvent {
     private Player currentPlayer;
     private Board board;
 
+    /**
+     * Constructor to initialize ScrabbleEvent with information that is passed during the event trigger
+     * @param player
+     * @param board
+     * @param gameFinished
+     * */
     public ScrabbleEvent(Player player, Board board, boolean gameFinished) {
         this.currentPlayer = player;
         this.board = board;
         this.gameFinished = gameFinished;
     }
 
+    /**
+     * Getter for if game is finished
+     * @return boolean
+     * */
     public boolean isGameFinished() {
         return gameFinished;
     }
 
+    /**
+     * Getter for current player
+     * @return Player
+     * */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
+    /**
+     * Getter for current Board state
+     * @return Board
+     * */
     public Board getBoard() {
         return board;
     }

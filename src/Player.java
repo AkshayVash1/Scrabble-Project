@@ -19,6 +19,7 @@ public class Player {
     private int points;
     private int playerNumber;
     private boolean active;
+    private boolean isAI;
 
     /**
      * Constructor to initialize player points to 0 when player is created. Constructor to initialize
@@ -31,6 +32,22 @@ public class Player {
         hand = new Hand();
         this.playerNumber = playerNumber;
         this.active = true;
+        this.isAI = false;
+    }
+
+    /**
+     * getter method for whether the player is an AI or not
+     * @return boolean
+     * */
+    public boolean isAI() {
+        return isAI;
+    }
+
+    /**
+     * Setter method for whether the player is an AI or not
+     * */
+    public void setAI(boolean AI) {
+        isAI = AI;
     }
 
     /**
