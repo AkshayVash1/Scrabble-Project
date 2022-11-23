@@ -327,8 +327,8 @@ public class GameTest {
 
         game.processCommand(new Command("play", "DO", "8H"));
 
-        //D has two points and O has one point
-        assert(player.getPoints() == 3);
+        //D has two points and O has one point, premium square adds 3 points
+        assert(player.getPoints() == 6);
     }
 
     /**
@@ -365,8 +365,8 @@ public class GameTest {
 
         //D has two points and O has one point to make 3 points
         //D has two points, A has one point, E has one point, R has one point to make 5 points
-        //Total 8 points
-        assert(player.getPoints() == 8);
+        //Total 8 points, premium square multiples by 2
+        assert(player.getPoints() == 16);
     }
 
     /**
@@ -403,7 +403,7 @@ public class GameTest {
 
         exp = game.processCommand(new Command("play", "ARE", "H8"));
 
-        assert(!exp);
+        assert(exp);
     }
 
 }
