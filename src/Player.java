@@ -35,14 +35,20 @@ public class Player {
         this.isAI = false;
     }
 
+    /**
+     * getter method for whether the player is an AI or not
+     * @return boolean
+     * */
     public boolean isAI() {
         return isAI;
     }
 
+    /**
+     * Setter method for whether the player is an AI or not
+     * */
     public void setAI(boolean AI) {
         isAI = AI;
     }
-
 
     /**
      * Emulates the exchanging of Tiles by removing the Tile objects from hand and replacing with new TIle objects

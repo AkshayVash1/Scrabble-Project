@@ -97,11 +97,19 @@ public class Game {
         this.firstPlayInTurn = true;
     }
 
+    /**
+     * Getter method for bag
+     * @return Bag
+     * */
     public Bag getBag()
     {
         return this.bag;
     }
 
+    /**
+     * Performs an AIPlay with AIPlayer methods and then skips the turn. Also responsible for clearing out
+     * blanks
+     * */
     private void performAIPlay() throws FileNotFoundException {
         AIPlayer aiPlayer = (AIPlayer) this.currentPlayer;
 

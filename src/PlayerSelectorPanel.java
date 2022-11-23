@@ -33,12 +33,19 @@ public class PlayerSelectorPanel extends JPanel implements ItemListener {
     JLabel playerSelectorLabel = new JLabel("Please Select Number of players");
     JLabel AISelectorLabel = new JLabel("Please Select Number of AIs");
 
+    /**
+     * Constructor for PlayerSelectorPanel
+     * @param startMenuFrame
+     * */
     public PlayerSelectorPanel(StartMenuFrame startMenuFrame) {
 
         this.startMenuFrame = startMenuFrame;
         initializePlayerSelector();
     }
 
+    /**
+     * Initializes the player selector combo box and panel. For display.
+     * */
     private void initializePlayerSelector() {
         try {
             backgroundImage = ImageIO.read(new File("src\\start_menu_background.jpg"));
@@ -61,6 +68,11 @@ public class PlayerSelectorPanel extends JPanel implements ItemListener {
         playerComboBox.addItemListener(this);
         this.add(playerComboBoxPanel);
     }
+
+    /**
+     * Initializes the specific AI selector combo box and panel
+     * @param AILimit
+     * */
     private void initializeAISelector(int AILimit) {
         AIComboBox.setName("AIComboBox");
         JPanel AIComboBoxPanel = new JPanel(new GridLayout(2, 0));
@@ -77,12 +89,20 @@ public class PlayerSelectorPanel extends JPanel implements ItemListener {
         this.add(AIComboBoxPanel);
     }
 
+    /**
+     * Helper method to pain component g
+     * @param g
+     * */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         // Draw the background image.
         g.drawImage(backgroundImage, 0, 0, this);
     }
 
+    /**
+     * Changes the state of the AI combo box if the state of the player select has changed
+     * @param e ItemEvent
+     * */
     @Override
     public void itemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {

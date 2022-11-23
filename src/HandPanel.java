@@ -63,6 +63,11 @@ public class HandPanel extends JPanel implements ScrabbleView {
         refreshHand();
     }
 
+    /**
+     * Removes a specified tile from the screen once it has been dropped
+     * @param tile to be removed
+     * @param tileIsBlank returns if the tile is blank
+     * */
     public void removeTile(Tile tile, boolean tileIsBlank) {
         ABC: for (Component component : this.getComponents()) {
             JPanel panel = (JPanel) component;
@@ -78,6 +83,13 @@ public class HandPanel extends JPanel implements ScrabbleView {
         this.repaint();
     }
 
+    /**
+     * Performs a remove and returns whether it's successful or not. Handles specific blank tile cases
+     *
+     * @param tileIsBlank is tile is blank
+     * @param panelComponent the component to be looked at.
+     * @param tile the Tile to be looked at
+     * */
     private boolean removeATile(boolean tileIsBlank, Component panelComponent, Tile tile)
     {
         return (tileIsBlank && ((JLabel)panelComponent).getText().charAt(0) == '_') ||
