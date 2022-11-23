@@ -73,7 +73,7 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
 
     @Override
     public void update(ScrabbleEvent e) {
-        if (textCount > 12) {
+        if (textCount > 7) {
             console.setText("");
             textCount = 0;
         }
