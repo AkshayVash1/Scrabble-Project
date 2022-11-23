@@ -86,8 +86,11 @@ public class BoardDropTargetController extends DropTargetAdapter {
                 }
 
                 dropTargetDropEvent.acceptDrop(DnDConstants.ACTION_COPY);
-                this.label.setText(tile.getLetter());
-                this.label.setForeground(Color.black);
+                if (this.label.getText().equals(" ")) {
+                    this.label.setText(tile.getLetter());
+                    this.label.setForeground(Color.black);
+                }
+
 
                 if (this.game.getFirstPlayInTurn() == true)
                 {
