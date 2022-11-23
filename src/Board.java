@@ -50,10 +50,21 @@ public class Board {
         return playedWord;
     }
 
+
     /**
      * Direction of word placement on the board
      */
     public enum Direction{HORIZONTAL, VERTICAL}
+
+    /**
+     * List of cell coordinates that have already been scored once.
+     */
+    ArrayList<String> scoredOnceList;
+
+    /**
+     * list of all new words added to board as a result of last play move.
+     */
+    ArrayList<String> newWords;
 
     /**
      * Colors and corresponding color codes used in this class's print statements.
@@ -68,6 +79,7 @@ public class Board {
         }
     }
 
+
     /**
      * Constructor for the class.
      * Creates a board and initializes its fields.
@@ -78,6 +90,8 @@ public class Board {
         this.squares = new HashMap<>();
         this.isFirstPlay = true;
         this.direction = Direction.HORIZONTAL;
+        this.scoredOnceList = new ArrayList<String>();
+        this.newWords = new ArrayList<String>();
         initializeBoard();                   // assign a Square and a Tile to each cell
     }
 
@@ -285,11 +299,16 @@ public class Board {
         }
         // play it on next available cell based on direction
         else {
+            //everytime a cell is not blank, it means it's already been scored
+            this.scoredOnceList.add(getStringCoords(row,col));
             if (direction.equals(Direction.VERTICAL)) {
                 for(int R = row + 1; R < 16; R++) {
                     if (cellIsBlank(R, col)) {
                         cells[R][col] = tile.getLetter();
                         return true;
+                    } else {
+                        //everytime a cell is not blank, it means it's already been scored
+                        this.scoredOnceList.add(getStringCoords(R,col));
                     }
                 }
             } else if (direction.equals(Direction.HORIZONTAL)) {
@@ -297,6 +316,9 @@ public class Board {
                     if (cellIsBlank(row, C)) {
                         cells[row][C] = tile.getLetter();
                         return true;
+                    } else {
+                        //everytime a cell is not blank, it means it's already been scored
+                        this.scoredOnceList.add(getStringCoords(row,C));
                     }
                 }
             }
@@ -696,12 +718,16 @@ public class Board {
         Direction DIR = getUpdatedDirection();
 
         int wordScore = calculateWordScore(wordToScore);
-        int premiumScore = calculatePremiumScore(wordToScore, DIR);
+        int premiumScore = calculatePremiumScore(wordToScore, tilesList, DIR);
         System.out.println("WORD SCORE for " + wordToScore + ": " + wordScore);
         System.out.println("PREMIUM SCORE for " + wordToScore + ": " + premiumScore);
 
-        return wordScore;
+        return premiumScore;
     }
+
+
+
+
 
     /**
      * Given a single square coordinate, finds all words containing that cell.
@@ -713,7 +739,8 @@ public class Board {
     private String getLongestAdjacentWord(int row, int col) {
         ArrayList<String> wordsOnRow = getWordsOnRow(row); // get all horizontal words attached to this cell
         ArrayList<String> wordsOnCol = getWordsOnCol(col); // get all vertical words attached to this cell
-
+        this.newWords.addAll(wordsOnRow);
+        this.newWords.addAll(wordsOnCol);
 
         String longestHorizontal = "";
         String longestVertical = "";
@@ -943,147 +970,69 @@ public class Board {
      * Returns the score for given word multiplied by corresponding premium scores' multipliers.
      *
      * @param word  the String word to score.
+     * @param tilesList
      * @param direction placement direction of the word to be scored.
      * @return the multiplied score of the word.
      */
-    public int calculatePremiumScore(String word, Direction direction) {
+    public int calculatePremiumScore(String word, ArrayList<Tile> tilesList, Direction direction) {
 
         int startingRow = getCurrentStartRow();
         int startingCol = getCurrentStartCol();
         int wordLength = word.length();
+        ArrayList<Tile> newTilesAdded = tilesList;
         ArrayList<Square.Multiplier> multipliers = new ArrayList<>();
         int wordScore = 0;
         int premiumScore = 0;
         Bag b = new Bag();
+        boolean scoredBefore = false;
 
         //iterate through squares of the word and check for multiplier type
         if (direction == Direction.HORIZONTAL) {
             for (int col = startingCol; col < (startingCol + wordLength); col++) {
+                if (scoredOnceList.contains(getStringCoords(startingRow,col))) {scoredBefore = true;}
                 Square.Multiplier multiplier = squares.get(getStringCoords(startingRow,col)).getMultiplier();
-                if (multiplier != Square.Multiplier.NONE) {
+                if (!scoredBefore) {
                     multipliers.add(multiplier);
                 }
                 int letterScore = b.getLetterValue(cells[startingRow][col]);
-
-                if ((multiplier == Square.Multiplier.DL) || (multiplier == Square.Multiplier.TL) || (multiplier == Square.Multiplier.NONE)) {
-                    letterScore = letterScore * multiplier.getValue();
+                // only apply multipliers if the letter hasn't been scored previously
+                if (!scoredBefore) {
+                    if (multiplier == Square.Multiplier.DL || multiplier == Square.Multiplier.TL || multiplier == Square.Multiplier.NONE) {
+                        letterScore = letterScore * multiplier.getValue();
+                    }
                 }
                 wordScore += letterScore;
-
                 System.out.println("square's multiplier: " + squares.get(getStringCoords(startingRow,col)).getMultiplier());
-
-                if (col == (startingCol + wordLength - 1)) {
-                    if (multipliers.contains(Square.Multiplier.DW)) { premiumScore = wordScore * 2;}
-                    else if (multipliers.contains(Square.Multiplier.TW)) {premiumScore = wordScore * 3;}
-                    else {premiumScore = wordScore;}
-                }
             }
+            if (multipliers.contains(Square.Multiplier.DW)) { premiumScore = wordScore * 2;}
+            else if (multipliers.contains(Square.Multiplier.TW)) {premiumScore = wordScore * 3;}
+            else {premiumScore = wordScore;}
         }
 
         //iterate through squares of the word and check for multiplier type
         if (direction == Direction.VERTICAL) {
             for (int row = startingRow; row < (startingRow + wordLength); row++) {
+                if (scoredOnceList.contains(getStringCoords(row,startingCol))) {scoredBefore = true;}
                 Square.Multiplier multiplier = squares.get(getStringCoords(row,startingCol)).getMultiplier();
-                if (multiplier != Square.Multiplier.NONE) {
+                if (!scoredBefore) {
                     multipliers.add(multiplier);
                 }
                 int letterScore = b.getLetterValue(cells[row][startingCol]);
 
-                if ((multiplier == Square.Multiplier.DL) || (multiplier == Square.Multiplier.TL) || (multiplier == Square.Multiplier.NONE)) {
-                    letterScore = letterScore * multiplier.getValue();
+                if (!scoredBefore) {
+                    if ((multiplier == Square.Multiplier.DL) || (multiplier == Square.Multiplier.TL) || (multiplier == Square.Multiplier.NONE)) {
+                        letterScore = letterScore * multiplier.getValue();
+                    }
                 }
                 wordScore += letterScore;
                 System.out.println("square's multiplier: " + squares.get(getStringCoords(row,startingCol)).getMultiplier());
-                if (row == (startingRow + wordLength - 1)) {
-                    if (multipliers.contains(Square.Multiplier.DW)) { premiumScore = wordScore * 2;}
-                    else if (multipliers.contains(Square.Multiplier.TW)) {premiumScore = wordScore * 3;}
-                    else {premiumScore = wordScore;}
-                }
             }
+            if (multipliers.contains(Square.Multiplier.DW)) { premiumScore = wordScore * 2;}
+            else if (multipliers.contains(Square.Multiplier.TW)) {premiumScore = wordScore * 3;}
+            else {premiumScore = wordScore;}
         }
         return premiumScore;
     }
-
-    /**
-     * Returns ArrayList of all horizontal words placed on board.
-     *
-     * @return list of horizontal words.
-     */
-/*    public ArrayList<String> getHorizontalWords () {
-        ArrayList<String> horizontalWords = new ArrayList<>();
-        String currentWord = "";
-        String currentLetter;
-
-        for (int row = 1; row < cells.length; row++) {
-            for (int col = 1; col < cells.length - 1; col++) {
-                if (!cellIsBlank(row, col)) {   // if
-                    currentLetter = cells[row][col];
-                    currentWord += currentLetter;
-                    // if next cell in row is blank, store currentWord in horizontalWords list and move on to next word
-                    if (cellIsBlank(row, col + 1)) {
-
-                        //todo change later?
-                        //scrabble words must be at least 2 letters long
-                        if(currentWord.length() > 1) {
-                            horizontalWords.add(currentWord);
-                            System.out.println("current word is: " + currentWord);
-                            currentWord = ""; // set currentWord to empty string so it can store the next word in row
-                        }
-
-                    }
-                    // handle cells on the right border of the board (col == 15)
-                    if (!cellIsBlank(row, col + 1) && (col == cells.length - 2)) {
-                        currentWord += cells[row][col + 1];
-                        if (currentWord.length() > 1) {
-                            horizontalWords.add(currentWord);
-                            System.out.println("current word is: " + currentWord);
-                            currentWord = ""; // set currentWord to empty string so it can store the next word in row
-                        }
-                    }
-                }
-            }
-        }
-        //System.out.println("number of words " + horizontalWords.size());
-        return horizontalWords;
-    }*/
-
-/*    *//**
-     * Returns a list of all vertical words placed on board.
-     *
-     * @return list of vertical words.
-     *//*
-    public ArrayList<String> getVerticalWords () {
-        ArrayList<String> VerticalWords = new ArrayList<>();
-        String currentWord = "";
-        String currentLetter;
-
-        for (int col = 1; col < cells.length; col++) {
-            for (int row = 1; row < cells.length - 1; row++) {
-                if (!cellIsBlank(row, col)) {
-                    currentLetter = cells[row][col];
-                    currentWord += currentLetter;
-                    // if next cell in column is blank, store currentWord in horizontalWords list and move on to next word
-                    if (cellIsBlank(row + 1, col)) {
-
-                        if (currentWord.length() > 1) {
-                            VerticalWords.add(currentWord);
-                            //System.out.println("current word is: " + currentWord);
-                            currentWord = ""; // set currentWord to empty string so it can store the next word in row
-                        }
-                    }
-                    // handle cells on the bottom border of board (row == 15)
-                    if (!cellIsBlank(row + 1, col) && (row == cells.length - 2) && (currentWord.length() > 1)) {
-                        currentWord += cells[row + 1][col];
-                        VerticalWords.add(currentWord);
-                        //System.out.println("current word is: " + currentWord);
-                        currentWord = ""; // set currentWord to empty string so it can store the next word in row
-                    }
-                }
-            }
-        }
-        //System.out.println("number of words " + VerticalWords.size());
-        return VerticalWords;
-    }*/
 
     public String getLetterAtSquare(int row, int col)
     {
@@ -1104,6 +1053,10 @@ public class Board {
 
     public void setCurrentStartCol(int currentStartCol) {
         this.currentStartCol = currentStartCol;
+    }
+
+    public ArrayList<String> getNewWords() {
+        return this.newWords;
     }
 
 }
