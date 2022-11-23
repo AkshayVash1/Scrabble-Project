@@ -50,7 +50,7 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
         console.setBackground(Color.lightGray);
         console.setText(" Welcome to Scrabble! Scrabble is a word game for 2 to 4 Players." + NEWLINE +
                 " The goal of the game is to accumulate more than or equal to 50 points."  + NEWLINE2 +
-                " Press help for details." + NEWLINE2);
+                " Press help for details. Refer to instruction manual for multiplier legend" + NEWLINE2);
 
         this.setPreferredSize(new Dimension(400, 500));
         this.setVisible(true);
@@ -81,8 +81,9 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
             textCount++;
         }
 
-        console.append(" Player " + (e.getCurrentPlayer().getPlayerNumber()+1) + "'s turn..." +  "\n Points: " +
-                e.getCurrentPlayer().getPoints() + NEWLINE2);
+        console.append(" Player " + (e.getCurrentPlayer().getPlayerNumber()+1) +
+                ((e.getCurrentPlayer().isAI()) ? "(AI PLAYER)" : "") + "'s turn..." +  "\n Points: " +
+                e.getCurrentPlayer().getPoints()  + NEWLINE2);
 
         if (e.isGameFinished() == true)
         {

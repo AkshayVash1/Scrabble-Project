@@ -47,9 +47,9 @@ public class StartMenuFrame extends JFrame {
      *
      * @param playerAmount
      */
-    public void createPlayers(String playerAmount) {
-        scrabbleFrame.createPlayers(playerAmount);
-        //this.setVisible(false);
+    public void createPlayers(String playerAmount, String AIAmount) {
+        scrabbleFrame.createPlayers(playerAmount, AIAmount);
+        this.setVisible(false);
         scrabbleFrame.setVisible(true);
     }
 
