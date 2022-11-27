@@ -62,18 +62,6 @@ public class Board {
      */
     private String playedWord = "";
 
-    /**
-     * Colors and corresponding color codes used in this class's print statements.
-     */
-    public enum TextColor{
-        GREEN_BOLD("\033[1;92m"),
-        YELLOW_BOLD("\033[1;93m"),
-        COLOR_RESET("\u001B[0m");
-        final String code;
-        TextColor(String colorCode) {
-            this.code = colorCode;
-        }
-    }
 
     /**
      * Constructor for the class.
@@ -188,63 +176,6 @@ public class Board {
         }
     }
 
-    /**
-     * Prints the state of the board, displaying each square's corresponding color, and each cell's letter value.
-     */
-    public void printBoard() {
-        String dashedLine = "-";
-        // make a string dashedLine
-        for (int i = 0; i < 19; i++) {
-            dashedLine+= "-----";
-        }
-        // iterating through nested loop of rows and columns
-        for (int row = 0; row < cells.length; row++) {
-            System.out.println(dashedLine);
-            for (int col = 0; col < cells[row].length; col++) {
-
-                // print board's column labels as letters
-                if ((row == 0) && (col < cells.length)) {
-                    // skip printing column label for column 0
-                    if (col == 0) {
-                        System.out.printf("|" +"%5s", "|");
-                        col++;
-                    }
-                    String colAsLetter = Square.columns.get(col);
-                    System.out.printf(TextColor.GREEN_BOLD.code + "%5s", colAsLetter);
-                    System.out.printf(TextColor.COLOR_RESET.code + "|");
-                }
-                // print board's row labels as numbers
-                else if ((col == 0) && (row > 0) && (row < cells.length)) {
-                    System.out.printf("|");
-                    System.out.printf(TextColor.GREEN_BOLD.code + "%4s", row);
-                    System.out.printf(TextColor.COLOR_RESET.code + "|");
-                }
-                else {
-                    // print Squares in corresponding color
-                    String coordinates = "" + row + Square.columns.get(col);
-                    Square thisSquare = squares.get(coordinates);
-
-                    String squareColor = thisSquare.getMultiplier().getColor();
-                    System.out.printf(squareColor + TextColor.YELLOW_BOLD.code + "%5s", cells[row][col]);
-                    System.out.print(TextColor.COLOR_RESET.code + "|");
-                }
-            }
-            System.out.println();
-        }
-        System.out.println(dashedLine);
-        printColorLegend();
-    }
-
-    /**
-     * Prints a color legend under the board to indicate the cell background color associated with premium squares.
-     */
-    private void printColorLegend() {
-        System.out.println("\n" + "Color Legend");
-        System.out.println(Square.Multiplier.DL.getColor() + "DL: Double Letter Score" + TextColor.COLOR_RESET.code);
-        System.out.println(Square.Multiplier.TL.getColor() + "TL: Triple Letter Score" + TextColor.COLOR_RESET.code);
-        System.out.println(Square.Multiplier.DW.getColor() + "DW: Double Word Score" + TextColor.COLOR_RESET.code);
-        System.out.println(Square.Multiplier.TW.getColor() + "TW: Triple Word Score" + TextColor.COLOR_RESET.code + "\n");
-    }
 
     /**
      * Returns true if a square has the empty tile (square has not been played yet).
