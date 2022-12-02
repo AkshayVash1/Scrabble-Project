@@ -11,11 +11,13 @@
  */
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game {
+public class Game implements Serializable{
 
     private Bag bag = new Bag();
     private Board board = new Board();
@@ -76,7 +78,7 @@ public class Game {
     /**
      * Logic for changing the turn order from current player to next player
      */
-    public void nextPlayer() throws FileNotFoundException {
+    public void nextPlayer() throws IOException, ClassNotFoundException {
         this.removeTilesFromHand.clear();
         if (currentPlayer != null) {
             if (currentPlayer.getPoints() >= 50) {
@@ -110,7 +112,7 @@ public class Game {
      * Performs an AIPlay with AIPlayer methods and then skips the turn. Also responsible for clearing out
      * blanks
      * */
-    private void performAIPlay() throws FileNotFoundException {
+    private void performAIPlay() throws IOException, ClassNotFoundException {
         AIPlayer aiPlayer = (AIPlayer) this.currentPlayer;
 
         boolean flag = true;
@@ -368,6 +370,8 @@ public class Game {
                 break;
         }
 
+        saveCurrentGameState();
+
         return rc;
     }
 
@@ -385,5 +389,9 @@ public class Game {
                 ((HandPanel) v).removeTile(tile, tileIsBlank);
             }
         }
+    }
+
+    public void saveCurrentGameState() {
+        GameState gameState = new GameState(this);
     }
 }

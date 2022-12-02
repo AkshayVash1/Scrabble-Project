@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  * @date 2022.10.25
  */
 
-public class Player {
+public class Player implements Serializable {
 
     public static final int MIN_POINTS = 0;
 

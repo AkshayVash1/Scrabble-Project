@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 /**
  * This class holds an enumeration of all command words known to the game.
  * It is used to recognise commands as they are typed in.
@@ -5,7 +7,7 @@
  * @author Jaydon Haghighi
  * @version 2022.10.25
  */
-public class CommandWords
+public class CommandWords implements Serializable
 {
     // a constant array that holds all valid command words
     private static final String[] validCommands = {

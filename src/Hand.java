@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -11,7 +12,7 @@ import java.util.Collections;
  * @author Mohamed Kaddour
  * @date 2022.10.25
  */
-public class Hand {
+public class Hand implements Serializable {
 
     public final static int MAX_HAND_SIZE = 7;
     public final static int PARSE_CHAR_AT_ZERO = 0;

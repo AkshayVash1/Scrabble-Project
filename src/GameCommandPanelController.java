@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameCommandPanelController implements ActionListener{
@@ -68,7 +69,7 @@ public class GameCommandPanelController implements ActionListener{
             }
             try {
                 this.game.nextPlayer();
-            } catch (FileNotFoundException fileNotFoundException) {
+            } catch (IOException | ClassNotFoundException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             }
             /**
@@ -88,7 +89,7 @@ public class GameCommandPanelController implements ActionListener{
         } else if (e.getActionCommand().equals(GameCommandPanel.PASS)) {
             try {
                 this.game.nextPlayer();
-            } catch (FileNotFoundException fileNotFoundException) {
+            } catch (IOException | ClassNotFoundException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             }
             /**
@@ -108,7 +109,7 @@ public class GameCommandPanelController implements ActionListener{
             this.game.clearRemoveFromExchangeTilesFromHand();
             try {
                 this.game.nextPlayer();
-            } catch (FileNotFoundException fileNotFoundException) {
+            } catch (IOException | ClassNotFoundException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             }
         }

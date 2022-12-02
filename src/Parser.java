@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.Scanner;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Scanner;
  * @author Jaydon Haghighi
  * @version 2022.10.25
  */
-public class Parser {
+public class Parser implements Serializable {
     private CommandWords commands;  // holds all valid command words
     private Scanner reader;         // source of command input
 

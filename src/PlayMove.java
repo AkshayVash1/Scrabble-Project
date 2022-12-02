@@ -1,4 +1,5 @@
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,7 +12,7 @@ import java.util.Scanner;
  * @author  Mohamed Kaddour
  * @date 2022.10.25
  */
-public class PlayMove {
+public class PlayMove implements Serializable {
 
     public final static int PARSE_CHAR_AT_ONE = 1;
     public final static int PARSE_CHAR_AT_TWO = 2;

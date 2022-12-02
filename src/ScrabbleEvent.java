@@ -7,9 +7,10 @@
  * @Version 1.0
  */
 
+import java.io.Serializable;
 import java.util.EventObject;
 
-public class ScrabbleEvent {
+public class ScrabbleEvent implements Serializable {
 
     private boolean gameFinished;
     private Player currentPlayer;

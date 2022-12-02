@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -7,7 +8,7 @@ import java.util.*;
  * @author Jaydon Haghighi
  * @version 2022.10.25
  */
-public class Bag {
+public class Bag implements Serializable {
 
     final private LinkedList<Tile> tiles = new LinkedList<>();
     private List<String> numOfLetters = Arrays.asList("A-9", "B-2", "C-2", "D-4", "E-12", "F-2", "G-3", "H-2", "I-9", "J-1",
