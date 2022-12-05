@@ -875,7 +875,7 @@ public class Board {
 
         //iterate through squares of the word and check for multiplier type
         if (direction == Direction.HORIZONTAL) {
-            for (int col = startingCol; col < (startingCol + wordLength); col++) {
+            for (int col = startingCol; col < cells.length ; col++) {
                 if (scoredOnceList.contains(getStringCoords(startingRow,col))) {scoredBefore = true;}
                 Square.Multiplier multiplier = squares.get(getStringCoords(startingRow,col)).getMultiplier();
                 if (!scoredBefore) {
@@ -898,7 +898,7 @@ public class Board {
 
         //iterate through squares of the word and check for multiplier type
         if (direction == Direction.VERTICAL) {
-            for (int row = startingRow; row < (startingRow + wordLength); row++) {
+            for (int row = startingRow; row < cells.length; row++) {
                 if (scoredOnceList.contains(getStringCoords(row,startingCol))) {scoredBefore = true;}
                 Square.Multiplier multiplier = squares.get(getStringCoords(row,startingCol)).getMultiplier();
                 if (!scoredBefore) {
