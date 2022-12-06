@@ -105,7 +105,7 @@ public class BoardDropTargetController extends DropTargetAdapter {
                     this.game.changeStartingCoordinatesToVertical();
                 }
 
-                if (tile.getLetter() == "_")
+                if (tile.getLetter().equals("_"))
                 {
                     tile.setLetter(handleBlankTiles());
                     this.label.setText(tile.getLetter());

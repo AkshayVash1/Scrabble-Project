@@ -10,15 +10,12 @@
  * @Version 2.0
  */
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game implements Serializable{
-
     private Bag bag = new Bag();
     private Board board = new Board();
     private ArrayList<Player> playerList = new ArrayList<>();
@@ -31,16 +28,69 @@ public class Game implements Serializable{
     private boolean firstPlayInTurn;
     private String startingCoordinates;
     private boolean gameFinished;
+    private boolean initialRead;
 
     /**
      * Public constructor for class game.
      */
     public Game() {
+        clearUndoRedoFileContents();
+        saveCurrentGameState();
+        this.initialRead = true;
+
         this.views = new ArrayList<>();
         this.removeTilesFromHand= new ArrayList<>();
         this.exchangeTilesFromHand = new ArrayList<>();
         this.firstPlayInTurn = true;
         this.gameFinished = false;
+    }
+
+    private void clearUndoRedoFileContents()
+    {
+        try {
+            PrintWriter writer = new PrintWriter(GameState.FILENAME);
+            writer.print("");
+            writer.close();
+        } catch (FileNotFoundException e)
+        {
+            System.out.println("ignore");
+        }
+    }
+
+    public void setBag(Bag bag) {
+        this.bag = bag;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public ArrayList<Player> getPlayerList() {
+        return playerList;
+    }
+
+    public void setPlayerList(ArrayList<Player> playerList) {
+        this.playerList = playerList;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public List<ScrabbleView> getViews() {
+        return views;
+    }
+
+    public void setViews(List<ScrabbleView> views) {
+        this.views = views;
+    }
+
+    public boolean isGameFinished() {
+        return gameFinished;
+    }
+
+    public void setGameFinished(boolean gameFinished) {
+        this.gameFinished = gameFinished;
     }
 
     /**
@@ -79,6 +129,8 @@ public class Game implements Serializable{
      * Logic for changing the turn order from current player to next player
      */
     public void nextPlayer() throws IOException, ClassNotFoundException {
+        saveCurrentGameState();
+        this.initialRead = false;
         this.removeTilesFromHand.clear();
         if (currentPlayer != null) {
             if (currentPlayer.getPoints() >= 50) {
@@ -370,8 +422,6 @@ public class Game implements Serializable{
                 break;
         }
 
-        saveCurrentGameState();
-
         return rc;
     }
 
@@ -393,5 +443,53 @@ public class Game implements Serializable{
 
     public void saveCurrentGameState() {
         GameState gameState = new GameState(this);
+    }
+
+    public boolean undoGame()
+    {
+        ArrayList<GameState> stateHistory = new ArrayList<>();
+        FileInputStream inputStream = null;
+        ObjectInputStream ois = null;
+        if (this.initialRead == false) {
+            try {
+                inputStream = new FileInputStream(GameState.FILENAME);
+                ois = new ObjectInputStream(inputStream);
+                try {
+                    stateHistory = (ArrayList<GameState>) ois.readObject();
+                } catch (ClassNotFoundException c)
+                {
+                    System.out.print("c");
+                }
+            } catch (IOException e)
+            {
+                System.out.println(e.getMessage());
+            }
+
+            GameState unDoneState = stateHistory.get(stateHistory.size() - 2);
+            changeCurrentGameState(unDoneState.getGame());
+            saveCurrentGameState();
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void changeCurrentGameState(Game game)
+    {
+        game.getBoard().printBoard();
+        this.board.printBoard();
+        this.setBag(game.getBag());
+        this.setCurrentPlayer(game.getCurrentPlayer());
+        this.setBoard(game.getBoard());
+        this.setPlayerList(this.getPlayerList());
+        this.setGameFinished(this.isGameFinished());
+        this.setViews(this.getViews());
+
+        for(ScrabbleView v : this.views) {
+            v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
+        }
     }
 }

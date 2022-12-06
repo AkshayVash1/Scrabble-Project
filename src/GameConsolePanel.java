@@ -82,7 +82,7 @@ public class GameConsolePanel extends JPanel implements ScrabbleView {
         }
 
         console.append(" Player " + (e.getCurrentPlayer().getPlayerNumber()+1) +
-                ((e.getCurrentPlayer().isAI()) ? "(AI PLAYER)" : "") + "'s turn..." +  "\n Points: " +
+                ((e.getCurrentPlayer().isAI()) ? "(AI PLAYER)" : "") +  "'s turn..." +  "\n Points: " +
                 e.getCurrentPlayer().getPoints()  + NEWLINE2);
 
 

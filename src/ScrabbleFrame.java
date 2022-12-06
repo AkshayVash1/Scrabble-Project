@@ -50,6 +50,9 @@ public class ScrabbleFrame extends JFrame implements ActionListener {
      * Creates and adds to this frame all component panels of the GUI.
      */
     private void initializePanels(Game game) {
+
+        UndoRedoController urc = new UndoRedoController(this.game);
+
         JPanel mainPanel = new JPanel(new BorderLayout());
 
         JPanel leftPanel = new JPanel();
@@ -65,13 +68,20 @@ public class ScrabbleFrame extends JFrame implements ActionListener {
         GameCommandPanel gameCommandPanel = new GameCommandPanel(game);
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Menu");
+        JMenu undoredo = new JMenu("Undo/Redo");
         JMenuItem help = new JMenuItem("Help");
         JMenuItem exit = new JMenuItem("Exit");
+        JMenuItem undo = new JMenuItem("Undo");
+        undo.addActionListener(urc);
+        JMenuItem redo = new JMenuItem("Redo");
         help.addActionListener(this);
         exit.addActionListener(this);
         menu.add(help);
         menu.add(exit);
+        undoredo.add(undo);
+        undoredo.add(redo);
         menuBar.add(menu);
+        menuBar.add(undoredo);
 
         southPanel.add(gameCommandPanel,BorderLayout.CENTER);
         leftPanel.add(boardPanel, BorderLayout.NORTH);

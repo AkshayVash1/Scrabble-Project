@@ -25,7 +25,6 @@ public class GameState implements Serializable{
                 ois = new ObjectInputStream(inputStream);
                 try {
                     this.stateHistory = (ArrayList<GameState>) ois.readObject();
-                    System.out.println(this.stateHistory.size());
                 } catch (ClassNotFoundException c)
                 {
                     System.out.print("c");
@@ -34,9 +33,9 @@ public class GameState implements Serializable{
             {
                 System.out.println(e.getMessage());
             }
-            this.stateHistory.add(this);
         }
 
+        this.stateHistory.add(this);
         saveCurrentGameState();
     }
 
@@ -61,6 +60,11 @@ public class GameState implements Serializable{
         }
 
         System.out.println(this.stateHistory.size());
+    }
+
+    public Game getGame()
+    {
+        return this.game;
     }
 
 }
