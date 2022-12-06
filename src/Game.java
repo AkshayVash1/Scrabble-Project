@@ -129,7 +129,6 @@ public class Game implements Serializable{
      * Logic for changing the turn order from current player to next player
      */
     public void nextPlayer() throws IOException, ClassNotFoundException {
-        saveCurrentGameState();
         this.initialRead = false;
         this.removeTilesFromHand.clear();
         if (currentPlayer != null) {
@@ -144,6 +143,8 @@ public class Game implements Serializable{
                         performAIPlay();
                     }
                 }
+
+                saveCurrentGameState();
             }
         }
 
@@ -448,8 +449,8 @@ public class Game implements Serializable{
     public boolean undoGame()
     {
         ArrayList<GameState> stateHistory = new ArrayList<>();
-        FileInputStream inputStream = null;
-        ObjectInputStream ois = null;
+        FileInputStream inputStream;
+        ObjectInputStream ois;
         if (this.initialRead == false) {
             try {
                 inputStream = new FileInputStream(GameState.FILENAME);
@@ -465,9 +466,9 @@ public class Game implements Serializable{
                 System.out.println(e.getMessage());
             }
 
-            GameState unDoneState = stateHistory.get(stateHistory.size() - 2);
-            changeCurrentGameState(unDoneState.getGame());
-            saveCurrentGameState();
+            stateHistory.remove(stateHistory.size() - 1);
+            popStateQueue(stateHistory);
+            changeCurrentGameState(stateHistory.get(stateHistory.size() - 1).getGame());
 
             return true;
         }
@@ -479,8 +480,8 @@ public class Game implements Serializable{
 
     private void changeCurrentGameState(Game game)
     {
-        game.getBoard().printBoard();
-        this.board.printBoard();
+        //game.getBoard().printBoard();
+        //this.board.printBoard();
         this.setBag(game.getBag());
         this.setCurrentPlayer(game.getCurrentPlayer());
         this.setBoard(game.getBoard());
@@ -490,6 +491,28 @@ public class Game implements Serializable{
 
         for(ScrabbleView v : this.views) {
             v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
+        }
+    }
+
+    private void popStateQueue(ArrayList<GameState> gameStates)
+    {
+        FileOutputStream outputStream = null;
+        try {
+            PrintWriter writer = new PrintWriter(GameState.FILENAME);
+            writer.print("");
+        } catch (FileNotFoundException f)
+        {
+            System.out.print("f");
+        }
+        ObjectOutputStream oos = null;
+        try {
+            outputStream = new FileOutputStream(GameState.FILENAME);
+            oos = new ObjectOutputStream(outputStream);
+            oos.writeObject(gameStates);
+        }
+        catch (IOException e)
+        {
+            System.out.print("e2");
         }
     }
 }

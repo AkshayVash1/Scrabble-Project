@@ -58,8 +58,6 @@ public class GameState implements Serializable{
         {
             System.out.print("e2");
         }
-
-        System.out.println(this.stateHistory.size());
     }
 
     public Game getGame()
