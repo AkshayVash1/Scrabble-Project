@@ -53,6 +53,7 @@ public class GameState implements Serializable{
             outputStream = new FileOutputStream(FILENAME);
             oos = new ObjectOutputStream(outputStream);
             oos.writeObject(this.stateHistory);
+            System.out.println(this.stateHistory.size());
         }
         catch (IOException e)
         {

@@ -35,7 +35,6 @@ public class Game implements Serializable{
      */
     public Game() {
         clearUndoRedoFileContents();
-        saveCurrentGameState();
         this.initialRead = true;
 
         this.views = new ArrayList<>();
@@ -112,6 +111,7 @@ public class Game implements Serializable{
 
         this.activeCount = this.playerList.size();
         this.currentPlayer = this.playerList.get(0);
+        saveCurrentGameState();
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
     }
 
@@ -129,7 +129,6 @@ public class Game implements Serializable{
      * Logic for changing the turn order from current player to next player
      */
     public void nextPlayer() throws IOException, ClassNotFoundException {
-        this.initialRead = false;
         this.removeTilesFromHand.clear();
         if (currentPlayer != null) {
             if (currentPlayer.getPoints() >= 50) {
@@ -137,14 +136,17 @@ public class Game implements Serializable{
             } else {
                 if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
                     this.currentPlayer = this.playerList.get(0);
+                    saveCurrentGameState();
                 } else {
                     this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
                     if (this.currentPlayer.isAI()) {
+                        saveCurrentGameState();
                         performAIPlay();
                     }
-                }
 
-                saveCurrentGameState();
+                    this.initialRead = false;
+                    saveCurrentGameState();
+                }
             }
         }
 
@@ -446,8 +448,7 @@ public class Game implements Serializable{
         GameState gameState = new GameState(this);
     }
 
-    public boolean undoGame()
-    {
+    public boolean undoGame() throws IOException, ClassNotFoundException {
         ArrayList<GameState> stateHistory = new ArrayList<>();
         FileInputStream inputStream;
         ObjectInputStream ois;
@@ -466,9 +467,23 @@ public class Game implements Serializable{
                 System.out.println(e.getMessage());
             }
 
+            System.out.println("STATE HISTORY SIZE BEFORE" + stateHistory.size());
+
             stateHistory.remove(stateHistory.size() - 1);
             popStateQueue(stateHistory);
+
+            System.out.println("STATE HISTORY SIZE AFTER" + stateHistory.size());
+
+            if (stateHistory.size() == 1)
+            {
+                this.initialRead = true;
+            }
+
             changeCurrentGameState(stateHistory.get(stateHistory.size() - 1).getGame());
+
+            if (this.currentPlayer.isAI()) {
+                performAIPlay();
+            }
 
             return true;
         }
@@ -480,8 +495,6 @@ public class Game implements Serializable{
 
     private void changeCurrentGameState(Game game)
     {
-        //game.getBoard().printBoard();
-        //this.board.printBoard();
         this.setBag(game.getBag());
         this.setCurrentPlayer(game.getCurrentPlayer());
         this.setBoard(game.getBoard());
