@@ -15,10 +15,18 @@ public class UndoRedoController implements Serializable, ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         try {
-            if (this.game.undoGame() == false)
-            {
-                JOptionPane.showMessageDialog(null, "Nothing to Undo");
+            if (actionEvent.getActionCommand().equals("undo")) {
+                if (this.game.undoGame() == false) {
+                    JOptionPane.showMessageDialog(null, "Nothing to Undo");
+                }
             }
+            else
+            {
+                if (this.game.redoGame() == false) {
+                    JOptionPane.showMessageDialog(null, "Nothing to Redo");
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

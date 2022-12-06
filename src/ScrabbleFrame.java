@@ -72,8 +72,11 @@ public class ScrabbleFrame extends JFrame implements ActionListener {
         JMenuItem help = new JMenuItem("Help");
         JMenuItem exit = new JMenuItem("Exit");
         JMenuItem undo = new JMenuItem("Undo");
+        undo.setActionCommand("undo");
         undo.addActionListener(urc);
         JMenuItem redo = new JMenuItem("Redo");
+        redo.setActionCommand("redo");
+        redo.addActionListener(urc);
         help.addActionListener(this);
         exit.addActionListener(this);
         menu.add(help);
