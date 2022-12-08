@@ -9,6 +9,7 @@ public class GameState implements Serializable{
 
     public final static String FILENAME_UNDO = "src/undo.txt";
     public final static String FILENAME_REDO = "src/redo.txt";
+    public final static String FILENAME_SAVE = "src/save.txt";
 
     public GameState(Game game, boolean undo) {
         this.game = game;
