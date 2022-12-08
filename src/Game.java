@@ -28,15 +28,16 @@ public class Game implements Serializable{
     private boolean firstPlayInTurn;
     private String startingCoordinates;
     private boolean gameFinished;
-    private boolean initialRead;
+    private boolean initialReadUndo;
+    private boolean initialReadRedo;
 
     /**
      * Public constructor for class game.
      */
     public Game() {
         clearUndoRedoFileContents();
-        saveCurrentGameState();
-        this.initialRead = true;
+        this.initialReadUndo = true;
+        this.initialReadRedo = true;
 
         this.views = new ArrayList<>();
         this.removeTilesFromHand= new ArrayList<>();
@@ -48,9 +49,12 @@ public class Game implements Serializable{
     private void clearUndoRedoFileContents()
     {
         try {
-            PrintWriter writer = new PrintWriter(GameState.FILENAME);
+            PrintWriter writer = new PrintWriter(GameState.FILENAME_UNDO);
             writer.print("");
             writer.close();
+            PrintWriter writer2 = new PrintWriter(GameState.FILENAME_REDO);
+            writer.print("");
+            writer2.close();
         } catch (FileNotFoundException e)
         {
             System.out.println("ignore");
@@ -112,6 +116,7 @@ public class Game implements Serializable{
 
         this.activeCount = this.playerList.size();
         this.currentPlayer = this.playerList.get(0);
+        saveCurrentGameState();
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
     }
 
@@ -129,8 +134,6 @@ public class Game implements Serializable{
      * Logic for changing the turn order from current player to next player
      */
     public void nextPlayer() throws IOException, ClassNotFoundException {
-        saveCurrentGameState();
-        this.initialRead = false;
         this.removeTilesFromHand.clear();
         if (currentPlayer != null) {
             if (currentPlayer.getPoints() >= 50) {
@@ -138,14 +141,23 @@ public class Game implements Serializable{
             } else {
                 if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
                     this.currentPlayer = this.playerList.get(0);
+                    saveCurrentGameState();
                 } else {
                     this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+
                     if (this.currentPlayer.isAI()) {
                         performAIPlay();
                     }
+                    else
+                    {
+                        saveCurrentGameState();
+                    }
+
+                    this.initialReadUndo = false;
                 }
             }
         }
+
 
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
         this.firstPlayInTurn = true;
@@ -335,8 +347,8 @@ public class Game implements Serializable{
      * @return returns true of false (Should be void)
      */
     public boolean processCommand(Command command) throws FileNotFoundException {
-        List<Tile> addTilesToHand = new ArrayList<>();
-        InHand inHand = null;
+        List<Tile> addTilesToHand;
+        InHand inHand;
         placementCheck = true;
         boolean rc = true;
 
@@ -442,17 +454,16 @@ public class Game implements Serializable{
     }
 
     public void saveCurrentGameState() {
-        GameState gameState = new GameState(this);
+        GameState gameState = new GameState(this, true);
     }
 
-    public boolean undoGame()
-    {
+    public boolean undoGame() throws IOException, ClassNotFoundException {
         ArrayList<GameState> stateHistory = new ArrayList<>();
-        FileInputStream inputStream = null;
-        ObjectInputStream ois = null;
-        if (this.initialRead == false) {
+        FileInputStream inputStream;
+        ObjectInputStream ois;
+        if (this.initialReadUndo == false) {
             try {
-                inputStream = new FileInputStream(GameState.FILENAME);
+                inputStream = new FileInputStream(GameState.FILENAME_UNDO);
                 ois = new ObjectInputStream(inputStream);
                 try {
                     stateHistory = (ArrayList<GameState>) ois.readObject();
@@ -465,9 +476,56 @@ public class Game implements Serializable{
                 System.out.println(e.getMessage());
             }
 
-            GameState unDoneState = stateHistory.get(stateHistory.size() - 2);
-            changeCurrentGameState(unDoneState.getGame());
-            saveCurrentGameState();
+            GameState gameState = new GameState(stateHistory.remove(stateHistory.size() - 1).getGame(), false);
+            this.initialReadRedo = false;
+            popUndoStateStack(stateHistory);
+
+            if (stateHistory.size() == 1)
+            {
+                this.initialReadUndo = true;
+            }
+
+            changeCurrentGameState(stateHistory.get(stateHistory.size() - 1).getGame());
+
+            if (this.currentPlayer.isAI()) {
+                performAIPlay();
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean redoGame() throws IOException, ClassNotFoundException {
+        ArrayList<GameState> stateHistory = new ArrayList<>();
+        FileInputStream inputStream;
+        ObjectInputStream ois;
+        if (this.initialReadRedo == false) {
+            try {
+                inputStream = new FileInputStream(GameState.FILENAME_REDO);
+                ois = new ObjectInputStream(inputStream);
+                try {
+                    stateHistory = (ArrayList<GameState>) ois.readObject();
+                } catch (ClassNotFoundException c)
+                {
+                    System.out.print("c");
+                }
+            } catch (IOException e)
+            {
+                System.out.println(e.getMessage());
+            }
+
+            changeCurrentGameState(stateHistory.get(stateHistory.size() - 1).getGame());
+            GameState gameState = new GameState(stateHistory.remove(stateHistory.size() - 1).getGame(), true);
+            popRedoStateStack(stateHistory);
+
+            if (stateHistory.size() == 0)
+            {
+                this.initialReadRedo = true;
+            }
 
             return true;
         }
@@ -488,6 +546,50 @@ public class Game implements Serializable{
 
         for(ScrabbleView v : this.views) {
             v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
+        }
+    }
+
+    private void popUndoStateStack(ArrayList<GameState> gameStates)
+    {
+        FileOutputStream outputStream = null;
+        try {
+            PrintWriter writer = new PrintWriter(GameState.FILENAME_UNDO);
+            writer.print("");
+        } catch (FileNotFoundException f)
+        {
+            System.out.print("f");
+        }
+        ObjectOutputStream oos = null;
+        try {
+            outputStream = new FileOutputStream(GameState.FILENAME_UNDO);
+            oos = new ObjectOutputStream(outputStream);
+            oos.writeObject(gameStates);
+        }
+        catch (IOException e)
+        {
+            System.out.print("e2");
+        }
+    }
+
+    private void popRedoStateStack(ArrayList<GameState> gameStates)
+    {
+        FileOutputStream outputStream = null;
+        try {
+            PrintWriter writer = new PrintWriter(GameState.FILENAME_REDO);
+            writer.print("");
+        } catch (FileNotFoundException f)
+        {
+            System.out.print("f");
+        }
+        ObjectOutputStream oos = null;
+        try {
+            outputStream = new FileOutputStream(GameState.FILENAME_REDO);
+            oos = new ObjectOutputStream(outputStream);
+            oos.writeObject(gameStates);
+        }
+        catch (IOException e)
+        {
+            System.out.print("e2");
         }
     }
 }
