@@ -144,16 +144,20 @@ public class Game implements Serializable{
                     saveCurrentGameState();
                 } else {
                     this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+
                     if (this.currentPlayer.isAI()) {
-                        saveCurrentGameState();
                         performAIPlay();
+                    }
+                    else
+                    {
+                        saveCurrentGameState();
                     }
 
                     this.initialReadUndo = false;
-                    saveCurrentGameState();
                 }
             }
         }
+
 
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
         this.firstPlayInTurn = true;
@@ -343,8 +347,8 @@ public class Game implements Serializable{
      * @return returns true of false (Should be void)
      */
     public boolean processCommand(Command command) throws FileNotFoundException {
-        List<Tile> addTilesToHand = new ArrayList<>();
-        InHand inHand = null;
+        List<Tile> addTilesToHand;
+        InHand inHand;
         placementCheck = true;
         boolean rc = true;
 
@@ -521,10 +525,6 @@ public class Game implements Serializable{
             if (stateHistory.size() == 0)
             {
                 this.initialReadRedo = true;
-            }
-
-            if (this.currentPlayer.isAI()) {
-                performAIPlay();
             }
 
             return true;
