@@ -207,7 +207,9 @@ public class Board {
         Square.Multiplier multi = Square.Multiplier.NONE;
         try
         {
-            File file = new File("src/board_standard.xml");
+            //File file = new File("src/board_standard.xml");
+            //File file = new File("src/board_custom_stripes.xml");
+            File file = new File("src/board_custom_tetris.xml");
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);
