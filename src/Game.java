@@ -374,8 +374,7 @@ public class Game implements Serializable{
                 break;
 
             case "play":
-                System.out.println(currentPlayer.getHand().getHand().toString());
-                inHand = new InHand(convertCharArrayListToString(this.removeTilesFromHand), currentPlayer.getHand());
+                inHand = new InHand(command.getWordAttempt(), currentPlayer.getHand());
                 if (inHand.wordInHand()) {
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
