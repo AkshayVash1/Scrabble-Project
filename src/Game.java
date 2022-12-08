@@ -457,6 +457,46 @@ public class Game implements Serializable{
         GameState gameState = new GameState(this, true);
     }
 
+    public void saveGame() {
+        FileOutputStream outputStream;
+        ObjectOutputStream oos;
+
+        try {
+            outputStream = new FileOutputStream(GameState.FILENAME_SAVE);
+            oos = new ObjectOutputStream(outputStream);
+            oos.writeObject(this);
+            oos.close();
+            outputStream.close();
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void loadGame() {
+        FileInputStream inputStream;
+        ObjectInputStream ois;
+        Game gameToBeLoaded;
+
+        try {
+            inputStream = new FileInputStream(GameState.FILENAME_SAVE);
+            ois = new ObjectInputStream(inputStream);
+
+            gameToBeLoaded = (Game) ois.readObject();
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        changeCurrentGameState(gameToBeLoaded);
+    }
+
     public boolean undoGame() throws IOException, ClassNotFoundException {
         ArrayList<GameState> stateHistory = new ArrayList<>();
         FileInputStream inputStream;
