@@ -47,6 +47,7 @@ public class BoardPanel extends JPanel implements ScrabbleView{
             for (int col = 1; col < 16; col++) {
 
                 Square thisSquare = new Square(row, col);
+                thisSquare.setMultiplier(board.getMultiplierFromXML(thisSquare));
 
                 JPanel cell = new JPanel();
 
