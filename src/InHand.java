@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  * @date 2022.10.25
  */
 
-public class InHand {
+public class InHand implements Serializable {
 
     private String wordAttempt;
     private Hand hand;

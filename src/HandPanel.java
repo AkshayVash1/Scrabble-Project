@@ -59,8 +59,10 @@ public class HandPanel extends JPanel implements ScrabbleView {
 
     @Override
     public void update(ScrabbleEvent e) {
-        this.player = e.getCurrentPlayer();
-        refreshHand();
+        if (e.getCurrentPlayer() != null) {
+            this.player = e.getCurrentPlayer();
+            refreshHand();
+        }
     }
 
     /**

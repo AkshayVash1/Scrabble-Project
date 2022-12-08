@@ -13,8 +13,9 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.io.Serializable;
 
-public class TransferableTile implements Transferable {
+public class TransferableTile implements Transferable, Serializable {
 
     public static final DataFlavor tileFlavor =
             new DataFlavor(Tile.class, "Tile");

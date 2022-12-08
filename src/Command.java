@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 /**
  * This class is part of the "Scrabble" application.
  *
@@ -9,7 +11,7 @@
  * @date 2022.10.25
  */
 
-public class Command {
+public class Command implements Serializable {
 
     public final static int PLACEMENT_ATTEMPT_SIZE = 2;
 

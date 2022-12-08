@@ -12,13 +12,14 @@
  * @date 2022.11.22
  */
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 
-public class AIPlayer extends Player{
+public class AIPlayer extends Player implements Serializable {
 
     private Board board;
 

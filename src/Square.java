@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.HashMap;
  * @date 2022-10-25
  * @version 0.0
  */
-public class Square {
+public class Square implements Serializable {
 
     /**
      * Multiplier type for premium squares of the board.

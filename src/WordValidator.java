@@ -1,5 +1,6 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Scanner;
  * @author Jaydon Haghighi
  * @version 2022.10.25
  */
-public class WordValidator {
+public class WordValidator implements Serializable {
     private final Map<Integer, String> wordsMap = new HashMap<>();
     private static final String FILE = "src/words.txt";
 

@@ -10,13 +10,12 @@
  * @Version 2.0
  */
 
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game {
-
+public class Game implements Serializable{
     private Bag bag = new Bag();
     private Board board = new Board();
     private ArrayList<Player> playerList = new ArrayList<>();
@@ -29,16 +28,73 @@ public class Game {
     private boolean firstPlayInTurn;
     private String startingCoordinates;
     private boolean gameFinished;
+    private boolean initialReadUndo;
+    private boolean initialReadRedo;
 
     /**
      * Public constructor for class game.
      */
     public Game() {
+        clearUndoRedoFileContents();
+        this.initialReadUndo = true;
+        this.initialReadRedo = true;
+
         this.views = new ArrayList<>();
         this.removeTilesFromHand= new ArrayList<>();
         this.exchangeTilesFromHand = new ArrayList<>();
         this.firstPlayInTurn = true;
         this.gameFinished = false;
+    }
+
+    private void clearUndoRedoFileContents()
+    {
+        try {
+            PrintWriter writer = new PrintWriter(GameState.FILENAME_UNDO);
+            writer.print("");
+            writer.close();
+            PrintWriter writer2 = new PrintWriter(GameState.FILENAME_REDO);
+            writer.print("");
+            writer2.close();
+        } catch (FileNotFoundException e)
+        {
+            System.out.println("ignore");
+        }
+    }
+
+    public void setBag(Bag bag) {
+        this.bag = bag;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public ArrayList<Player> getPlayerList() {
+        return playerList;
+    }
+
+    public void setPlayerList(ArrayList<Player> playerList) {
+        this.playerList = playerList;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public List<ScrabbleView> getViews() {
+        return views;
+    }
+
+    public void setViews(List<ScrabbleView> views) {
+        this.views = views;
+    }
+
+    public boolean isGameFinished() {
+        return gameFinished;
+    }
+
+    public void setGameFinished(boolean gameFinished) {
+        this.gameFinished = gameFinished;
     }
 
     /**
@@ -60,6 +116,7 @@ public class Game {
 
         this.activeCount = this.playerList.size();
         this.currentPlayer = this.playerList.get(0);
+        saveCurrentGameState();
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
     }
 
@@ -76,7 +133,7 @@ public class Game {
     /**
      * Logic for changing the turn order from current player to next player
      */
-    public void nextPlayer() throws FileNotFoundException {
+    public void nextPlayer() throws IOException, ClassNotFoundException {
         this.removeTilesFromHand.clear();
         if (currentPlayer != null) {
             if (currentPlayer.getPoints() >= 50) {
@@ -84,14 +141,23 @@ public class Game {
             } else {
                 if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
                     this.currentPlayer = this.playerList.get(0);
+                    saveCurrentGameState();
                 } else {
                     this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+
                     if (this.currentPlayer.isAI()) {
                         performAIPlay();
                     }
+                    else
+                    {
+                        saveCurrentGameState();
+                    }
+
+                    this.initialReadUndo = false;
                 }
             }
         }
+
 
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
         this.firstPlayInTurn = true;
@@ -110,7 +176,7 @@ public class Game {
      * Performs an AIPlay with AIPlayer methods and then skips the turn. Also responsible for clearing out
      * blanks
      * */
-    private void performAIPlay() throws FileNotFoundException {
+    private void performAIPlay() throws IOException, ClassNotFoundException {
         AIPlayer aiPlayer = (AIPlayer) this.currentPlayer;
 
         boolean flag = true;
@@ -281,8 +347,8 @@ public class Game {
      * @return returns true of false (Should be void)
      */
     public boolean processCommand(Command command) throws FileNotFoundException {
-        List<Tile> addTilesToHand = new ArrayList<>();
-        InHand inHand = null;
+        List<Tile> addTilesToHand;
+        InHand inHand;
         placementCheck = true;
         boolean rc = true;
 
@@ -384,6 +450,186 @@ public class Game {
             if (v instanceof HandPanel) {
                 ((HandPanel) v).removeTile(tile, tileIsBlank);
             }
+        }
+    }
+
+    public void saveCurrentGameState() {
+        GameState gameState = new GameState(this, true);
+    }
+
+    public void saveGame() {
+        FileOutputStream outputStream;
+        ObjectOutputStream oos;
+
+        try {
+            outputStream = new FileOutputStream(GameState.FILENAME_SAVE);
+            oos = new ObjectOutputStream(outputStream);
+            oos.writeObject(this);
+            oos.close();
+            outputStream.close();
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void loadGame() {
+        FileInputStream inputStream;
+        ObjectInputStream ois;
+        Game gameToBeLoaded;
+
+        try {
+            inputStream = new FileInputStream(GameState.FILENAME_SAVE);
+            ois = new ObjectInputStream(inputStream);
+
+            gameToBeLoaded = (Game) ois.readObject();
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        changeCurrentGameState(gameToBeLoaded);
+    }
+
+    public boolean undoGame() throws IOException, ClassNotFoundException {
+        ArrayList<GameState> stateHistory = new ArrayList<>();
+        FileInputStream inputStream;
+        ObjectInputStream ois;
+        if (this.initialReadUndo == false) {
+            try {
+                inputStream = new FileInputStream(GameState.FILENAME_UNDO);
+                ois = new ObjectInputStream(inputStream);
+                try {
+                    stateHistory = (ArrayList<GameState>) ois.readObject();
+                } catch (ClassNotFoundException c)
+                {
+                    System.out.print("c");
+                }
+            } catch (IOException e)
+            {
+                System.out.println(e.getMessage());
+            }
+
+            GameState gameState = new GameState(stateHistory.remove(stateHistory.size() - 1).getGame(), false);
+            this.initialReadRedo = false;
+            popUndoStateStack(stateHistory);
+
+            if (stateHistory.size() == 1)
+            {
+                this.initialReadUndo = true;
+            }
+
+            changeCurrentGameState(stateHistory.get(stateHistory.size() - 1).getGame());
+
+            if (this.currentPlayer.isAI()) {
+                performAIPlay();
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean redoGame() throws IOException, ClassNotFoundException {
+        ArrayList<GameState> stateHistory = new ArrayList<>();
+        FileInputStream inputStream;
+        ObjectInputStream ois;
+        if (this.initialReadRedo == false) {
+            try {
+                inputStream = new FileInputStream(GameState.FILENAME_REDO);
+                ois = new ObjectInputStream(inputStream);
+                try {
+                    stateHistory = (ArrayList<GameState>) ois.readObject();
+                } catch (ClassNotFoundException c)
+                {
+                    System.out.print("c");
+                }
+            } catch (IOException e)
+            {
+                System.out.println(e.getMessage());
+            }
+
+            changeCurrentGameState(stateHistory.get(stateHistory.size() - 1).getGame());
+            GameState gameState = new GameState(stateHistory.remove(stateHistory.size() - 1).getGame(), true);
+            popRedoStateStack(stateHistory);
+
+            if (stateHistory.size() == 0)
+            {
+                this.initialReadRedo = true;
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void changeCurrentGameState(Game game)
+    {
+        this.setBag(game.getBag());
+        this.setCurrentPlayer(game.getCurrentPlayer());
+        this.setBoard(game.getBoard());
+        this.setPlayerList(this.getPlayerList());
+        this.setGameFinished(this.isGameFinished());
+        this.setViews(this.getViews());
+
+        for(ScrabbleView v : this.views) {
+            v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
+        }
+    }
+
+    private void popUndoStateStack(ArrayList<GameState> gameStates)
+    {
+        FileOutputStream outputStream = null;
+        try {
+            PrintWriter writer = new PrintWriter(GameState.FILENAME_UNDO);
+            writer.print("");
+        } catch (FileNotFoundException f)
+        {
+            System.out.print("f");
+        }
+        ObjectOutputStream oos = null;
+        try {
+            outputStream = new FileOutputStream(GameState.FILENAME_UNDO);
+            oos = new ObjectOutputStream(outputStream);
+            oos.writeObject(gameStates);
+        }
+        catch (IOException e)
+        {
+            System.out.print("e2");
+        }
+    }
+
+    private void popRedoStateStack(ArrayList<GameState> gameStates)
+    {
+        FileOutputStream outputStream = null;
+        try {
+            PrintWriter writer = new PrintWriter(GameState.FILENAME_REDO);
+            writer.print("");
+        } catch (FileNotFoundException f)
+        {
+            System.out.print("f");
+        }
+        ObjectOutputStream oos = null;
+        try {
+            outputStream = new FileOutputStream(GameState.FILENAME_REDO);
+            oos = new ObjectOutputStream(outputStream);
+            oos.writeObject(gameStates);
+        }
+        catch (IOException e)
+        {
+            System.out.print("e2");
         }
     }
 }
