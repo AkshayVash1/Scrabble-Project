@@ -479,8 +479,6 @@ public class Game implements Serializable{
 
     private void changeCurrentGameState(Game game)
     {
-        game.getBoard().printBoard();
-        this.board.printBoard();
         this.setBag(game.getBag());
         this.setCurrentPlayer(game.getCurrentPlayer());
         this.setBoard(game.getBoard());

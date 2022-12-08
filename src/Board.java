@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -18,7 +19,7 @@ import java.util.*;
  * @date 2022-11-22
  * @version 2.0
  */
-public class Board {
+public class Board implements Serializable {
 
     /**
      * 16*16 array of String stores letters of tiles placed.
