@@ -3,7 +3,7 @@
  *
  * @Author Jaydon Haghighi
  * @Date 2022-11-13
- * @Version 1.0
+ * @Version 3.0
  */
 
 import javax.swing.*;
@@ -47,8 +47,8 @@ public class StartMenuFrame extends JFrame {
      *
      * @param playerAmount
      */
-    public void createPlayers(String playerAmount) {
-        scrabbleFrame.createPlayers(playerAmount);
+    public void createPlayers(String playerAmount, String AIAmount) {
+        scrabbleFrame.createPlayers(playerAmount, AIAmount);
         this.setVisible(false);
         scrabbleFrame.setVisible(true);
     }

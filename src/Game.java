@@ -11,6 +11,7 @@
  */
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class Game {
 
     private Bag bag = new Bag();
     private Board board = new Board();
-    private ArrayList<Player> playerList = new ArrayList<Player>();
+    private ArrayList<Player> playerList = new ArrayList<>();
     private Player currentPlayer;
     private boolean placementCheck;
     private List<ScrabbleView> views;
@@ -42,16 +43,21 @@ public class Game {
 
     /**
      * Creates number of players based on user input
-     * @param input User input for number of players
+     * @param playerAmount User input for number of players
      */
-    public void createPlayers(String input) {
-        int value = Integer.parseInt(input);
-
+    public void createPlayers(String playerAmount, String AIAmount) {
+        int playerValue = Integer.parseInt(playerAmount);
+        int AIValue = Integer.parseInt(AIAmount);
         playerList.clear();
-        for (int i = 0; i < value; i++) {
+        for (int i = 0; i < playerValue; i++) {
             playerList.add(new Player(i));
             playerList.get(i).initializePlayerHand((ArrayList<Tile>) bag.removeTiles(7));
         }
+        for (int i = playerValue; i < AIValue + playerValue; i++) {
+            playerList.add(new AIPlayer(i, this));
+            playerList.get(i).initializePlayerHand((ArrayList<Tile>) bag.removeTiles(7));
+        }
+
         this.activeCount = this.playerList.size();
         this.currentPlayer = this.playerList.get(0);
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
@@ -70,8 +76,7 @@ public class Game {
     /**
      * Logic for changing the turn order from current player to next player
      */
-    public void nextPlayer()
-    {
+    public void nextPlayer() throws FileNotFoundException {
         this.removeTilesFromHand.clear();
         if (currentPlayer != null) {
             if (currentPlayer.getPoints() >= 50) {
@@ -81,12 +86,53 @@ public class Game {
                     this.currentPlayer = this.playerList.get(0);
                 } else {
                     this.currentPlayer = this.playerList.get((this.currentPlayer.getPlayerNumber() + 1));
+                    if (this.currentPlayer.isAI()) {
+                        performAIPlay();
+                    }
                 }
             }
         }
 
-        this.firstPlayInTurn = true;
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+        this.firstPlayInTurn = true;
+    }
+
+    /**
+     * Getter method for bag
+     * @return Bag
+     * */
+    public Bag getBag()
+    {
+        return this.bag;
+    }
+
+    /**
+     * Performs an AIPlay with AIPlayer methods and then skips the turn. Also responsible for clearing out
+     * blanks
+     * */
+    private void performAIPlay() throws FileNotFoundException {
+        AIPlayer aiPlayer = (AIPlayer) this.currentPlayer;
+
+        boolean flag = true;
+        while (flag) {
+            flag = false;
+
+            for (Tile t : aiPlayer.getHand().getHand())
+            {
+                if (t.getLetter().equals("_"))
+                {
+                    flag = true;
+                    this.addToExchangeTilesFromHand('_');
+                    this.processCommand(new Command("exchange", "_", null));
+                }
+            }
+        }
+
+        aiPlayer.analyzeBoard(this.board);
+        aiPlayer.playHighestMove();
+        this.clearRemoveTilesFromHand();
+
+        this.nextPlayer();
     }
 
     /**
@@ -245,26 +291,29 @@ public class Game {
         switch (action) {
             case "exchange":
                 inHand = new InHand(convertCharArrayListToString(this.exchangeTilesFromHand), currentPlayer.getHand());
-
                 if (inHand.wordInHand()) {
                     this.exchangeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(this.exchangeTilesFromHand.size());
                     bag.placeTiles(currentPlayer.exchange((ArrayList<Tile>) addTilesToHand,
-                            this.exchangeTilesFromHand)); //only enter capital letters
+                            this.exchangeTilesFromHand));
                 }
                 else {
                     System.out.println("All tiles not in hand");
                     rc = false;
                 }
 
-                for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+                for(ScrabbleView v : this.views){
+                    v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
+                }
                 break;
 
             case "play":
+                System.out.println(currentPlayer.getHand().getHand().toString());
                 inHand = new InHand(convertCharArrayListToString(this.removeTilesFromHand), currentPlayer.getHand());
                 if (inHand.wordInHand()) {
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
+                    System.out.println(removeTilesFromHand.toString() + " " + command.getPlacementAttempt());
                     PlayMove playMove = new PlayMove(command.getPlacementAttempt(),
                             currentPlayer.exchange((ArrayList<Tile>) addTilesToHand, removeTilesFromHand),
                             this.board, command.getPlacementDirection());
@@ -294,12 +343,16 @@ public class Game {
                     rc = false;
                 }
 
-                for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+                for(ScrabbleView v : this.views) {
+                    v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
+                }
                 break;
 
             case "shuffle":
                 currentPlayer.shuffle();
-                for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+                for(ScrabbleView v : this.views) {
+                    v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
+                }
                 break;
 
             case "pass":
@@ -326,4 +379,11 @@ public class Game {
         return board;
     }
 
+    public void refreshHandPanelView(Tile tile, boolean tileIsBlank) {
+        for(ScrabbleView v : this.views) {
+            if (v instanceof HandPanel) {
+                ((HandPanel) v).removeTile(tile, tileIsBlank);
+            }
+        }
+    }
 }

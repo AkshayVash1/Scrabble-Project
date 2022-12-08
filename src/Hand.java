@@ -65,6 +65,7 @@ public class Hand {
     public boolean removeTiles(ArrayList<Character> removeTiles, boolean clear)
     {
         boolean rc = true;
+        int sizeCounter = removeTiles.size() + 1;
 
         if (clear == true) {
             this.recentlyRemoved.clear();
@@ -80,15 +81,23 @@ public class Hand {
         }
         else
         {
-            for (Character c : removeTiles) {
+            clearLoop:
+            for (int i = 0; i < removeTiles.size(); i++) {
+                mockLoop:
                 for (Tile l : mock) {
-                    if (c.equals(l.getLetter().charAt(PARSE_CHAR_AT_ZERO)))
+                    if (removeTiles.get(i).equals(l.getLetter().charAt(PARSE_CHAR_AT_ZERO)))
                     {
                         this.hand.remove(l);
+                        mock.remove(l);
+                        sizeCounter--;
                         if (clear == true) {
                             this.recentlyRemoved.add(l);
                         }
-                        break;
+                        if (sizeCounter == 0)
+                        {
+                            break clearLoop;
+                        }
+                        break mockLoop;
                     }
                 }
             }
@@ -107,7 +116,7 @@ public class Hand {
     }
 
     /**
-     * Returns a set of the recently added Tiles in order to be remove from hand if play not valid.
+     * Returns a set of the recently added Tiles in order to be removed from hand if play not valid.
      * @return the set of recently removed Tiles as a Tile ArrayList
      * */
     public ArrayList<Tile> getRecentlyAdded()

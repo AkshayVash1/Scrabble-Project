@@ -16,72 +16,132 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 
-public class PlayerSelectorPanel extends JPanel {
+public class PlayerSelectorPanel extends JPanel implements ItemListener {
     public static final int WIDTH = 180;
     public static final int HEIGHT = 25;
-    JComboBox comboBox = new JComboBox();
-    private JComboBox oldJComboBox = new JComboBox();
-    private String playerAmount;
+    JComboBox playerComboBox = new JComboBox();
+    JComboBox AIComboBox = new JComboBox();
+    private JComboBox oldPlayerComboBox = new JComboBox();
+    private JComboBox oldAIComboBox = new JComboBox();
+    private int playerAmount;
+    private int AILimit;
+    private int AIAmount;
+
     private Image backgroundImage;
 
     private StartMenuFrame startMenuFrame;
-    JLabel jlabel = new JLabel("Please Select Number of players");
+    JLabel playerSelectorLabel = new JLabel("Please Select Number of players");
+    JLabel AISelectorLabel = new JLabel("Please Select Number of AIs");
 
+    /**
+     * Constructor for PlayerSelectorPanel
+     * @param startMenuFrame
+     * */
     public PlayerSelectorPanel(StartMenuFrame startMenuFrame) {
+
         this.startMenuFrame = startMenuFrame;
-        this.add(initializePlayerSelector());
+        initializePlayerSelector();
     }
 
-    private JPanel initializePlayerSelector() {
+    /**
+     * Initializes the player selector combo box and panel. For display.
+     * */
+    private void initializePlayerSelector() {
         try {
             backgroundImage = ImageIO.read(new File("src\\start_menu_background.jpg"));
         } catch (IOException e) {
-            jlabel.setForeground(Color.black);
+            playerSelectorLabel.setForeground(Color.black);
+            AISelectorLabel.setForeground(Color.black);
         }
 
-        comboBox.setName("JComboBox");
-        JPanel jComboBoxPanel = new JPanel(new GridLayout(2, 0));
-        jComboBoxPanel.setBackground(new Color(0, 0, 0, 0));
-        jlabel.setForeground(Color.white);
-        comboBox.addItem("");
+        playerComboBox.setName("playerComboBox");
+        JPanel playerComboBoxPanel = new JPanel(new GridLayout(2, 0));
+        playerComboBoxPanel.setBackground(new Color(0, 0, 0, 0));
+        playerSelectorLabel.setForeground(Color.white);
+        playerComboBox.addItem("");
         for (int i = 2; i < 5; i++) {
-            comboBox.addItem(i + " players");
+            playerComboBox.addItem(i + " players");
         }
-        comboBox.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        jComboBoxPanel.add(jlabel);
-        jComboBoxPanel.add(comboBox);
-        jComboBoxListener();
-        return jComboBoxPanel;
+        playerComboBox.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        playerComboBoxPanel.add(playerSelectorLabel);
+        playerComboBoxPanel.add(playerComboBox);
+        playerComboBox.addItemListener(this);
+        this.add(playerComboBoxPanel);
     }
 
+    /**
+     * Initializes the specific AI selector combo box and panel
+     * @param AILimit
+     * */
+    private void initializeAISelector(int AILimit) {
+        AIComboBox.setName("AIComboBox");
+        JPanel AIComboBoxPanel = new JPanel(new GridLayout(2, 0));
+        AIComboBoxPanel.setBackground(new Color(0, 0, 0, 0));
+        AISelectorLabel.setForeground(Color.white);
+        AIComboBox.addItem("");
+        for (int i = 0; i < AILimit; i++) {
+            AIComboBox.addItem(i + " AI players");
+        }
+        AIComboBox.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        AIComboBoxPanel.add(AISelectorLabel);
+        AIComboBoxPanel.add(AIComboBox);
+        AIComboBox.addItemListener(this);
+        this.add(AIComboBoxPanel);
+    }
+
+    /**
+     * Helper method to pain component g
+     * @param g
+     * */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         // Draw the background image.
         g.drawImage(backgroundImage, 0, 0, this);
     }
 
-    private void jComboBoxListener() {
-        comboBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    comboBox.setName(String.valueOf(comboBox.getSelectedItem()));
-                    if (comboBox.getSelectedItem().equals(2 + " players")) {
-                        playerAmount = "2";
-                        oldJComboBox.setName(String.valueOf(comboBox.getSelectedItem()));
-                    } else if (comboBox.getSelectedItem().equals(3 + " players")) {
-                        playerAmount = "3";
-
-                        oldJComboBox.setName(String.valueOf(comboBox.getSelectedItem()));
-                    } else if (comboBox.getSelectedItem().equals(4 + " players")) {
-                        playerAmount = "4";
-
-                        oldJComboBox.setName(String.valueOf(comboBox.getSelectedItem()));
-                    }
-
-                    startMenuFrame.createPlayers(playerAmount);
+    /**
+     * Changes the state of the AI combo box if the state of the player select has changed
+     * @param e ItemEvent
+     * */
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            playerComboBox.setName(String.valueOf(playerComboBox.getSelectedItem()));
+            if (e.getSource().equals(playerComboBox)) {
+                if (playerComboBox.getSelectedItem().equals(2 + " players")) {
+                    playerAmount = 2;
+                    AILimit = 2;
+                    oldPlayerComboBox.setName(String.valueOf(playerComboBox.getSelectedItem()));
+                } else if (playerComboBox.getSelectedItem().equals(3 + " players")) {
+                    playerAmount = 3;
+                    AILimit = 3;
+                    oldPlayerComboBox.setName(String.valueOf(playerComboBox.getSelectedItem()));
+                } else if (playerComboBox.getSelectedItem().equals(4 + " players")) {
+                    playerAmount = 4;
+                    AILimit = 4;
+                    oldPlayerComboBox.setName(String.valueOf(playerComboBox.getSelectedItem()));
                 }
+                initializeAISelector(AILimit);
+            } else if (e.getSource().equals(AIComboBox)) {
+                if (AIComboBox.getSelectedItem().equals(0 + " AI players")) {
+                    AIAmount = 0;
+                    oldAIComboBox.setName(String.valueOf(AIComboBox.getSelectedItem()));
+                } else if (AIComboBox.getSelectedItem().equals(1 + " AI players")) {
+                    AIAmount = 1;
+                    oldAIComboBox.setName(String.valueOf(AIComboBox.getSelectedItem()));
+                } else if (AIComboBox.getSelectedItem().equals(2 + " AI players")) {
+                    AIAmount = 2;
+                    oldAIComboBox.setName(String.valueOf(AIComboBox.getSelectedItem()));
+                } else if (AIComboBox.getSelectedItem().equals(3 + " AI players")) {
+                    AIAmount = 3;
+                    oldAIComboBox.setName(String.valueOf(AIComboBox.getSelectedItem()));
+                }
+                playerAmount = playerAmount - AIAmount;
+                startMenuFrame.createPlayers(Integer.toString(playerAmount), Integer.toString(AIAmount));
             }
-        });
+            this.revalidate();
+            this.repaint();
+        }
+
     }
 }

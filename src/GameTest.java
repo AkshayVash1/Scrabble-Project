@@ -25,7 +25,7 @@ public class GameTest {
         ArrayList<Tile> expectedOutput = new ArrayList<>();
 
         Game game = new Game();
-        game.createPlayers("1");
+        game.createPlayers("1", "0");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -54,7 +54,7 @@ public class GameTest {
         ArrayList<Tile> expectedOutput = new ArrayList<>();
 
         Game game = new Game();
-        game.createPlayers("1");
+        game.createPlayers("1", "0");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -92,7 +92,7 @@ public class GameTest {
         ArrayList<String> expectedOutput = new ArrayList<>();
 
         Game game = new Game();
-        game.createPlayers("1");
+        game.createPlayers("1", "0");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -126,7 +126,7 @@ public class GameTest {
         ArrayList<Tile> expectedOutput = new ArrayList<>();
 
         Game game = new Game();
-        game.createPlayers("1");
+        game.createPlayers("1", "0");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -164,7 +164,7 @@ public class GameTest {
         boolean exp;
 
         Game game = new Game();
-        game.createPlayers("1");
+        game.createPlayers("1", "0");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -193,7 +193,7 @@ public class GameTest {
         boolean exp;
 
         Game game = new Game();
-        game.createPlayers("1");
+        game.createPlayers("1", "0");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -222,7 +222,7 @@ public class GameTest {
         boolean exp;
 
         Game game = new Game();
-        game.createPlayers("1");
+        game.createPlayers("1", "0");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -251,7 +251,7 @@ public class GameTest {
         boolean exp;
 
         Game game = new Game();
-        game.createPlayers("1");
+        game.createPlayers("1", "0");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -281,7 +281,7 @@ public class GameTest {
         boolean exp;
 
         Game game = new Game();
-        game.createPlayers("1");
+        game.createPlayers("1", "0");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -310,7 +310,7 @@ public class GameTest {
         ArrayList<Tile> playerHand = new ArrayList<>();
 
         Game game = new Game();
-        game.createPlayers("1");
+        game.createPlayers("1", "0");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -327,8 +327,8 @@ public class GameTest {
 
         game.processCommand(new Command("play", "DO", "8H"));
 
-        //D has two points and O has one point
-        assert(player.getPoints() == 3);
+        //D has two points and O has one point, premium square adds 3 points
+        assert(player.getPoints() == 6);
     }
 
     /**
@@ -339,7 +339,7 @@ public class GameTest {
         ArrayList<Tile> playerHand = new ArrayList<>();
 
         Game game = new Game();
-        game.createPlayers("1");
+        game.createPlayers("1", "0");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -365,8 +365,8 @@ public class GameTest {
 
         //D has two points and O has one point to make 3 points
         //D has two points, A has one point, E has one point, R has one point to make 5 points
-        //Total 8 points
-        assert(player.getPoints() == 8);
+        //Total 8 points, premium square multiples by 2
+        assert(player.getPoints() == 16);
     }
 
     /**
@@ -378,7 +378,7 @@ public class GameTest {
         boolean exp;
 
         Game game = new Game();
-        game.createPlayers("1");
+        game.createPlayers("1", "0");
         Player player = game.getCurrentPlayer();
         player.getHand().getHand().clear();
         playerHand.add(new Tile("A", 1));
@@ -403,7 +403,7 @@ public class GameTest {
 
         exp = game.processCommand(new Command("play", "ARE", "H8"));
 
-        assert(!exp);
+        assert(exp);
     }
 
 }

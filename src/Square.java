@@ -66,6 +66,8 @@ public class Square {
 
     private int row;
     private int col;
+
+
     private Multiplier multiplier;
     public static HashMap<Integer,String> columns;
 
@@ -74,12 +76,13 @@ public class Square {
      * Creates a Square when both row column are passed separately as int values.
      */
     public Square(Integer row, Integer col) {
-        // todo errors for unacceptable inputs
+
         this.row = row;
         this.col = col;
+        this.multiplier = Multiplier.NONE;
         columns = new HashMap<>();
         initializeColumns();
-        assignMultiplier();
+        //assignMultiplier();
     }
 
     /**
@@ -110,6 +113,15 @@ public class Square {
      */
     public Multiplier getMultiplier() {
         return this.multiplier;
+    }
+
+
+    /**
+     * Setter for the square's multiplier. The board sets the square's multiplier based on board's premium square pattern.
+     * @param multiplier
+     */
+    public void setMultiplier(Multiplier multiplier) {
+        this.multiplier = multiplier;
     }
 
     /**

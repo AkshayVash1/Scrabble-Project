@@ -8,6 +8,8 @@
  * Uses the board coordinates as well to determine whether the play is considered to be a vertical play based off
  * of the drop or a horizontal play based off of the drop.
  *
+ * Also has the handling for when a blank tile is dropped onto the board.
+ *
  * @author Mohamed Kaddour
  * @date 2022.11.13
  * @Version 1.0
@@ -22,6 +24,7 @@ import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
 import java.io.IOException;
+import java.util.Locale;
 
 public class BoardDropTargetController extends DropTargetAdapter {
 
@@ -60,6 +63,7 @@ public class BoardDropTargetController extends DropTargetAdapter {
      * The drop listener which process the drop command from the mouse and then performs various actions on the
      * model with it. This includes checking the direction that the player intends to play with.
      *
+     * This method
      * @param dropTargetDropEvent
      * */
     @Override
@@ -68,11 +72,25 @@ public class BoardDropTargetController extends DropTargetAdapter {
             Transferable tr = dropTargetDropEvent.getTransferable();
             Tile tile = (Tile) tr.getTransferData(TransferableTile.tileFlavor);
 
+            boolean tileIsBlank = false;
+
             if (dropTargetDropEvent.isDataFlavorSupported(TransferableTile.tileFlavor)) {
 
+                Component c = dropTargetDropEvent.getDropTargetContext().getDropTarget().getComponent();
+
+                if (c instanceof JLabel) {
+                    if (!((JLabel)c).getText().equals(" ")) {
+                        dropTargetDropEvent.rejectDrop();
+                        return;
+                    }
+                }
+
                 dropTargetDropEvent.acceptDrop(DnDConstants.ACTION_COPY);
-                this.label.setText(tile.getLetter());
-                this.label.setForeground(Color.black);
+                if (this.label.getText().equals(" ")) {
+                    this.label.setText(tile.getLetter());
+                    this.label.setForeground(Color.black);
+                }
+
 
                 if (this.game.getFirstPlayInTurn() == true)
                 {
@@ -87,9 +105,17 @@ public class BoardDropTargetController extends DropTargetAdapter {
                     this.game.changeStartingCoordinatesToVertical();
                 }
 
+                if (tile.getLetter() == "_")
+                {
+                    tile.setLetter(handleBlankTiles());
+                    this.label.setText(tile.getLetter());
+                    tileIsBlank = true;
+                }
+
                 this.game.addToRemoveTilesFromHand(tile.getLetter().charAt(0));
 
                 dropTargetDropEvent.dropComplete(true);
+                this.game.refreshHandPanelView(tile, tileIsBlank);
                 return;
             }
 
@@ -98,5 +124,54 @@ public class BoardDropTargetController extends DropTargetAdapter {
             e.printStackTrace();
             dropTargetDropEvent.rejectDrop();
         }
+    }
+
+    /**
+     * Helper method to handle blank tiles using a JOptionPane to get the user input and then setting
+     * the tile letter.
+     *
+     * @return String with the inputted letter.
+     * */
+    private String handleBlankTiles()
+    {
+        JPanel panel = new JPanel(new GridLayout(2, 1));
+        JLabel label = new JLabel("Enter a Letter Please");
+        JTextField answer = new JTextField();
+        panel.add(label);
+        panel.add(answer);
+
+        String input = " ";
+        boolean flag = false;
+        while (!flag) {
+            int result = JOptionPane.showOptionDialog(null, panel, "Enter A Letter Please",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null ,
+                    null, null );
+            if (result == JOptionPane.OK_OPTION)
+            {
+                input = answer.getText();
+            }
+            flag = (checkBlankTileInput(input.toUpperCase(Locale.ROOT))) ? true : false;
+        }
+
+        return input;
+    }
+    /**
+     * Helper method to check whether the blank tile input is valid or not.
+     * @param input String to check
+     * @return boolean
+     * */
+    private boolean checkBlankTileInput(String input)
+    {
+        return (input.length() == 1) && (checkLowerCaseAndUpperCase(input.charAt(0)));
+    }
+
+    /**
+     * Checks whether the letter is a valid lower case or upper case letter.
+     * @param letter to check
+     * @return boolean
+     * */
+    private boolean checkLowerCaseAndUpperCase(char letter)
+    {
+        return (letter >= 'A' && letter <= 'Z') || (letter >= 'a' && letter <= 'z');
     }
 }

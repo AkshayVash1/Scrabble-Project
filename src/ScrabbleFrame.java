@@ -92,8 +92,8 @@ public class ScrabbleFrame extends JFrame implements ActionListener {
      *
      * @param playerAmount
      */
-    public void createPlayers(String playerAmount) {
-        game.createPlayers(playerAmount);
+    public void createPlayers(String playerAmount, String AIAmount) {
+        game.createPlayers(playerAmount, AIAmount);
     }
 
     @Override
