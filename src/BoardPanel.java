@@ -98,7 +98,7 @@ public class BoardPanel extends JPanel implements ScrabbleView{
                 //label.setIcon(new ImageIcon("src/star_icon.png"));
                 label.setText("*");
             } else {
-                label.setForeground(Color.white);
+                //label.setForeground(Color.white);
                 label.setText(String.valueOf(square.getMultiplier()));
             }
         }

@@ -208,8 +208,8 @@ public class Board {
         try
         {
             //File file = new File("src/board_standard.xml");
-            //File file = new File("src/board_custom_stripes.xml");
-            File file = new File("src/board_custom_tetris.xml");
+            File file = new File("src/board_custom_diamond.xml");
+            //File file = new File("src/board_custom_tetris.xml");
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);
