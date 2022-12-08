@@ -58,7 +58,7 @@ public class Board {
     /**
      * Type of premium square pattern for custom boards.
      */
-    public enum Pattern{STANDARD, DIAMOND, SPIRAL, PATTERNLESS}
+    public enum Pattern{STANDARD, DIAMOND, TETRIS}
 
     /**
      * List of cell coordinates that have already been scored once.
@@ -208,8 +208,8 @@ public class Board {
         try
         {
             //File file = new File("src/board_standard.xml");
-            File file = new File("src/board_custom_diamond.xml");
-            //File file = new File("src/board_custom_tetris.xml");
+            //File file = new File("src/board_custom_diamond.xml");
+            File file = new File("src/board_custom_tetris.xml");
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);
