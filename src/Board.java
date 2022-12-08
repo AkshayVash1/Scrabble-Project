@@ -1,4 +1,11 @@
-import java.io.Serializable;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -11,7 +18,7 @@ import java.util.*;
  * @date 2022-11-22
  * @version 2.0
  */
-public class Board implements Serializable {
+public class Board {
 
     /**
      * 16*16 array of String stores letters of tiles placed.
@@ -49,6 +56,11 @@ public class Board implements Serializable {
     public enum Direction{HORIZONTAL, VERTICAL}
 
     /**
+     * Type of premium square pattern for custom boards.
+     */
+    public enum Pattern{STANDARD, DIAMOND, SPIRAL, PATTERNLESS}
+
+    /**
      * List of cell coordinates that have already been scored once.
      */
     ArrayList<String> scoredOnceList;
@@ -63,6 +75,11 @@ public class Board implements Serializable {
      */
     private String playedWord = "";
 
+    /**
+     * The last word played on board.
+     */
+    private String currentWord;
+
 
     /**
      * Constructor for the class.
@@ -76,7 +93,9 @@ public class Board implements Serializable {
         this.direction = Direction.HORIZONTAL;
         this.scoredOnceList = new ArrayList<String>();
         this.newWords = new ArrayList<String>();
+        this.currentWord = "";
         initializeBoard();                   // assign a Square and a Tile to each cell
+
     }
 
     /**
@@ -168,13 +187,70 @@ public class Board implements Serializable {
         for (int row = 0; row < cells.length; row++) {
             for (int col = 0; col < cells[row].length; col++) {
                 // Each placement has a corresponding Tile and a Square
+
                 thisSquare = new Square(row,col);
+                //thisSquare.setMultiplier(getMultiplierFromXML(thisSquare));
                 String coordinates = thisSquare.getStringCoordinates();
                 tiles.put(coordinates, emptyTile);   // put an empty tile on thisSquare
                 squares.put(coordinates, thisSquare);   // put thisSquare on the placement corresponding to coordinates (this placement)
                 cells[row][col] = (tiles.get(coordinates).getLetter());     // store the letter of the tile in this placement
             }
         }
+    }
+
+    /**
+     * Returns the multiplier type for a given square from the xml file from user's chosen custom board.
+     * @param square
+     * @return
+     */
+    public Square.Multiplier getMultiplierFromXML(Square square) {
+        Square.Multiplier multi = Square.Multiplier.NONE;
+        try
+        {
+            File file = new File("src/board_standard.xml");
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(file);
+            doc.getDocumentElement().normalize();
+            //System.out.println("Root element: " + doc.getDocumentElement().getNodeName());
+            NodeList nodeList = doc.getElementsByTagName("multiplier");
+            //System.out.println("number of cells: " + nodeList.getLength());
+
+            String coordinates = square.getStringCoordinates();
+            String coordsSearchString = "-" + coordinates + "-";
+            // iterating through nodeList of multiplier elements in xml file
+            for (int itr = 0; itr < nodeList.getLength(); itr++) {
+                Node node = nodeList.item(itr);
+                Element elem = (Element) node;
+                String coordinates_element = elem.getElementsByTagName("coordinates").item(0).getTextContent();
+
+                if (coordinates_element.contains(coordsSearchString)) {
+                    String multiplier_type_element = elem.getElementsByTagName("type").item(0).getTextContent();
+                    if(multiplier_type_element.equals("DL")) {
+                        square.setMultiplier(Square.Multiplier.DL);
+                        multi = Square.Multiplier.DL;
+                    }
+                    else if(multiplier_type_element.equals("DW")) {
+                        square.setMultiplier(Square.Multiplier.DW);
+                        multi = Square.Multiplier.DW;
+                    }
+                    else if(multiplier_type_element.equals("TL")) {
+                        square.setMultiplier(Square.Multiplier.TL);
+                        multi = Square.Multiplier.TL;
+                    }
+                    else if(multiplier_type_element.equals("TW")) {
+                        square.setMultiplier(Square.Multiplier.TW);
+                        multi = Square.Multiplier.TW;
+                    }
+                }
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return multi;
     }
 
 
@@ -748,18 +824,25 @@ public class Board implements Serializable {
 
         if (direction == Direction.HORIZONTAL) {
             // iterate through columns of row until find matching word
-            for (int COL = 0; COL < 15; COL++) {
+            for (int COL = col; COL < 15; COL++) {
+            //for (int COL = 0; COL < 15; COL++) {
 
                 String letter = ((Character) word.charAt(0)).toString();
                 // if first letter matches iterate through rest of words to see if the whole word matches
+
+/*                //if the left cell of this cells is empty, then this cell has the first letter of the word
+                if(getLeftCellContent(row,COL).equals(" ")) {
+                    currentStartCol = COL;
+                    currentStartRow = row;
+                    break;
+                }*/
+
                 if (cells[row][COL].equals(letter)) {
                     currentStartCol = COL;
                     currentStartRow = row;
-/*                    setCurrentStartCol(COL);
-                    setCurrentStartRow(row);*/
 
                     int COLUMN_current = COL + 1;
-                    if(COLUMN_current == 16) {continue; }
+                    if(COLUMN_current == cells.length) {continue; }
 
                     for (int i = 1; i < word.length(); i++) {
                         if (word.length() + COLUMN_current > 15) {break;}
@@ -780,7 +863,7 @@ public class Board implements Serializable {
 
         if (direction == Direction.VERTICAL) {
             // iterate through columns of row until find matching word
-            for (int ROW = 0; ROW < 15; ROW++) {
+            for (int ROW = row; ROW < 15; ROW++) {
 
                 String letter = ((Character) word.charAt(0)).toString();
                 // if first letter matches iterate through rest of words to see if the whole word matches
@@ -828,6 +911,11 @@ public class Board implements Serializable {
     private Direction getUpdatedDirection() {
         return this.direction;
     }
+
+    /**
+     * Updates the current word.
+     */
+    public void updateCurrentWord(String word){this.currentWord = word;}
 
     /**
      * Calculates score of the given word.
@@ -941,4 +1029,9 @@ public class Board implements Serializable {
         return this.newWords;
     }
 
+
+    public static void main(String[] args) {
+        Board bbb = new Board();
+
+    }
 }

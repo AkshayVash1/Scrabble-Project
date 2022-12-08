@@ -124,6 +124,7 @@ public class BoardTest {
     }
 
 
+
     /**
      * TEST CASE: new instance of Board has been created and should have 61 premium squares + 195 non-premium squares (256 total).
      *
