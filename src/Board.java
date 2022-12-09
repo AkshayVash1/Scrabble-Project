@@ -194,7 +194,6 @@ public class Board {
                 // Each placement has a corresponding Tile and a Square
 
                 thisSquare = new Square(row,col);
-                thisSquare.setMultiplier(getMultiplierFromXML(thisSquare));
                 String coordinates = thisSquare.getStringCoordinates();
                 tiles.put(coordinates, emptyTile);   // put an empty tile on thisSquare
                 squares.put(coordinates, thisSquare);   // put thisSquare on the placement corresponding to coordinates (this placement)
@@ -624,11 +623,16 @@ public class Board {
         int COL = col;
         Boolean tilePlaced = false;
         int tilePlacedCount = 0;
+
         Boolean adjacentConditionMet = adjacentConditionMet(row, col, tiles, direction);
-        if (isFirstPlay)
-        {
-            adjacentConditionMet = true;
-            this.isFirstPlay = false;
+        Boolean tilesCoverCentre = tilesCoverCentre(row, col, tiles, direction);
+
+        if ((tiles.size() <= 1) && (tilesCoverCentre)) {
+            System.out.println("ERROR: Words must be at least two letters long.");
+            firstPlayValid = false;
+        }
+        else if ((tiles.size() > 1) && (tilesCoverCentre)) {
+            firstPlayValid = true;
         }
         // iterate through word tiles
         for (Tile tile: tiles) {
@@ -644,7 +648,14 @@ public class Board {
                 COL++;
             }
         }
-        if ((adjacentConditionMet) && tilePlacedCount == tiles.size()){
+
+        if (isFirstPlay && firstPlayValid) {
+            System.out.println("First word's placement is valid.");
+            getWordScore(row, col);
+            return true;
+        }
+
+        else if ((adjacentConditionMet) && tilePlacedCount == tiles.size()){
             System.out.println("Placement is valid.");
             getWordScore(row, col);
             return true;
@@ -674,16 +685,7 @@ public class Board {
         return cells[row][col];
     }
 
-    /**
-     * Returns arrayList of horizontal words that span given coordinates.
-     * @param row
-     * @param col
-     * @return
-     */
-    private ArrayList<String> getVerticalWordsSpanning(int row, int col) {
-        ArrayList<String> words = new ArrayList<>();
-        return words;
-    }
+
 
 
     /**
@@ -1041,6 +1043,36 @@ public class Board {
         }
         System.out.println("BOARD IS EMPTY.");
         return true;
+    }
+
+    /**
+     * Returns true if placement of first word on board would be valid,
+     * given starting coordinates, tiles, and placement direction.
+     * @param row
+     * @param col
+     * @param tiles
+     * @param direction
+     * @return
+     */
+    private boolean tilesCoverCentre(int row, int col, ArrayList<Tile> tiles, Direction direction) {
+        if ((direction == Direction.VERTICAL) && (col == 8)) {
+            for (int ROW = row; ROW < row + tiles.size(); ROW++) {
+                if (ROW == 8) {
+                    System.out.println("First word correctly covers the centre.");
+                    return true;
+                }
+            }
+        }
+        if ((direction == Direction.HORIZONTAL) && (row == 8)) {
+            for (int COL = col; COL < col + tiles.size(); COL++) {
+                if (COL == 8) {
+                    System.out.println("First word correctly covers the centre.");
+                    return true;
+                }
+            }
+        }
+        System.out.println("ERROR: First word must cover the centre square of the board.");
+        return false;
     }
 
     /**
