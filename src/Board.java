@@ -78,7 +78,7 @@ public class Board {
     /**
      * The last word played on board.
      */
-    private String currentWord;
+    //private String currentWord;
 
 
     /**
@@ -99,8 +99,8 @@ public class Board {
         this.direction = Direction.HORIZONTAL;
         this.scoredOnceList = new ArrayList<String>();
         this.newWords = new ArrayList<String>();
-        this.currentWord = "";
-        this.boardPattern = Pattern.STANDARD;
+        //this.currentWord = "";
+        this.boardPattern = Pattern.TETRIS;
         initializeBoard();                   // assign a Square and a Tile to each cell
 
     }
@@ -606,20 +606,18 @@ public class Board {
      * @return true if placement of given word would be valid if it were to be placed.
      */
     public Boolean placeWord(int row, int col, ArrayList<Tile> tiles, Direction direction) {
-        ArrayList<Tile> wordTiles = tiles;
-        Boolean adjacentConditionMet = true;
 
         int ROW = row;
         int COL = col;
         Boolean tilePlaced = false;
         int tilePlacedCount = 0;
-        adjacentConditionMet = adjacentConditionMet(row, col, tiles, direction);
+        Boolean adjacentConditionMet = adjacentConditionMet(row, col, tiles, direction);
         if (isFirstPlay)
         {
             adjacentConditionMet = true;
             this.isFirstPlay = false;
         }
-
+        // iterate through word tiles
         for (Tile tile: tiles) {
             tilePlaced = this.placeTileAt(ROW, COL, tile, direction);
             //if (tilePlaced) {tilePlacedCount++; }
@@ -632,16 +630,16 @@ public class Board {
             }
         }
         // return true if adjacent Not empty condition was met and all the tiles were placed successfully
-        if (!adjacentConditionMet) {
+/*        if (!adjacentConditionMet) {
             //System.out.println(tiles.toString() + " " + row + col);
-            /*System.out.println("ERROR: Placement is NOT valid." +
-            "\nAt least one tile must be adjacent to an existing tile."); */
+            *//*System.out.println("ERROR: Placement is NOT valid." +
+            "\nAt least one tile must be adjacent to an existing tile."); *//*
             return false;
-        }
-        else if ((adjacentConditionMet) && tilePlacedCount == tiles.size()){
+        }*/
+        if ((adjacentConditionMet) && tilePlacedCount == tiles.size()){
             System.out.println("Placement is valid.");
+            //updateStartingCoords(row, col,direction);
             getWordScore(row, col);
-
             return true;
         }
         return false;
@@ -670,6 +668,77 @@ public class Board {
     }
 
     /**
+     * Returns arrayList of horizontal words that span given coordinates.
+     * @param row
+     * @param col
+     * @return
+     */
+    private ArrayList<String> getVerticalWordsSpanning(int row, int col) {
+        ArrayList<String> words = new ArrayList<>();
+        return words;
+    }
+
+    /**
+     * Returns arrayList of vertical words that span given coordinates.
+     * @param row
+     * @param col
+     * @return
+     */
+/*    private ArrayList<String> getHorizontalWordsSpanning(int row, int col) {
+        ArrayList<String> words = getWordsOnRow(row);
+        //reset current word's starting coordinates to 0 before starting
+        currentStartRow = 0;
+        currentStartCol = 0;
+
+        int ROW = row;
+
+        for(String word: words) {
+
+        }
+
+
+            // keep checking left cell until next left is blank
+
+            for (int COL = col; COL > 1; COL--) {
+
+                // if left cell is blank or if current cell is on leftmost edge of the board, then current horizontal word starts at current cell
+                if (getLeftCellContent(ROW, COL).equals(" ")) {
+
+                    return;
+                }
+                else if (COL == 2) {
+                    currentStartRow = ROW;
+                    currentStartCol = 1;
+                    return;
+                }
+                // else, keep going left until find starting cell of word
+            }
+        }
+
+        // if direction is vertical, keep going up in the column until find first cell of the word
+        else if (direction == Direction.VERTICAL) {
+            for (ROW = row; ROW > 1; ROW--) {
+                if (getTopCellContent(ROW,COL).equals(" ")) {
+                    currentStartRow = ROW;
+                    currentStartCol = COL;
+                    return;
+                }
+                else if (ROW == 2) {
+                    currentStartRow = 1;
+                    currentStartCol = COL;
+                    return;
+                }
+            }
+
+        }
+
+        if (currentStartCol == 0 || currentStartRow == 0) {
+            System.out.println("ERROR: NO WORDS HAVE BEEN FORMED THAT CONTAIN ROW = " + row + ", COLUMN = " + col);
+        }
+        return words;
+    }*/
+
+    /**
      * Returns list of all String words on given row of board.
      *
      * @param row the integer value of the row of given cell.
@@ -691,7 +760,7 @@ public class Board {
                     //todo maybe remove?
                     if ((currentWord.length() > 1)) {
                         wordsOnRow.add(currentWord);
-                        //System.out.println("current word on row is: " + currentWord);
+                        System.out.println("current word on row is: " + currentWord);
                     }
                     currentWord = ""; // set currentWord to empty string so it can store the next word in row
                 }
@@ -701,7 +770,7 @@ public class Board {
                         currentWord += cells[row][COL + 1];
                         if (currentWord.length() > 1) {
                             wordsOnRow.add(currentWord);
-                            //System.out.println("current word on row is: " + currentWord);
+                            System.out.println("current word on row is: " + currentWord);
                             currentWord = ""; // set currentWord to empty string so it can store the next word in row
                         }
                     }
@@ -712,6 +781,111 @@ public class Board {
         System.out.println("number of words on row: " + wordsOnRow.size());
         return wordsOnRow;
     }
+
+
+    /*public ArrayList<String> getWordsOnRowSpanning(int row, int col) {
+        ArrayList<String> wordsOnRow = new ArrayList<>();
+        String currentWord = "";
+        String currentLetter;
+
+        int startingRow = 0;
+        int startingCol = 0;
+        boolean spansCoordinate = false;
+        boolean lengthIsValid = false;
+
+        //int ROW = row;
+        //iterate through columns of ROW == row
+        for (int COL = 1; COL < cells.length - 1; COL++) {
+            if (!cellIsBlank(row, COL)) {   // if
+                //setCurrentStartCol(COL); setCurrentStartRow(row);  // update starting coordinates of current word
+                if (COL == col) {spansCoordinate = true;}
+                currentLetter = cells[row][COL];
+                currentWord += currentLetter;
+                //update starting coordinates
+                startingRow = row;
+                startingCol = COL;
+                // if next cell in row is blank, store currentWord in horizontalWords list and move on to next word
+                //if (cellIsBlank(row, COL + 1)) {
+                if (getRightCellContent(row, COL).equals(" ")) {
+                    //todo maybe remove?
+                    if ((spansCoordinate) && (currentWord.length() > 1)) {
+                        wordsOnRow.add(currentWord);
+                        System.out.println("current word on row is: " + currentWord);
+                    }
+                    currentWord = ""; // set currentWord to empty string so it can store the next word in row
+                }
+                // else if cell on right is not empty
+                else if ((COL == cells.length - 1)) {
+                    if (COL == col) {spansCoordinate = true;}
+                    //currentWord += cells[row][COL + 1];
+                    currentWord += getRightCellContent(row,COL);
+                    if (spansCoordinate && (currentWord.length() > 1)) {
+                        wordsOnRow.add(currentWord);
+                        System.out.println("current word on row is: " + currentWord);
+                        currentWord = ""; //reset current word
+                    }
+
+
+                }
+            }
+        }
+        System.out.println("number of words on row: " + wordsOnRow.size());
+        return wordsOnRow;
+    }*/
+
+    /**
+     * Returns list of all String words on given column of board.
+     *
+     * @param col the integer value of the column of given cell.
+     * @return list of all words on given column of board.
+     */
+/*    public ArrayList<String> getWordsOnColSpanning(int row, int col) {
+        ArrayList<String> wordsOnCol = new ArrayList<>();
+        String currentWord = "";
+        String currentLetter;
+
+        int startingRow = 0;
+        int startingCol = 0;
+        boolean spansCoordinate = false;
+        boolean lengthIsValid = false;
+
+        //int ROW = row;
+        //iterate through columns of COL == col
+        for (int ROW = 1; ROW < cells.length - 1; ROW++) {
+            if (!cellIsBlank(ROW, col)) {   // if
+                if (ROW == row) {spansCoordinate = true;}
+                currentLetter = cells[ROW][col];
+                currentWord += currentLetter;
+                //update starting coordinates
+                startingRow = ROW;
+                startingCol = col;
+                // if next cell in col is blank, store currentWord in verticalWords list and move on to next word
+
+                if (getRightCellContent(ROW, col).equals(" ")) {
+                    //todo maybe remove?
+                    if ((spansCoordinate) && (currentWord.length() > 1)) {
+                        wordsOnCol.add(currentWord);
+                        System.out.println("current word on col is: " + currentWord);
+                    }
+                    currentWord = ""; // set currentWord to empty string so it can store the next word in row
+                }
+                // else if cell on top is not empty
+                else if ((ROW == cells.length - 1)) {
+                    if (ROW == row) {spansCoordinate = true;}
+                    currentWord += getTopCellContent(ROW,col);
+                    if (spansCoordinate && (currentWord.length() > 1)) {
+                        wordsOnCol.add(currentWord);
+                        System.out.println("current word on col is: " + currentWord);
+                        currentWord = ""; //reset current word
+                    }
+
+
+                }
+            }
+        }
+        System.out.println("number of words on col: " + wordsOnCol.size());
+        return wordsOnCol;
+    }*/
 
     /**
      * Returns list of all String words on given column of board.
@@ -763,8 +937,10 @@ public class Board {
      * @return sum score of values of tiles.
      */
     public int getWordScore(int row, int col) {
-        String wordToScore = getLongestAdjacentWord(row,col);
-        Direction DIR = getUpdatedDirection();
+
+        //updateStartingCoords(row,col,this.direction);
+        String wordToScore = getLongestWordFormed(row, col);
+        //Direction DIR = this.direction;
 
         int wordScore = calculateWordScore(wordToScore);
         int premiumScore = calculatePremiumScore(wordToScore);
@@ -772,7 +948,73 @@ public class Board {
         System.out.println("PREMIUM SCORE for " + wordToScore + ": " + premiumScore);
 
         return premiumScore;
+
     }
+
+    /**
+     * Given a single square coordinate, finds all words containing that cell and returns the longest word formed, for scoring.
+     * @return
+     */
+/*    private String getLongestWordFormed(int row, int col) {
+        ArrayList<String> wordsOnRow = getWordsOnRow(row); // get all horizontal words attached to this cell
+        ArrayList<String> wordsOnCol = getWordsOnCol(col); // get all vertical words attached to this cell
+        this.newWords.addAll(wordsOnRow);
+        this.newWords.addAll(wordsOnCol);
+
+
+        String wordFormed_Horizontal = "";
+        String wordFormed_Vertical = "";
+        String longerWord = "";
+
+        if (currentStartRow == 0 || currentStartCol == 0) {
+            System.out.println("ERROR: INVALID COORDINATES. THERE ARE NO WORDS STARTING AT (0,0)");
+            //return longerWord;
+        }
+
+        if (cellIsBlank(currentStartRow, currentStartCol)) {
+            System.out.println("ERROR: INVALID COORDINATES. THERE IS NO LETTER AT (" + currentStartRow + "," + currentStartCol + ")");
+            //return longerWord;
+        }
+
+        // for horizontal direction, keep checking right cell until next on right is blank or right edge of board is reached
+        for (int COL = currentStartCol; COL < cells.length - 1; COL++) {
+            int ROW = currentStartRow;
+            wordFormed_Horizontal += getLetterAt(ROW, COL);
+            if (getRightCellContent(ROW, COL).equals(" ")) {
+                break;
+
+            }
+            //handling horizontal word that has a letter on rightmost edge of board
+            else if (COL == cells.length - 1) {
+                wordFormed_Horizontal += getRightCellContent(ROW, COL);
+                break;
+            }
+        }
+
+        // for vertical direction, keep checking bottom cell until next on bottom is blank or bottom edge of board is reached
+        for (int ROW = currentStartRow; ROW < cells.length - 1; ROW++) {
+            int COL = currentStartCol;
+            wordFormed_Vertical += getLetterAt(ROW, COL);
+            if (getBottomCellContent(ROW, COL).equals(" ")) {
+                break;
+            } else if (ROW == cells.length - 1) {
+                wordFormed_Vertical += getBottomCellContent(ROW, COL);
+                break;
+            }
+        }
+        // compare horizontal and vertical words for length
+        // if there's a tie, pick horizontal by convention
+        if (wordFormed_Horizontal.length() >= wordFormed_Vertical.length()) {
+            longerWord = wordFormed_Horizontal;
+            this.direction = Direction.HORIZONTAL;
+            //updateStartingCoords(row, col, longestWord, Direction.HORIZONTAL); // update starting coordinates of current word
+        } else {
+            longerWord = wordFormed_Vertical;
+            this.direction = Direction.VERTICAL;
+        }
+        updateStartingCoords(row,col, longerWord, this.direction);
+        return longerWord;
+    }*/
 
 
     /**
@@ -782,18 +1024,19 @@ public class Board {
      * @param col the integer value of the column of given cell.
      * @return
      */
-    private String getLongestAdjacentWord(int row, int col) {
+    private String getLongestWordFormed(int row, int col) {
         ArrayList<String> wordsOnRow = getWordsOnRow(row); // get all horizontal words attached to this cell
         ArrayList<String> wordsOnCol = getWordsOnCol(col); // get all vertical words attached to this cell
+
+/*        ArrayList<String> wordsOnRow = getWordsOnRowSpanning(row, col);
+        ArrayList<String> wordsOnCol = getWordsOnColSpanning(row, col);*/
+
         this.newWords.addAll(wordsOnRow);
         this.newWords.addAll(wordsOnCol);
 
         String longestHorizontal = "";
         String longestVertical = "";
         String longestWord = "";
-
-        //maps word to word length
-        HashMap<String, Integer> horizontalWordSizes = new HashMap<>();
 
         // find the longest horizontal word formed
         if (!wordsOnRow.isEmpty()) {
@@ -805,7 +1048,7 @@ public class Board {
             }
         }
 
-        // find the longest vertical word formed
+        // find the longest vertical word formed that covers (row,col)
         if (!wordsOnCol.isEmpty()) {
             for (int i = 0; i < wordsOnCol.size(); i++) {
                 String currWord_V = wordsOnCol.get(i);
@@ -816,23 +1059,87 @@ public class Board {
         }
         //choose longer word between vertical longest and horizontal longest
         // if there's a tie, pick horizontal by convention
+        // update starting coordinates of current word
         if (longestHorizontal.length() >= longestVertical.length()) {
             longestWord = longestHorizontal;
-            updateDirection(Direction.HORIZONTAL);
-            updateStartingCoords(row, col, longestWord, Direction.HORIZONTAL); // update starting coordinates of current word
+            this.direction = Direction.HORIZONTAL;
+            //updateStartingCoords(row, col, longestWord, Direction.HORIZONTAL); // update starting coordinates of current word
 
         } else {
             longestWord = longestVertical;
-            updateDirection(Direction.VERTICAL);
-            updateStartingCoords(row, col, longestWord, Direction.VERTICAL); // update starting coordinates of current word
+            this.direction = Direction.VERTICAL;
+            //updateStartingCoords(row, col, longestWord, Direction.VERTICAL); // update starting coordinates of current word
         }
+        updateStartingCoords(row, col, longestWord); // update starting coordinates of current word
         System.out.println("LONGEST WORD FORMED BY TILE: " + longestWord
                 + "\nstarting at: row " + this.currentStartRow
                 + " col " + this.currentStartCol);
         return longestWord;
     }
 
-    // finds the starting coordinates of current active word and sets them.
+
+
+
+    /**
+     *
+     * @param row
+     * @param col
+
+     */
+    private void updateStartingCoords(int row, int col, String word) {
+
+        //reset current word's starting coordinates to 0 before starting
+        currentStartRow = 0;
+        currentStartCol = 0;
+        int COL = col;
+        int ROW = row;
+
+        if (word.length() <= 1) {
+            System.out.println("ERROR: the word played is only one letter long.");
+            return;
+        }
+
+        // if direction is horizontal keep checking left cell until next left is blank
+        if (direction == Direction.HORIZONTAL) {
+            for (COL = col; COL > 1; COL--) {
+
+                // if left cell is blank or if current cell is on leftmost edge of the board, then current horizontal word starts at current cell
+                if (getLeftCellContent(ROW, COL).equals(" ")) {
+                    currentStartRow = ROW;
+                    currentStartCol = COL;
+                    return;
+                }
+                else if (COL == 2) {
+                    currentStartRow = ROW;
+                    currentStartCol = 1;
+                    return;
+                }
+                // else, keep going left until find starting cell of word
+            }
+        }
+
+        // if direction is vertical, keep going up in the column until find first cell of the word
+        else if (direction == Direction.VERTICAL) {
+            for (ROW = row; ROW > 1; ROW--) {
+                if (getTopCellContent(ROW,COL).equals(" ")) {
+                    currentStartRow = ROW;
+                    currentStartCol = COL;
+                    return;
+                }
+                else if (ROW == 2) {
+                    currentStartRow = 1;
+                    currentStartCol = COL;
+                    return;
+                }
+            }
+
+        }
+
+        if (currentStartCol == 0 || currentStartRow == 0) {
+            System.out.println("ERROR: NO WORDS HAVE BEEN FORMED THAT CONTAIN ROW = " + row + ", COLUMN = " + col);
+        }
+        return;
+    }
 
     /**
      * Finds the coordinates of the first letter of the given word and updates
@@ -842,7 +1149,7 @@ public class Board {
      * @param word the word to find the starting cell of.
      * @param direction direction of word's placement.
      */
-    private void updateStartingCoords(int row, int col, String word, Direction direction) {
+/*    private void updateStartingCoords(int row, int col, String word, Direction direction) {
 
         //reset current word's starting coordinates to 0 before starting
         currentStartRow = 0;
@@ -861,12 +1168,12 @@ public class Board {
                 String letter = ((Character) word.charAt(0)).toString();
                 // if first letter matches iterate through rest of words to see if the whole word matches
 
-/*                //if the left cell of this cells is empty, then this cell has the first letter of the word
+*//*                //if the left cell of this cells is empty, then this cell has the first letter of the word
                 if(getLeftCellContent(row,COL).equals(" ")) {
                     currentStartCol = COL;
                     currentStartRow = row;
                     break;
-                }*/
+                }*//*
 
                 if (cells[row][COL].equals(letter)) {
                     currentStartCol = COL;
@@ -901,8 +1208,8 @@ public class Board {
                 if (cells[ROW][col].equals(letter)) {
                     currentStartCol = col;
                     currentStartRow = ROW;
-/*                    setCurrentStartCol(col);
-                    setCurrentStartRow(ROW);*/
+*//*                    setCurrentStartCol(col);
+                    setCurrentStartRow(ROW);*//*
 
                     int ROW_current = ROW + 1;
                     if(ROW_current == 16) {continue; }
@@ -925,28 +1232,10 @@ public class Board {
 
         }
 
-    }
+    }*/
 
-    /**
-     * Updates direction of last word played.
-     * @return
-     */
-    private void updateDirection(Direction updatedDirection) {
-        this.direction = updatedDirection;
-    }
 
-    /**
-     * Returns direction of last word played.
-     * @return the direction of current word's placement.
-     */
-    private Direction getUpdatedDirection() {
-        return this.direction;
-    }
 
-    /**
-     * Updates the current word.
-     */
-    public void updateCurrentWord(String word){this.currentWord = word;}
 
     /**
      * Calculates score of the given word.
@@ -996,11 +1285,18 @@ public class Board {
         //iterate through squares of the word and check for multiplier type
         if (direction == Direction.HORIZONTAL) {
             for (int col = startingCol; col < cells.length ; col++) {
+                if (multipliers.size() >= wordLength) {break;}
                 if (scoredOnceList.contains(getStringCoords(startingRow,col))) {scoredBefore = true;}
-                Square.Multiplier multiplier = squares.get(getStringCoords(startingRow,col)).getMultiplier();
+                //Square.Multiplier multiplier = squares.get(getStringCoords(startingRow,col)).getMultiplier();
+                Square.Multiplier multiplier = getMultiplierFromXML(squares.get(getStringCoords(startingRow,col)));
                 if (!scoredBefore) {
                     multipliers.add(multiplier);
                 }
+
+
+                //multipliers.add(multiplier);
+
+
                 int letterScore = b.getLetterValue(cells[startingRow][col]);
                 // only apply multipliers if the letter hasn't been scored previously
                 if (!scoredBefore) {
@@ -1008,8 +1304,12 @@ public class Board {
                         letterScore = letterScore * multiplier.getValue();
                     }
                 }
+                if (multiplier == Square.Multiplier.DL || multiplier == Square.Multiplier.TL || multiplier == Square.Multiplier.NONE) {
+                    letterScore = letterScore * multiplier.getValue();
+                }
                 wordScore += letterScore;
-                System.out.println("square's multiplier: " + squares.get(getStringCoords(startingRow,col)).getMultiplier());
+                //System.out.println("square's multiplier: " + squares.get(getStringCoords(startingRow,col)).getMultiplier());
+                System.out.println("square (" + startingRow +"," + col  +") multiplier: "+ getMultiplierFromXML(squares.get(getStringCoords(startingRow,col))));
             }
             if (multipliers.contains(Square.Multiplier.DW)) { premiumScore = wordScore * 2;}
             else if (multipliers.contains(Square.Multiplier.TW)) {premiumScore = wordScore * 3;}
@@ -1019,11 +1319,19 @@ public class Board {
         //iterate through squares of the word and check for multiplier type
         if (direction == Direction.VERTICAL) {
             for (int row = startingRow; row < cells.length; row++) {
+                if (multipliers.size() >= wordLength) {break;}
                 if (scoredOnceList.contains(getStringCoords(row,startingCol))) {scoredBefore = true;}
-                Square.Multiplier multiplier = squares.get(getStringCoords(row,startingCol)).getMultiplier();
+                //Square.Multiplier multiplier = squares.get(getStringCoords(row,startingCol)).getMultiplier();
+                Square.Multiplier multiplier = getMultiplierFromXML(squares.get(getStringCoords(row,startingCol)));
                 if (!scoredBefore) {
                     multipliers.add(multiplier);
                 }
+
+
+                //multipliers.add(multiplier);
+
+
+
                 int letterScore = b.getLetterValue(cells[row][startingCol]);
 
                 if (!scoredBefore) {
@@ -1031,13 +1339,18 @@ public class Board {
                         letterScore = letterScore * multiplier.getValue();
                     }
                 }
+                if ((multiplier == Square.Multiplier.DL) || (multiplier == Square.Multiplier.TL) || (multiplier == Square.Multiplier.NONE)) {
+                    letterScore = letterScore * multiplier.getValue();
+                }
                 wordScore += letterScore;
-                System.out.println("square's multiplier: " + squares.get(getStringCoords(row,startingCol)).getMultiplier());
+                //System.out.println("square's multiplier: " + squares.get(getStringCoords(row,startingCol)).getMultiplier());
+                System.out.println("square (" + row +"," + startingCol  +") multiplier: " + getMultiplierFromXML(squares.get(getStringCoords(row,startingCol))));
             }
             if (multipliers.contains(Square.Multiplier.DW)) { premiumScore = wordScore * 2;}
             else if (multipliers.contains(Square.Multiplier.TW)) {premiumScore = wordScore * 3;}
             else {premiumScore = wordScore;}
         }
+
         return premiumScore;
     }
 
