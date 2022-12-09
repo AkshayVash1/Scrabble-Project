@@ -374,7 +374,7 @@ public class Game implements Serializable{
                 break;
 
             case "play":
-                inHand = new InHand(command.getWordAttempt(), currentPlayer.getHand());
+                inHand = new InHand(wordTypeToPassIn(command.getWordAttempt()), currentPlayer.getHand());
                 if (inHand.wordInHand()) {
                     removeTilesFromHand = inHand.wordToList();
                     addTilesToHand = this.bag.removeTiles(removeTilesFromHand.size());
@@ -629,6 +629,18 @@ public class Game implements Serializable{
         catch (IOException e)
         {
             System.out.print("e2");
+        }
+    }
+
+    private String wordTypeToPassIn(String wordAttempt)
+    {
+        if (this.currentPlayer.isAI())
+        {
+            return wordAttempt;
+        }
+        else
+        {
+            return convertCharArrayListToString(this.removeTilesFromHand);
         }
     }
 }

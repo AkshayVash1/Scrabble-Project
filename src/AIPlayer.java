@@ -56,13 +56,14 @@ public class AIPlayer extends Player implements Serializable {
         this.board.setFirstPlay(board.isFirstPlay());
 
         System.out.println(this.getHand().getHand().toString());
+        /*
         if (isBoardEmpty())
         {
             this.playableCoordinates.put("8H", true);
         }
-        else {
-            this.playableCoordinates = this.board.getAIPlayableCoordinates();
-        }
+        else { */
+
+        this.playableCoordinates = this.board.getAIPlayableCoordinates();
         System.out.println(this.playableCoordinates.toString());
         ArrayList<Tile> hand = this.getHand().getHand();
 
