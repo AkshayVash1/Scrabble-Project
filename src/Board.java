@@ -297,6 +297,10 @@ public class Board implements Serializable {
         return false;
     }
 
+    public Pattern getBoardPattern() {
+        return boardPattern;
+    }
+
     /**
      * Returns coordinates on board, where AI player can place tiles.
      * @return
