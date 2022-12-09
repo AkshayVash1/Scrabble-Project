@@ -37,6 +37,7 @@ public class InHand implements Serializable {
     {
         ArrayList<Tile> mockHand = (ArrayList<Tile>) (this.hand.getHand().clone());
 
+        System.out.println();
         int initialSize = mockHand.size();
 
         for (Character c : this.wordAttempt.toCharArray())

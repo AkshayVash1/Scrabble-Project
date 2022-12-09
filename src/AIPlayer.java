@@ -56,6 +56,13 @@ public class AIPlayer extends Player implements Serializable {
         this.board.setFirstPlay(board.isFirstPlay());
 
         System.out.println(this.getHand().getHand().toString());
+        /*
+        if (isBoardEmpty())
+        {
+            this.playableCoordinates.put("8H", true);
+        }
+        else { */
+
         this.playableCoordinates = this.board.getAIPlayableCoordinates();
         System.out.println(this.playableCoordinates.toString());
         ArrayList<Tile> hand = this.getHand().getHand();
@@ -154,9 +161,16 @@ public class AIPlayer extends Player implements Serializable {
             }
         }
 
-        for (Character c : bestWord.toCharArray()){this.game.addToRemoveTilesFromHand(c);}
+        for (Character c : bestWord.toCharArray()){this.game.addToRemoveTilesFromHand(c, false);}
 
-        this.game.processCommand(new Command("play", bestWord, this.possiblePlays.get(bestWord)));
+        if (bestWord != null) {
+            this.game.processCommand(new Command("play", bestWord, this.possiblePlays.get(bestWord)));
+        }
+        else
+        {
+            this.game.processCommand(new Command("pass", null, null));
+        }
+
         this.possiblePlays.clear();
     }
 
@@ -213,5 +227,13 @@ public class AIPlayer extends Player implements Serializable {
         }
 
         return returnArray;
+    }
+
+    /**
+     * Temporary Method
+     * */
+    private boolean isBoardEmpty()
+    {
+        return true;
     }
 }

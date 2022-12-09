@@ -41,10 +41,18 @@ public class Board implements Serializable {
      */
     private boolean isFirstPlay;
 
+
+    /**
+     * True if the current move is the first play of the game.
+     */
+    private boolean firstPlayValid;
+
     /**
      * The direction of the last word played.
      */
     private Direction direction;
+
+    private String playedWord = "";
 
     /**
      * current active word's starting coordinates.
@@ -59,7 +67,7 @@ public class Board implements Serializable {
     /**
      * Type of premium square pattern for custom boards.
      */
-    public enum Pattern{STANDARD, DIAMOND, SPIRAL, PATTERNLESS}
+    public enum Pattern{STANDARD, DIAMOND, TETRIS}
 
     /**
      * List of cell coordinates that have already been scored once.
@@ -71,15 +79,11 @@ public class Board implements Serializable {
      */
     ArrayList<String> newWords;
 
-    /**
-     * Most recently played word
-     */
-    private String playedWord = "";
 
     /**
-     * The last word played on board.
+     * The custom pattern of the board, chosen by the user in beggining of game.
      */
-    private String currentWord;
+    private Pattern boardPattern;
 
 
     /**
@@ -91,10 +95,11 @@ public class Board implements Serializable {
         this.tiles = new HashMap<>();
         this.squares = new HashMap<>();
         this.isFirstPlay = true;
+        this.firstPlayValid = false;
         this.direction = Direction.HORIZONTAL;
         this.scoredOnceList = new ArrayList<String>();
         this.newWords = new ArrayList<String>();
-        this.currentWord = "";
+        this.boardPattern = Pattern.STANDARD;
         initializeBoard();                   // assign a Square and a Tile to each cell
 
     }
@@ -190,13 +195,34 @@ public class Board implements Serializable {
                 // Each placement has a corresponding Tile and a Square
 
                 thisSquare = new Square(row,col);
-                //thisSquare.setMultiplier(getMultiplierFromXML(thisSquare));
                 String coordinates = thisSquare.getStringCoordinates();
                 tiles.put(coordinates, emptyTile);   // put an empty tile on thisSquare
                 squares.put(coordinates, thisSquare);   // put thisSquare on the placement corresponding to coordinates (this placement)
                 cells[row][col] = (tiles.get(coordinates).getLetter());     // store the letter of the tile in this placement
             }
         }
+    }
+
+    /**
+     * Updates the board's custom pattern based on user's choice in the beggining of the game.
+     * @param boardPattern
+     */
+    public void updateBoardPattern(Pattern boardPattern) {
+        this.boardPattern = boardPattern;
+    }
+
+    /**
+     * Creates and returns board pattern's sml file based on user's selection.
+     * @return xml file for board pattern.
+     */
+    private File createCustomPatternFile() {
+        if (this.boardPattern.equals(Pattern.DIAMOND)) {
+            return new File("src/board_custom_diamond.xml");
+        }
+        if (this.boardPattern.equals(Pattern.TETRIS)) {
+            return new File("src/board_custom_tetris.xml");
+        }
+        return new File("src/board_standard.xml"); // board pattern is standard by default
     }
 
     /**
@@ -208,14 +234,12 @@ public class Board implements Serializable {
         Square.Multiplier multi = Square.Multiplier.NONE;
         try
         {
-            File file = new File("src/board_standard.xml");
+            File file = createCustomPatternFile();
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);
             doc.getDocumentElement().normalize();
-            //System.out.println("Root element: " + doc.getDocumentElement().getNodeName());
             NodeList nodeList = doc.getElementsByTagName("multiplier");
-            //System.out.println("number of cells: " + nodeList.getLength());
 
             String coordinates = square.getStringCoordinates();
             String coordsSearchString = "-" + coordinates + "-";
@@ -254,7 +278,6 @@ public class Board implements Serializable {
         return multi;
     }
 
-
     /**
      * Returns true if a square has the empty tile (square has not been played yet).
      * @param row the integer value of the row of given cell.
@@ -263,12 +286,19 @@ public class Board implements Serializable {
      */
     private boolean cellIsBlank(int row, int col){
         // a cell is empty if it stores a single space (" ")
+        if ((row < 1) || (col < 1) || (row > 16) || (col > 16)) {
+            return false;
+        }
         if(cells[row][col].equals(" ")) {
             return true;
         }
         return false;
     }
 
+    /**
+     * Returns coordinates on board, where AI player can place tiles.
+     * @return
+     */
     public HashMap<String, Boolean> getAIPlayableCoordinates(){
         HashMap<String, Boolean> playableCoordinates = new HashMap<>();
 
@@ -286,7 +316,6 @@ public class Board implements Serializable {
                 }
             }
         }
-
         return playableCoordinates;
     }
 
@@ -316,7 +345,8 @@ public class Board implements Serializable {
         }
         // successful placement
         if (cellIsBlank(row, col)) {
-            String coordinates = "" + row + Square.columns.get(col);
+            //String coordinates = "" + row + Square.columns.get(col);
+            String coordinates = getStringCoords(row, col);
             tiles.put(coordinates,tile);
             cells[row][col] = tile.getLetter();
             return true;
@@ -325,24 +355,36 @@ public class Board implements Serializable {
         else {
             //everytime a cell is not blank, it means it's already been scored
             this.scoredOnceList.add(getStringCoords(row,col));
+
             if (direction.equals(Direction.VERTICAL)) {
-                for(int R = row + 1; R < 16; R++) {
-                    if (cellIsBlank(R, col)) {
-                        cells[R][col] = tile.getLetter();
-                        return true;
-                    } else {
-                        //everytime a cell is not blank, it means it's already been scored
-                        this.scoredOnceList.add(getStringCoords(R,col));
+                if (row >= 16) {return false;}
+                if (getBottomCellContent(row,col).equals(" ")) {
+                    for(int ROW = row + 1; ROW < 16; ROW++) {
+                        if (cellIsBlank(ROW, col)) {
+                            tiles.put(getStringCoords(ROW,col),tile);
+                            cells[ROW][col] = tile.getLetter();
+                            return true;
+                        } else {
+                            //everytime a cell is not blank, it means it's already been scored
+                            this.scoredOnceList.add(getStringCoords(ROW,col));
+                        }
                     }
                 }
-            } else if (direction.equals(Direction.HORIZONTAL)) {
-                for (int C = col + 1; C < 16; C++) {
-                    if (cellIsBlank(row, C)) {
-                        cells[row][C] = tile.getLetter();
-                        return true;
-                    } else {
-                        //everytime a cell is not blank, it means it's already been scored
-                        this.scoredOnceList.add(getStringCoords(row,C));
+
+            }
+            else if (direction.equals(Direction.HORIZONTAL)) {
+                if (col >= 16) {return false;}
+                if (getRightCellContent(row,col).equals(" ")) {
+                    for (int COL = col + 1; COL < 16; COL++) {
+
+                        if (cellIsBlank(row, COL)) {
+                            tiles.put(getStringCoords(row,COL),tile);
+                            cells[row][COL] = tile.getLetter();
+                            return true;
+                        } else {
+                            //everytime a cell is not blank, it means it's already been scored
+                            this.scoredOnceList.add(getStringCoords(row,COL));
+                        }
                     }
                 }
             }
@@ -577,38 +619,43 @@ public class Board implements Serializable {
      * @return true if placement of given word would be valid if it were to be placed.
      */
     public Boolean placeWord(int row, int col, ArrayList<Tile> tiles, Direction direction) {
-        ArrayList<Tile> wordTiles = tiles;
-        Boolean adjacentConditionMet = true;
 
         int ROW = row;
         int COL = col;
         Boolean tilePlaced = false;
         int tilePlacedCount = 0;
-        adjacentConditionMet = adjacentConditionMet(row, col, tiles, direction);
-        if (isFirstPlay)
-        {
-            adjacentConditionMet = true;
-            this.isFirstPlay = false;
-        }
 
+        Boolean adjacentConditionMet = adjacentConditionMet(row, col, tiles, direction);
+        Boolean tilesCoverCentre = tilesCoverCentre(row, col, tiles, direction);
+
+        if ((tiles.size() <= 1) && (tilesCoverCentre)) {
+            System.out.println("ERROR: Words must be at least two letters long.");
+            firstPlayValid = false;
+        }
+        else if ((tiles.size() > 1) && (tilesCoverCentre)) {
+            firstPlayValid = true;
+        }
+        // iterate through word tiles
         for (Tile tile: tiles) {
             tilePlaced = this.placeTileAt(ROW, COL, tile, direction);
             //if (tilePlaced) {tilePlacedCount++; }
-            if (!tilePlaced) {break;}
+            if (!tilePlaced) {
+                break;
+            }
             tilePlacedCount++;
             if (direction == Direction.VERTICAL) {  // placement direction is vertical
                 ROW++;
-            } else if (direction.equals(Direction.HORIZONTAL)){    // placement direction is horizontal
+            } else if (direction.equals(Direction.HORIZONTAL)) {    // placement direction is horizontal
                 COL++;
             }
         }
-        // return true if adjacent Not empty condition was met and all the tiles were placed successfully
-        if (!adjacentConditionMet) {
-            //System.out.println(tiles.toString() + " " + row + col);
-            /*System.out.println("ERROR: Placement is NOT valid." +
-            "\nAt least one tile must be adjacent to an existing tile."); */
-            return false;
+
+        if (isFirstPlay && firstPlayValid) {
+            System.out.println("First word's placement is valid.");
+            getWordScore(row, col);
+            return true;
         }
+
         else if ((adjacentConditionMet) && tilePlacedCount == tiles.size()){
             System.out.println("Placement is valid.");
             getWordScore(row, col);
@@ -639,6 +686,9 @@ public class Board implements Serializable {
         return cells[row][col];
     }
 
+
+
+
     /**
      * Returns list of all String words on given row of board.
      *
@@ -653,7 +703,6 @@ public class Board implements Serializable {
         //iterate through columns of ROW == row
         for (int COL = 1; COL < cells.length - 1; COL++) {
             if (!cellIsBlank(row, COL)) {   // if
-                //setCurrentStartCol(COL); setCurrentStartRow(row);  // update starting coordinates of current word
                 currentLetter = cells[row][COL];
                 currentWord += currentLetter;
                 // if next cell in row is blank, store currentWord in horizontalWords list and move on to next word
@@ -661,7 +710,7 @@ public class Board implements Serializable {
                     //todo maybe remove?
                     if ((currentWord.length() > 1)) {
                         wordsOnRow.add(currentWord);
-                        //System.out.println("current word on row is: " + currentWord);
+                        System.out.println("current word on row is: " + currentWord);
                     }
                     currentWord = ""; // set currentWord to empty string so it can store the next word in row
                 }
@@ -671,7 +720,7 @@ public class Board implements Serializable {
                         currentWord += cells[row][COL + 1];
                         if (currentWord.length() > 1) {
                             wordsOnRow.add(currentWord);
-                            //System.out.println("current word on row is: " + currentWord);
+                            System.out.println("current word on row is: " + currentWord);
                             currentWord = ""; // set currentWord to empty string so it can store the next word in row
                         }
                     }
@@ -682,6 +731,7 @@ public class Board implements Serializable {
         System.out.println("number of words on row: " + wordsOnRow.size());
         return wordsOnRow;
     }
+
 
     /**
      * Returns list of all String words on given column of board.
@@ -733,14 +783,11 @@ public class Board implements Serializable {
      * @return sum score of values of tiles.
      */
     public int getWordScore(int row, int col) {
-        String wordToScore = getLongestAdjacentWord(row,col);
-        Direction DIR = getUpdatedDirection();
-
+        String wordToScore = getLongestWordFormed(row, col);
         int wordScore = calculateWordScore(wordToScore);
         int premiumScore = calculatePremiumScore(wordToScore);
         System.out.println("WORD SCORE for " + wordToScore + ": " + wordScore);
         System.out.println("PREMIUM SCORE for " + wordToScore + ": " + premiumScore);
-
         return premiumScore;
     }
 
@@ -752,18 +799,16 @@ public class Board implements Serializable {
      * @param col the integer value of the column of given cell.
      * @return
      */
-    private String getLongestAdjacentWord(int row, int col) {
+    private String getLongestWordFormed(int row, int col) {
         ArrayList<String> wordsOnRow = getWordsOnRow(row); // get all horizontal words attached to this cell
         ArrayList<String> wordsOnCol = getWordsOnCol(col); // get all vertical words attached to this cell
+
         this.newWords.addAll(wordsOnRow);
         this.newWords.addAll(wordsOnCol);
 
         String longestHorizontal = "";
         String longestVertical = "";
         String longestWord = "";
-
-        //maps word to word length
-        HashMap<String, Integer> horizontalWordSizes = new HashMap<>();
 
         // find the longest horizontal word formed
         if (!wordsOnRow.isEmpty()) {
@@ -775,7 +820,7 @@ public class Board implements Serializable {
             }
         }
 
-        // find the longest vertical word formed
+        // find the longest vertical word formed that covers (row,col)
         if (!wordsOnCol.isEmpty()) {
             for (int i = 0; i < wordsOnCol.size(); i++) {
                 String currWord_V = wordsOnCol.get(i);
@@ -786,137 +831,83 @@ public class Board implements Serializable {
         }
         //choose longer word between vertical longest and horizontal longest
         // if there's a tie, pick horizontal by convention
+        // update starting coordinates of current word
         if (longestHorizontal.length() >= longestVertical.length()) {
             longestWord = longestHorizontal;
-            updateDirection(Direction.HORIZONTAL);
-            updateStartingCoords(row, col, longestWord, Direction.HORIZONTAL); // update starting coordinates of current word
+            this.direction = Direction.HORIZONTAL;
+            //updateStartingCoords(row, col, longestWord, Direction.HORIZONTAL); // update starting coordinates of current word
 
         } else {
             longestWord = longestVertical;
-            updateDirection(Direction.VERTICAL);
-            updateStartingCoords(row, col, longestWord, Direction.VERTICAL); // update starting coordinates of current word
+            this.direction = Direction.VERTICAL;
+            //updateStartingCoords(row, col, longestWord, Direction.VERTICAL); // update starting coordinates of current word
         }
+        updateStartingCoords(row, col, longestWord); // update starting coordinates of current word
         System.out.println("LONGEST WORD FORMED BY TILE: " + longestWord
                 + "\nstarting at: row " + this.currentStartRow
                 + " col " + this.currentStartCol);
         return longestWord;
     }
 
-    // finds the starting coordinates of current active word and sets them.
 
     /**
-     * Finds the coordinates of the first letter of the given word and updates
-     * currentStartRow and currentStartCol.
-     * @param row the integer value of the row of given cell.
-     * @param col the integer value of the column of given cell.
-     * @param word the word to find the starting cell of.
-     * @param direction direction of word's placement.
+     * Updates current word's starting coordinates.
+     * @param row the integer value of the row of given word.
+     * @param col the integer value of the column of given word.
      */
-    private void updateStartingCoords(int row, int col, String word, Direction direction) {
-
+    private void updateStartingCoords(int row, int col, String word) {
         //reset current word's starting coordinates to 0 before starting
         currentStartRow = 0;
         currentStartCol = 0;
+        int COL = col;
+        int ROW = row;
 
         if (word.length() <= 1) {
-            System.out.println("ERROR: the word played is only one letter long. Enter a longer word.");
+            System.out.println("ERROR: the word played is only one letter long.");
             return;
         }
-
+        // if direction is horizontal keep checking left cell until next left is blank
         if (direction == Direction.HORIZONTAL) {
-            // iterate through columns of row until find matching word
-            for (int COL = col; COL < 15; COL++) {
-            //for (int COL = 0; COL < 15; COL++) {
+            for (COL = col; COL > 1; COL--) {
 
-                String letter = ((Character) word.charAt(0)).toString();
-                // if first letter matches iterate through rest of words to see if the whole word matches
-
-/*                //if the left cell of this cells is empty, then this cell has the first letter of the word
-                if(getLeftCellContent(row,COL).equals(" ")) {
-                    currentStartCol = COL;
-                    currentStartRow = row;
-                    break;
-                }*/
-
-                if (cells[row][COL].equals(letter)) {
-                    currentStartCol = COL;
-                    currentStartRow = row;
-
-                    int COLUMN_current = COL + 1;
-                    if(COLUMN_current == cells.length) {continue; }
-
-                    for (int i = 1; i < word.length(); i++) {
-                        if (word.length() + COLUMN_current > 15) {break;}
-                        letter = ((Character) word.charAt(i)).toString();
-                        if (!cells[row][COLUMN_current].equals(letter)) {
-                            COLUMN_current++;
-                            if (COLUMN_current == word.length()-1) {
-                                // the whole word has matched
-                                return;
-                            }
-                        } else {break;}
-                    }
-                }
-
-            }
-
-        }
-
-        if (direction == Direction.VERTICAL) {
-            // iterate through columns of row until find matching word
-            for (int ROW = row; ROW < 15; ROW++) {
-
-                String letter = ((Character) word.charAt(0)).toString();
-                // if first letter matches iterate through rest of words to see if the whole word matches
-                if (cells[ROW][col].equals(letter)) {
-                    currentStartCol = col;
+                // if left cell is blank or if current cell is on leftmost edge of the board, then current horizontal word starts at current cell
+                if (getLeftCellContent(ROW, COL).equals(" ")) {
                     currentStartRow = ROW;
-/*                    setCurrentStartCol(col);
-                    setCurrentStartRow(ROW);*/
-
-                    int ROW_current = ROW + 1;
-                    if(ROW_current == 16) {continue; }
-
-                    for (int i = 1; i < word.length(); i++) {
-                        if (word.length() + ROW_current > 15) {break;}
-
-                        letter = ((Character) word.charAt(i)).toString();
-                        if (!cells[ROW_current][col].equals(letter)) {
-                            ROW_current++;
-                            if (ROW_current == word.length() -1) {
-                                // the whole word has matched
-                                return;
-                            }
-                        } else {break;}
-                    }
+                    currentStartCol = COL;
+                    return;
                 }
+                else if (COL == 2) {
+                    currentStartRow = ROW;
+                    currentStartCol = 1;
+                    return;
+                }
+                // else, keep going left until find starting cell of word
+            }
+        }
 
+        // if direction is vertical, keep going up in the column until find first cell of the word
+        else if (direction == Direction.VERTICAL) {
+            for (ROW = row; ROW > 1; ROW--) {
+                if (getTopCellContent(ROW,COL).equals(" ")) {
+                    currentStartRow = ROW;
+                    currentStartCol = COL;
+                    return;
+                }
+                else if (ROW == 2) {
+                    currentStartRow = 1;
+                    currentStartCol = COL;
+                    return;
+                }
             }
 
         }
 
+        if (currentStartCol == 0 || currentStartRow == 0) {
+            System.out.println("ERROR: NO WORDS HAVE BEEN FORMED THAT CONTAIN ROW = " + row + ", COLUMN = " + col);
+        }
+        return;
     }
 
-    /**
-     * Updates direction of last word played.
-     * @return
-     */
-    private void updateDirection(Direction updatedDirection) {
-        this.direction = updatedDirection;
-    }
-
-    /**
-     * Returns direction of last word played.
-     * @return the direction of current word's placement.
-     */
-    private Direction getUpdatedDirection() {
-        return this.direction;
-    }
-
-    /**
-     * Updates the current word.
-     */
-    public void updateCurrentWord(String word){this.currentWord = word;}
 
     /**
      * Calculates score of the given word.
@@ -966,11 +957,13 @@ public class Board implements Serializable {
         //iterate through squares of the word and check for multiplier type
         if (direction == Direction.HORIZONTAL) {
             for (int col = startingCol; col < cells.length ; col++) {
+                if (multipliers.size() >= wordLength) {break;}
                 if (scoredOnceList.contains(getStringCoords(startingRow,col))) {scoredBefore = true;}
-                Square.Multiplier multiplier = squares.get(getStringCoords(startingRow,col)).getMultiplier();
+                Square.Multiplier multiplier = getMultiplierFromXML(squares.get(getStringCoords(startingRow,col)));
                 if (!scoredBefore) {
                     multipliers.add(multiplier);
                 }
+
                 int letterScore = b.getLetterValue(cells[startingRow][col]);
                 // only apply multipliers if the letter hasn't been scored previously
                 if (!scoredBefore) {
@@ -978,8 +971,11 @@ public class Board implements Serializable {
                         letterScore = letterScore * multiplier.getValue();
                     }
                 }
+                if (multiplier == Square.Multiplier.DL || multiplier == Square.Multiplier.TL || multiplier == Square.Multiplier.NONE) {
+                    letterScore = letterScore * multiplier.getValue();
+                }
                 wordScore += letterScore;
-                System.out.println("square's multiplier: " + squares.get(getStringCoords(startingRow,col)).getMultiplier());
+                System.out.println("square (" + startingRow +"," + col  +") multiplier: "+ getMultiplierFromXML(squares.get(getStringCoords(startingRow,col))));
             }
             if (multipliers.contains(Square.Multiplier.DW)) { premiumScore = wordScore * 2;}
             else if (multipliers.contains(Square.Multiplier.TW)) {premiumScore = wordScore * 3;}
@@ -989,11 +985,13 @@ public class Board implements Serializable {
         //iterate through squares of the word and check for multiplier type
         if (direction == Direction.VERTICAL) {
             for (int row = startingRow; row < cells.length; row++) {
+                if (multipliers.size() >= wordLength) {break;}
                 if (scoredOnceList.contains(getStringCoords(row,startingCol))) {scoredBefore = true;}
-                Square.Multiplier multiplier = squares.get(getStringCoords(row,startingCol)).getMultiplier();
+                Square.Multiplier multiplier = getMultiplierFromXML(squares.get(getStringCoords(row,startingCol)));
                 if (!scoredBefore) {
                     multipliers.add(multiplier);
                 }
+
                 int letterScore = b.getLetterValue(cells[row][startingCol]);
 
                 if (!scoredBefore) {
@@ -1001,13 +999,17 @@ public class Board implements Serializable {
                         letterScore = letterScore * multiplier.getValue();
                     }
                 }
+                if ((multiplier == Square.Multiplier.DL) || (multiplier == Square.Multiplier.TL) || (multiplier == Square.Multiplier.NONE)) {
+                    letterScore = letterScore * multiplier.getValue();
+                }
                 wordScore += letterScore;
-                System.out.println("square's multiplier: " + squares.get(getStringCoords(row,startingCol)).getMultiplier());
+                System.out.println("square (" + row +"," + startingCol  +") multiplier: " + getMultiplierFromXML(squares.get(getStringCoords(row,startingCol))));
             }
             if (multipliers.contains(Square.Multiplier.DW)) { premiumScore = wordScore * 2;}
             else if (multipliers.contains(Square.Multiplier.TW)) {premiumScore = wordScore * 3;}
             else {premiumScore = wordScore;}
         }
+
         return premiumScore;
     }
 
@@ -1030,9 +1032,56 @@ public class Board implements Serializable {
         return this.newWords;
     }
 
-
-    public static void main(String[] args) {
-        Board bbb = new Board();
-
+    /**
+     * Returns true if there are no tiles on the board;
+     * @return
+     */
+    public boolean boardIsEmpty() {
+        for (int row = 1; row < cells.length; row++) {
+            for (int col = 1; col < cells.length; col++) {
+                if (!cellIsBlank(row,col)) {return false;}
+            }
+        }
+        System.out.println("BOARD IS EMPTY.");
+        return true;
     }
+
+    /**
+     * Returns true if placement of first word on board would be valid,
+     * given starting coordinates, tiles, and placement direction.
+     * @param row
+     * @param col
+     * @param tiles
+     * @param direction
+     * @return
+     */
+    private boolean tilesCoverCentre(int row, int col, ArrayList<Tile> tiles, Direction direction) {
+        if ((direction == Direction.VERTICAL) && (col == 8)) {
+            for (int ROW = row; ROW < row + tiles.size(); ROW++) {
+                if (ROW == 8) {
+                    System.out.println("First word correctly covers the centre.");
+                    return true;
+                }
+            }
+        }
+        if ((direction == Direction.HORIZONTAL) && (row == 8)) {
+            for (int COL = col; COL < col + tiles.size(); COL++) {
+                if (COL == 8) {
+                    System.out.println("First word correctly covers the centre.");
+                    return true;
+                }
+            }
+        }
+        System.out.println("ERROR: First word must cover the centre square of the board.");
+        return false;
+    }
+
+    /**
+     * Returns true if first play move is valid.
+     * @return
+     */
+    public boolean isFirstPlayValid() {
+        return firstPlayValid;
+    }
+
 }

@@ -112,7 +112,7 @@ public class BoardDropTargetController extends DropTargetAdapter {
                     tileIsBlank = true;
                 }
 
-                this.game.addToRemoveTilesFromHand(tile.getLetter().charAt(0));
+                this.game.addToRemoveTilesFromHand(tile.getLetter().charAt(0), tileIsBlank);
 
                 dropTargetDropEvent.dropComplete(true);
                 this.game.refreshHandPanelView(tile, tileIsBlank);
