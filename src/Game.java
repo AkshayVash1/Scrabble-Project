@@ -178,18 +178,28 @@ public class Game implements Serializable{
      * */
     private void performAIPlay() throws IOException, ClassNotFoundException {
         AIPlayer aiPlayer = (AIPlayer) this.currentPlayer;
+        System.out.println(this.currentPlayer.getHand().getHand().toString() + "INITIAL HAND");
 
         boolean flag = true;
         while (flag) {
             flag = false;
 
-            for (Tile t : aiPlayer.getHand().getHand())
+            ArrayList<Tile> mockHand = (ArrayList<Tile>) aiPlayer.getHand().getHand().clone();
+
+            System.out.println(mockHand.toString());
+
+            int i = 0;
+
+            for (Tile t : mockHand)
             {
+                i++;
                 if (t.getLetter().equals("_"))
                 {
+                    System.out.println("BLANK DETECTED AT " + i);
                     flag = true;
                     this.addToExchangeTilesFromHand('_');
                     this.processCommand(new Command("exchange", "_", null));
+                    this.exchangeTilesFromHand.clear();
                 }
             }
         }
@@ -224,10 +234,24 @@ public class Game implements Serializable{
      *
      * @param c
      */
-    public void addToRemoveTilesFromHand(Character c)
+    public void addToRemoveTilesFromHand(Character c, boolean blankTile)
     {
         this.removeTilesFromHand.add(c);
         this.firstPlayInTurn = false;
+
+        if (blankTile)
+        {
+            ArrayList<Tile> mockHand = (ArrayList<Tile>) currentPlayer.getHand().getHand().clone();
+
+            for (int i = 0; i < mockHand.size(); i++)
+            {
+                if (mockHand.get(i).getLetter().equals("_"))
+                {
+                    currentPlayer.getHand().getHand().get(i).setLetter(c.toString());
+                    break;
+                }
+            }
+        }
     }
 
     /**

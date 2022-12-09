@@ -161,7 +161,7 @@ public class AIPlayer extends Player implements Serializable {
             }
         }
 
-        for (Character c : bestWord.toCharArray()){this.game.addToRemoveTilesFromHand(c);}
+        for (Character c : bestWord.toCharArray()){this.game.addToRemoveTilesFromHand(c, false);}
 
         if (bestWord != null) {
             this.game.processCommand(new Command("play", bestWord, this.possiblePlays.get(bestWord)));

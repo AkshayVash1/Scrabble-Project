@@ -138,8 +138,8 @@ public class GameTest {
         playerHand.add(new Tile("R", 1));
         player.getHand().addTiles(playerHand, false);
 
-        game.addToRemoveTilesFromHand('O');
-        game.addToRemoveTilesFromHand('R');
+        game.addToRemoveTilesFromHand('O', false);
+        game.addToRemoveTilesFromHand('R', false);
 
         game.processCommand(new Command("play", "OR", "8H"));
 
@@ -176,8 +176,8 @@ public class GameTest {
         playerHand.add(new Tile("R", 1));
         player.getHand().addTiles(playerHand, false);
 
-        game.addToRemoveTilesFromHand('O');
-        game.addToRemoveTilesFromHand('R');
+        game.addToRemoveTilesFromHand('O', false);
+        game.addToRemoveTilesFromHand('R', false);
 
         exp = game.processCommand(new Command("play", "OR", "8H"));
 
@@ -205,8 +205,8 @@ public class GameTest {
         playerHand.add(new Tile("R", 1));
         player.getHand().addTiles(playerHand, false);
 
-        game.addToRemoveTilesFromHand('O');
-        game.addToRemoveTilesFromHand('R');
+        game.addToRemoveTilesFromHand('O', false);
+        game.addToRemoveTilesFromHand('R', false);
 
         exp = game.processCommand(new Command("play", "OR", "20H"));
 
@@ -234,8 +234,8 @@ public class GameTest {
         playerHand.add(new Tile("R", 1));
         player.getHand().addTiles(playerHand, false);
 
-        game.addToRemoveTilesFromHand('O');
-        game.addToRemoveTilesFromHand('R');
+        game.addToRemoveTilesFromHand('O', false);
+        game.addToRemoveTilesFromHand('R', false);
 
         exp = game.processCommand(new Command("play", "OR", "8H"));
 
@@ -264,8 +264,8 @@ public class GameTest {
         player.getHand().addTiles(playerHand, false);
 
         //Not a valid word
-        game.addToRemoveTilesFromHand('E');
-        game.addToRemoveTilesFromHand('O');
+        game.addToRemoveTilesFromHand('E', false);
+        game.addToRemoveTilesFromHand('O', false);
 
         exp = game.processCommand(new Command("play", "OR", "8H"));
 
@@ -293,9 +293,9 @@ public class GameTest {
         playerHand.add(new Tile("R", 1));
         player.getHand().addTiles(playerHand, false);
 
-        game.addToRemoveTilesFromHand('T');
-        game.addToRemoveTilesFromHand('A');
-        game.addToRemoveTilesFromHand('R');
+        game.addToRemoveTilesFromHand('T' ,false);
+        game.addToRemoveTilesFromHand('A',false);
+        game.addToRemoveTilesFromHand('R',false);
 
         exp = game.processCommand(new Command("play", "OR", "8H"));
 
@@ -322,8 +322,8 @@ public class GameTest {
         playerHand.add(new Tile("R", 1));
         player.getHand().addTiles(playerHand, false);
 
-        game.addToRemoveTilesFromHand('D');
-        game.addToRemoveTilesFromHand('O');
+        game.addToRemoveTilesFromHand('D', false);
+        game.addToRemoveTilesFromHand('O', false);
 
         game.processCommand(new Command("play", "DO", "8H"));
 
@@ -351,15 +351,15 @@ public class GameTest {
         playerHand.add(new Tile("R", 1));
         player.getHand().addTiles(playerHand, false);
 
-        game.addToRemoveTilesFromHand('D');
-        game.addToRemoveTilesFromHand('O');
+        game.addToRemoveTilesFromHand('D', false);
+        game.addToRemoveTilesFromHand('O', false);
 
         game.processCommand(new Command("play", "DO", "8H"));
         game.clearRemoveTilesFromHand();
 
-        game.addToRemoveTilesFromHand('A');
-        game.addToRemoveTilesFromHand('R');
-        game.addToRemoveTilesFromHand('E');
+        game.addToRemoveTilesFromHand('A',false);
+        game.addToRemoveTilesFromHand('R',false);
+        game.addToRemoveTilesFromHand('E',false);
 
         game.processCommand(new Command("play", "ARE", "H9"));
 
@@ -390,16 +390,16 @@ public class GameTest {
         playerHand.add(new Tile("R", 1));
         player.getHand().addTiles(playerHand, false);
 
-        game.addToRemoveTilesFromHand('D');
-        game.addToRemoveTilesFromHand('O');
+        game.addToRemoveTilesFromHand('D',false);
+        game.addToRemoveTilesFromHand('O',false);
 
         game.processCommand(new Command("play", "OR", "8H"));
 
         game.clearRemoveTilesFromHand();
 
-        game.addToRemoveTilesFromHand('A');
-        game.addToRemoveTilesFromHand('R');
-        game.addToRemoveTilesFromHand('E');
+        game.addToRemoveTilesFromHand('A',false);
+        game.addToRemoveTilesFromHand('R',false);
+        game.addToRemoveTilesFromHand('E',false);
 
         exp = game.processCommand(new Command("play", "ARE", "H8"));
 
