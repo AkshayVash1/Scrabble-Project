@@ -19,8 +19,10 @@ import java.io.IOException;
 public class SelectionPanel extends JPanel implements ItemListener {
     public static final int WIDTH = 180;
     public static final int HEIGHT = 25;
-    JComboBox playerComboBox = new JComboBox();
-    JComboBox AIComboBox = new JComboBox();
+    private Board board;
+    private JComboBox playerComboBox = new JComboBox();
+    private JComboBox AIComboBox = new JComboBox();
+    private JComboBox boardComboBox = new JComboBox();
     private JComboBox oldPlayerComboBox = new JComboBox();
     private JComboBox oldAIComboBox = new JComboBox();
     private int playerAmount;
@@ -30,27 +32,31 @@ public class SelectionPanel extends JPanel implements ItemListener {
     private Image backgroundImage;
 
     private StartMenuFrame startMenuFrame;
-    JLabel playerSelectorLabel = new JLabel("Please Select Number of players");
-    JLabel AISelectorLabel = new JLabel("Please Select Number of AIs");
+    private JLabel playerSelectorLabel = new JLabel("Please Select Number of players", SwingConstants.CENTER);
+    private JLabel AISelectorLabel = new JLabel("Please Select Number of AIs", SwingConstants.CENTER);
+    private JLabel boardSelectorLabel = new JLabel("Please Select Style of Board", SwingConstants.CENTER);
 
     /**
      * Constructor for PlayerSelectorPanel
+     *
      * @param startMenuFrame
-     * */
+     */
     public SelectionPanel(StartMenuFrame startMenuFrame) {
+        super(new GridLayout(3, 0));
         this.startMenuFrame = startMenuFrame;
         initializePlayerSelector();
     }
 
     /**
      * Initializes the player selector combo box and panel. For display.
-     * */
+     */
     private void initializePlayerSelector() {
         try {
             backgroundImage = ImageIO.read(new File("src\\start_menu_background.jpg"));
         } catch (IOException e) {
             playerSelectorLabel.setForeground(Color.black);
             AISelectorLabel.setForeground(Color.black);
+            boardSelectorLabel.setForeground(Color.black);
         }
 
         playerComboBox.setName("playerComboBox");
@@ -70,8 +76,9 @@ public class SelectionPanel extends JPanel implements ItemListener {
 
     /**
      * Initializes the specific AI selector combo box and panel
+     *
      * @param AILimit
-     * */
+     */
     private void initializeAISelector(int AILimit) {
         AIComboBox.setName("AIComboBox");
         JPanel AIComboBoxPanel = new JPanel(new GridLayout(2, 0));
@@ -89,23 +96,38 @@ public class SelectionPanel extends JPanel implements ItemListener {
     }
 
     private void initializeBoardLayoutSelector() {
-
+        boardComboBox.setName("boardSelectComboBox");
+        JPanel boardComboBoxPanel = new JPanel(new GridLayout(2, 0));
+        boardComboBoxPanel.setBackground(new Color(0, 0, 0, 0));
+        boardSelectorLabel.setForeground(Color.white);
+        boardComboBox.addItem("");
+        boardComboBox.addItem("Standard");
+        boardComboBox.addItem("Tetris");
+        boardComboBox.addItem("Diamond");
+        boardComboBox.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        boardComboBoxPanel.add(boardSelectorLabel);
+        boardComboBoxPanel.add(boardComboBox);
+        boardComboBox.addItemListener(this);
+        this.add(boardComboBoxPanel);
     }
 
     /**
      * Helper method to pain component g
+     *
      * @param g
-     * */
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         // Draw the background image.
         g.drawImage(backgroundImage, 0, 0, this);
     }
 
+
     /**
      * Changes the state of the AI combo box if the state of the player select has changed
+     *
      * @param e ItemEvent
-     * */
+     */
     @Override
     public void itemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -124,10 +146,9 @@ public class SelectionPanel extends JPanel implements ItemListener {
                     AILimit = 4;
                     oldPlayerComboBox.setName(String.valueOf(playerComboBox.getSelectedItem()));
                 }
-//                playerSelectorLabel.setVisible(false);
-//                playerComboBox.setVisible(false);
                 playerComboBox.setEnabled(false);
                 initializeAISelector(AILimit);
+                initializeBoardLayoutSelector();
             } else if (e.getSource().equals(AIComboBox)) {
                 if (AIComboBox.getSelectedItem().equals(0 + " AI players")) {
                     AIAmount = 0;
@@ -143,11 +164,19 @@ public class SelectionPanel extends JPanel implements ItemListener {
                     oldAIComboBox.setName(String.valueOf(AIComboBox.getSelectedItem()));
                 }
                 playerAmount = playerAmount - AIAmount;
+            } else if (e.getSource().equals(boardComboBox)) {
+                if (boardComboBox.getSelectedItem().equals("Standard")) {
+                    startMenuFrame.updateBoardPattern(Board.Pattern.STANDARD);
+                } else if (boardComboBox.getSelectedItem().equals("Tetris")) {
+                    startMenuFrame.updateBoardPattern(Board.Pattern.TETRIS);
+                } else if (boardComboBox.getSelectedItem().equals("Diamond")) {
+                    startMenuFrame.updateBoardPattern(Board.Pattern.DIAMOND);
+                }
                 startMenuFrame.createPlayers(Integer.toString(playerAmount), Integer.toString(AIAmount));
+
             }
             this.revalidate();
             this.repaint();
         }
-
     }
 }

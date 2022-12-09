@@ -17,13 +17,13 @@ public class StartMenuFrame extends JFrame {
     /**
      * Public constructor for StartMenuFrame class
      */
-    public StartMenuFrame() { //TODO: Catch Exception
+    public StartMenuFrame(ScrabbleFrame scrabbleFrame) { //TODO: Catch Exception
         super("Welcome to Scrabble!");
         this.initializeFrame();
         this.initializePanel();
         this.setVisible(true);
         this.setResizable(false);
-        scrabbleFrame = new ScrabbleFrame();
+        this.scrabbleFrame = scrabbleFrame;
 
     }
 
@@ -61,6 +61,10 @@ public class StartMenuFrame extends JFrame {
      * @throws FileNotFoundException
      */
     public static void main(String[] args) throws FileNotFoundException {
-        StartMenuFrame startMenuFrame = new StartMenuFrame();
+        StartMenuFrame startMenuFrame = new StartMenuFrame(new ScrabbleFrame());
+    }
+
+    public void updateBoardPattern(Board.Pattern boardPattern) {
+        scrabbleFrame.updateBoardPattern(boardPattern);
     }
 }

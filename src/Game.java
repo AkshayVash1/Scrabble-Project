@@ -11,7 +11,6 @@
  */
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,6 +117,10 @@ public class Game implements Serializable{
         this.currentPlayer = this.playerList.get(0);
         saveCurrentGameState();
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+    }
+
+    public void updateBoardPattern(Board.Pattern boardPattern) {
+        board.updateBoardPattern(boardPattern);
     }
 
     /**
