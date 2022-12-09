@@ -603,9 +603,9 @@ public class Game implements Serializable{
         this.setBag(game.getBag());
         this.setCurrentPlayer(game.getCurrentPlayer());
         this.setBoard(game.getBoard());
-        this.setPlayerList(this.getPlayerList());
-        this.setGameFinished(this.isGameFinished());
-        this.setViews(this.getViews());
+        this.setPlayerList(game.getPlayerList());
+        this.setGameFinished(game.isGameFinished());
+        this.setViews(game.getViews());
 
         for(ScrabbleView v : this.views) {
             v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
