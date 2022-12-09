@@ -39,7 +39,7 @@ public class StartMenuFrame extends JFrame {
      * Initializes the panel
      */
     private void initializePanel() {
-        this.add(new PlayerSelectorPanel(this));
+        this.add(new SelectionPanel(this));
     }
 
     /**
