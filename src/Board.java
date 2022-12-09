@@ -204,7 +204,7 @@ public class Board implements Serializable {
     }
 
     /**
-     * Updates the board's custom pattern based on user's choice in the beggining of the game.
+     * Updates the board's custom pattern based on user's choice in the beginning of the game.
      * @param boardPattern
      */
     public void updateBoardPattern(Pattern boardPattern) {
@@ -219,10 +219,12 @@ public class Board implements Serializable {
         if (this.boardPattern.equals(Pattern.DIAMOND)) {
             return new File("src/board_custom_diamond.xml");
         }
-        if (this.boardPattern.equals(Pattern.TETRIS)) {
+        else if (this.boardPattern.equals(Pattern.TETRIS)) {
             return new File("src/board_custom_tetris.xml");
+        } else {
+            return new File("src/board_standard.xml"); // board pattern is standard by default
         }
-        return new File("src/board_standard.xml"); // board pattern is standard by default
+
     }
 
     /**

@@ -11,11 +11,11 @@
  */
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game implements Serializable{
+    private static final long serialVersionUID = 3156533007620095055L;
     private Bag bag = new Bag();
     private Board board = new Board();
     private ArrayList<Player> playerList = new ArrayList<>();
@@ -118,6 +118,10 @@ public class Game implements Serializable{
         this.currentPlayer = this.playerList.get(0);
         saveCurrentGameState();
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+    }
+
+    public void updateBoardPattern(Board.Pattern boardPattern) {
+        board.updateBoardPattern(boardPattern);
     }
 
     /**
@@ -599,7 +603,6 @@ public class Game implements Serializable{
         this.setBoard(game.getBoard());
         this.setPlayerList(game.getPlayerList());
         this.setGameFinished(game.isGameFinished());
-        this.setViews(game.getViews());
 
         for(ScrabbleView v : this.views) {
             v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));
