@@ -51,6 +51,8 @@ public class Board {
      */
     private Direction direction;
 
+    private String playedWord = "";
+
     /**
      * current active word's starting coordinates.
      */
@@ -639,11 +641,13 @@ public class Board {
         for (Tile tile: tiles) {
             tilePlaced = this.placeTileAt(ROW, COL, tile, direction);
             //if (tilePlaced) {tilePlacedCount++; }
-            if (!tilePlaced) {break;}
+            if (!tilePlaced) {
+                break;
+            }
             tilePlacedCount++;
             if (direction == Direction.VERTICAL) {  // placement direction is vertical
                 ROW++;
-            } else if (direction.equals(Direction.HORIZONTAL)){    // placement direction is horizontal
+            } else if (direction.equals(Direction.HORIZONTAL)) {    // placement direction is horizontal
                 COL++;
             }
         }
