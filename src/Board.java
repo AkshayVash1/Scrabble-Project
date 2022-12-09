@@ -82,6 +82,12 @@ public class Board {
 
 
     /**
+     * The custom pattern of the board, chosen by the user in beggining of game.
+     */
+    private Pattern boardPattern;
+
+
+    /**
      * Constructor for the class.
      * Creates a board and initializes its fields.
      */
@@ -94,6 +100,7 @@ public class Board {
         this.scoredOnceList = new ArrayList<String>();
         this.newWords = new ArrayList<String>();
         this.currentWord = "";
+        this.boardPattern = Pattern.STANDARD;
         initializeBoard();                   // assign a Square and a Tile to each cell
 
     }
@@ -199,6 +206,28 @@ public class Board {
     }
 
     /**
+     * Updates the board's custom pattern based on user's choice in the beggining of the game.
+     * @param boardPattern
+     */
+    public void updateBoardPattern(Pattern boardPattern) {
+        this.boardPattern = boardPattern;
+    }
+
+    /**
+     * Creates and returns board pattern's sml file based on user's selection.
+     * @return xml file for board pattern.
+     */
+    private File createCustomPatternFile() {
+        if (this.boardPattern.equals(Pattern.DIAMOND)) {
+            return new File("src/board_custom_diamond.xml");
+        }
+        if (this.boardPattern.equals(Pattern.TETRIS)) {
+            return new File("src/board_custom_tetris.xml");
+        }
+        return new File("src/board_standard.xml"); // board pattern is standard by default
+    }
+
+    /**
      * Returns the multiplier type for a given square from the xml file from user's chosen custom board.
      * @param square
      * @return
@@ -207,9 +236,7 @@ public class Board {
         Square.Multiplier multi = Square.Multiplier.NONE;
         try
         {
-            //File file = new File("src/board_standard.xml");
-            //File file = new File("src/board_custom_diamond.xml");
-            File file = new File("src/board_custom_tetris.xml");
+            File file = createCustomPatternFile();
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);
@@ -254,6 +281,7 @@ public class Board {
         }
         return multi;
     }
+
 
 
     /**
@@ -613,6 +641,7 @@ public class Board {
         else if ((adjacentConditionMet) && tilePlacedCount == tiles.size()){
             System.out.println("Placement is valid.");
             getWordScore(row, col);
+
             return true;
         }
         return false;
@@ -1031,9 +1060,18 @@ public class Board {
         return this.newWords;
     }
 
-
-    public static void main(String[] args) {
-        Board bbb = new Board();
-
+    /**
+     * Returns true if there are no tiles on the board;
+     * @return
+     */
+    public boolean boardIsEmpty() {
+        for (int row = 1; row < cells.length; row++) {
+            for (int col = 1; col < cells.length; col++) {
+                if (!cellIsBlank(row,col)) {return false;}
+            }
+        }
+        System.out.println("BOARD IS EMPTY.");
+        return true;
     }
+
 }
