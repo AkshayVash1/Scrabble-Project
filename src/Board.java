@@ -40,6 +40,12 @@ public class Board {
      */
     private boolean isFirstPlay;
 
+
+    /**
+     * True if the current move is the first play of the game.
+     */
+    private boolean firstPlayValid;
+
     /**
      * The direction of the last word played.
      */
@@ -75,10 +81,6 @@ public class Board {
      */
     private String playedWord = "";
 
-    /**
-     * The last word played on board.
-     */
-    //private String currentWord;
 
 
     /**
@@ -96,11 +98,11 @@ public class Board {
         this.tiles = new HashMap<>();
         this.squares = new HashMap<>();
         this.isFirstPlay = true;
+        this.firstPlayValid = false;
         this.direction = Direction.HORIZONTAL;
         this.scoredOnceList = new ArrayList<String>();
         this.newWords = new ArrayList<String>();
-        //this.currentWord = "";
-        this.boardPattern = Pattern.TETRIS;
+        this.boardPattern = Pattern.STANDARD;
         initializeBoard();                   // assign a Square and a Tile to each cell
 
     }
@@ -292,6 +294,9 @@ public class Board {
      */
     private boolean cellIsBlank(int row, int col){
         // a cell is empty if it stores a single space (" ")
+        if ((row < 1) || (col < 1) || (row > 16) || (col > 16)) {
+            return false;
+        }
         if(cells[row][col].equals(" ")) {
             return true;
         }
@@ -345,7 +350,8 @@ public class Board {
         }
         // successful placement
         if (cellIsBlank(row, col)) {
-            String coordinates = "" + row + Square.columns.get(col);
+            //String coordinates = "" + row + Square.columns.get(col);
+            String coordinates = getStringCoords(row, col);
             tiles.put(coordinates,tile);
             cells[row][col] = tile.getLetter();
             return true;
@@ -354,24 +360,36 @@ public class Board {
         else {
             //everytime a cell is not blank, it means it's already been scored
             this.scoredOnceList.add(getStringCoords(row,col));
+
             if (direction.equals(Direction.VERTICAL)) {
-                for(int R = row + 1; R < 16; R++) {
-                    if (cellIsBlank(R, col)) {
-                        cells[R][col] = tile.getLetter();
-                        return true;
-                    } else {
-                        //everytime a cell is not blank, it means it's already been scored
-                        this.scoredOnceList.add(getStringCoords(R,col));
+                if (row >= 16) {return false;}
+                if (getBottomCellContent(row,col).equals(" ")) {
+                    for(int ROW = row + 1; ROW < 16; ROW++) {
+                        if (cellIsBlank(ROW, col)) {
+                            tiles.put(getStringCoords(ROW,col),tile);
+                            cells[ROW][col] = tile.getLetter();
+                            return true;
+                        } else {
+                            //everytime a cell is not blank, it means it's already been scored
+                            this.scoredOnceList.add(getStringCoords(ROW,col));
+                        }
                     }
                 }
-            } else if (direction.equals(Direction.HORIZONTAL)) {
-                for (int C = col + 1; C < 16; C++) {
-                    if (cellIsBlank(row, C)) {
-                        cells[row][C] = tile.getLetter();
-                        return true;
-                    } else {
-                        //everytime a cell is not blank, it means it's already been scored
-                        this.scoredOnceList.add(getStringCoords(row,C));
+
+            }
+            else if (direction.equals(Direction.HORIZONTAL)) {
+                if (col >= 16) {return false;}
+                if (getRightCellContent(row,col).equals(" ")) {
+                    for (int COL = col + 1; COL < 16; COL++) {
+
+                        if (cellIsBlank(row, COL)) {
+                            tiles.put(getStringCoords(row,COL),tile);
+                            cells[row][COL] = tile.getLetter();
+                            return true;
+                        } else {
+                            //everytime a cell is not blank, it means it's already been scored
+                            this.scoredOnceList.add(getStringCoords(row,COL));
+                        }
                     }
                 }
             }
@@ -1385,6 +1403,14 @@ public class Board {
         }
         System.out.println("BOARD IS EMPTY.");
         return true;
+    }
+
+    /**
+     * Returns true if first play move is valid.
+     * @return
+     */
+    public boolean isFirstPlayValid() {
+        return firstPlayValid;
     }
 
 }
