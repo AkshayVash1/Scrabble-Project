@@ -12,19 +12,17 @@ import java.io.FileNotFoundException;
 public class StartMenuFrame extends JFrame {
     int frameWidth = 400;
     int frameHeight = 400;
-    private ScrabbleFrame scrabbleFrame;
+    private ScrabbleFrame scrabbleFrame = new ScrabbleFrame();
 
     /**
      * Public constructor for StartMenuFrame class
      */
-    public StartMenuFrame(ScrabbleFrame scrabbleFrame) { //TODO: Catch Exception
+    public StartMenuFrame() { //TODO: Catch Exception
         super("Welcome to Scrabble!");
         this.initializeFrame();
         this.initializePanel();
         this.setVisible(true);
         this.setResizable(false);
-        this.scrabbleFrame = scrabbleFrame;
-
     }
 
     /**
@@ -61,7 +59,7 @@ public class StartMenuFrame extends JFrame {
      * @throws FileNotFoundException
      */
     public static void main(String[] args) throws FileNotFoundException {
-        StartMenuFrame startMenuFrame = new StartMenuFrame(new ScrabbleFrame());
+        StartMenuFrame startMenuFrame = new StartMenuFrame();
     }
 
     public void updateBoardPattern(Board.Pattern boardPattern) {
