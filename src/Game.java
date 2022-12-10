@@ -205,7 +205,7 @@ public class Game implements Serializable{
         }
 
         aiPlayer.analyzeBoard(this.board);
-        aiPlayer.playHighestMove();
+        aiPlayer.playHighestMove(this);
         this.clearRemoveTilesFromHand();
 
         this.nextPlayer();
