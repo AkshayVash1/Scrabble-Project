@@ -56,14 +56,14 @@ public class AIPlayer extends Player implements Serializable {
         this.board.setFirstPlay(board.isFirstPlay());
 
         System.out.println(this.getHand().getHand().toString());
-        /*
-        if (isBoardEmpty())
+
+        if (board.boardIsEmpty())
         {
             this.playableCoordinates.put("8H", true);
         }
-        else { */
-
-        this.playableCoordinates = this.board.getAIPlayableCoordinates();
+        else {
+            this.playableCoordinates = this.board.getAIPlayableCoordinates();
+        }
         System.out.println(this.playableCoordinates.toString());
         ArrayList<Tile> hand = this.getHand().getHand();
 
@@ -145,7 +145,8 @@ public class AIPlayer extends Player implements Serializable {
      * Analyzes the hashmap of all possible plays and then picks the word with the higest score to play on the actual
      * board.
      * */
-    public void playHighestMove() throws FileNotFoundException {
+    public void playHighestMove(Game game) throws FileNotFoundException {
+
         ArrayList<String> possiblePlays = new ArrayList<>();
         for (Object s : this.possiblePlays.keySet().toArray()) {possiblePlays.add((String)s);}
         String bestWord = " ";
@@ -163,12 +164,14 @@ public class AIPlayer extends Player implements Serializable {
 
         for (Character c : bestWord.toCharArray()){this.game.addToRemoveTilesFromHand(c, false);}
 
+        System.out.println(this.getHand().getHand().toString() + "SHOULD BE CORRECT AI HAND");
+
         if (bestWord != null) {
-            this.game.processCommand(new Command("play", bestWord, this.possiblePlays.get(bestWord)));
+            game.processCommand(new Command("play", bestWord, this.possiblePlays.get(bestWord)));
         }
         else
         {
-            this.game.processCommand(new Command("pass", null, null));
+            game.processCommand(new Command("pass", null, null));
         }
 
         this.possiblePlays.clear();
@@ -227,13 +230,5 @@ public class AIPlayer extends Player implements Serializable {
         }
 
         return returnArray;
-    }
-
-    /**
-     * Temporary Method
-     * */
-    private boolean isBoardEmpty()
-    {
-        return true;
     }
 }
