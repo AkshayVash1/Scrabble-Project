@@ -8,7 +8,7 @@
  */
 
 import java.io.Serializable;
-import java.util.EventObject;
+
 
 public class ScrabbleEvent implements Serializable {
 

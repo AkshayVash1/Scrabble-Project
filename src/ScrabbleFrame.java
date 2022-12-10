@@ -130,6 +130,11 @@ public class ScrabbleFrame extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Updates the board pattern
+     *
+     * @param boardPattern
+     */
     public void updateBoardPattern(Board.Pattern boardPattern) {
         game.updateBoardPattern(boardPattern);
     }
