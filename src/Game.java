@@ -140,7 +140,7 @@ public class Game implements Serializable{
     public void nextPlayer() throws IOException, ClassNotFoundException {
         this.removeTilesFromHand.clear();
         if (currentPlayer != null) {
-            if (currentPlayer.getPoints() >= 50) {
+            if (currentPlayer.getPoints() >= 120) {
                 this.gameFinished = true;
             } else {
                 if (this.currentPlayer.getPlayerNumber() == (this.playerList.size() - 1)) {
