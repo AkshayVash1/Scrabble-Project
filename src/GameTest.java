@@ -8,8 +8,7 @@
  * @author Mohamed Kaddour
  * @date 2022.11.13
  */
-
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
