@@ -11,11 +11,11 @@
  */
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game implements Serializable{
+    private static final long serialVersionUID = 3156533007620095055L;
     private Bag bag = new Bag();
     private Board board = new Board();
     private ArrayList<Player> playerList = new ArrayList<>();
@@ -118,6 +118,10 @@ public class Game implements Serializable{
         this.currentPlayer = this.playerList.get(0);
         saveCurrentGameState();
         for(ScrabbleView v : this.views){v.update(new ScrabbleEvent(this.currentPlayer, this.board, this.gameFinished));}
+    }
+
+    public void updateBoardPattern(Board.Pattern boardPattern) {
+        board.updateBoardPattern(boardPattern);
     }
 
     /**
@@ -476,10 +480,16 @@ public class Game implements Serializable{
         }
     }
 
+    /**
+     * Creates new GameState type object using this game
+     */
     public void saveCurrentGameState() {
         GameState gameState = new GameState(this, true);
     }
 
+    /**
+     * Serializes the game and saves all object data into the save.txt file
+     */
     public void saveGame() {
         FileOutputStream outputStream;
         ObjectOutputStream oos;
@@ -491,13 +501,14 @@ public class Game implements Serializable{
             oos.close();
             outputStream.close();
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Deserializes the game and loads all object data from save.txt file and updates the view accordingly
+     */
     public void loadGame() {
         FileInputStream inputStream;
         ObjectInputStream ois;
@@ -509,17 +520,20 @@ public class Game implements Serializable{
 
             gameToBeLoaded = (Game) ois.readObject();
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
         changeCurrentGameState(gameToBeLoaded);
     }
 
+    /**
+     * Reverts the most recent player action.
+     *
+     * @return returns true or false based on whether an undo was possible based on state history
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public boolean undoGame() throws IOException, ClassNotFoundException {
         ArrayList<GameState> stateHistory = new ArrayList<>();
         FileInputStream inputStream;
@@ -562,6 +576,13 @@ public class Game implements Serializable{
         }
     }
 
+    /**
+     * Redoes an undone player action. (Goes forward one action)
+     *
+     * @return returns true or false based on whether a redo was possible based on state history
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public boolean redoGame() throws IOException, ClassNotFoundException {
         ArrayList<GameState> stateHistory = new ArrayList<>();
         FileInputStream inputStream;
@@ -598,6 +619,11 @@ public class Game implements Serializable{
         }
     }
 
+    /**
+     * Sets the games attributes to the game instance and updates all views.
+     *
+     * @param game Instance of a game
+     */
     private void changeCurrentGameState(Game game)
     {
         this.setBag(game.getBag());
@@ -611,6 +637,11 @@ public class Game implements Serializable{
         }
     }
 
+    /**
+     * Removes the most recent GameState in the UndoState history and then updates its corresponding file.
+     *
+     * @param gameStates A list of game states
+     */
     private void popUndoStateStack(ArrayList<GameState> gameStates)
     {
         FileOutputStream outputStream = null;
@@ -633,6 +664,11 @@ public class Game implements Serializable{
         }
     }
 
+    /**
+     * Removes the most recent GameState in the RedoState history and then updates its corresponding file.
+     *
+     * @param gameStates A list of game states
+     */
     private void popRedoStateStack(ArrayList<GameState> gameStates)
     {
         FileOutputStream outputStream = null;
@@ -655,6 +691,12 @@ public class Game implements Serializable{
         }
     }
 
+    /**
+     * Returns the word attempt by the AI
+     *
+     * @param wordAttempt
+     * @return The word attempted by the AI
+     */
     private String wordTypeToPassIn(String wordAttempt)
     {
         if (this.currentPlayer.isAI())

@@ -116,6 +116,9 @@ public class BoardPanel extends JPanel implements ScrabbleView{
                 for (Component jc : this.cells[row][col].getComponents()) {
                     if ( jc instanceof JLabel ) {
                         ((JLabel) jc).setText(this.board.getLetterAtSquare(row, col));
+                        Square thisSquare = new Square(row, col);
+                        thisSquare.setMultiplier(board.getMultiplierFromXML(thisSquare));
+                        this.cells[row][col].setBackground(new Color(thisSquare.getMultiplier().getRGB_color()));
                     }
                 }
             }

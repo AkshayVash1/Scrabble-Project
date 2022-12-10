@@ -129,4 +129,13 @@ public class ScrabbleFrame extends JFrame implements ActionListener {
                 this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }
+
+    /**
+     * Updates the board pattern
+     *
+     * @param boardPattern
+     */
+    public void updateBoardPattern(Board.Pattern boardPattern) {
+        game.updateBoardPattern(boardPattern);
+    }
 }

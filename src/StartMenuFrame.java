@@ -12,7 +12,7 @@ import java.io.FileNotFoundException;
 public class StartMenuFrame extends JFrame {
     int frameWidth = 400;
     int frameHeight = 400;
-    private ScrabbleFrame scrabbleFrame;
+    private ScrabbleFrame scrabbleFrame = new ScrabbleFrame();
 
     /**
      * Public constructor for StartMenuFrame class
@@ -23,8 +23,6 @@ public class StartMenuFrame extends JFrame {
         this.initializePanel();
         this.setVisible(true);
         this.setResizable(false);
-        scrabbleFrame = new ScrabbleFrame();
-
     }
 
     /**
@@ -39,7 +37,7 @@ public class StartMenuFrame extends JFrame {
      * Initializes the panel
      */
     private void initializePanel() {
-        this.add(new PlayerSelectorPanel(this));
+        this.add(new SelectionPanel(this));
     }
 
     /**
@@ -62,5 +60,9 @@ public class StartMenuFrame extends JFrame {
      */
     public static void main(String[] args) throws FileNotFoundException {
         StartMenuFrame startMenuFrame = new StartMenuFrame();
+    }
+
+    public void updateBoardPattern(Board.Pattern boardPattern) {
+        scrabbleFrame.updateBoardPattern(boardPattern);
     }
 }

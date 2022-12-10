@@ -54,8 +54,7 @@ public class AIPlayer extends Player implements Serializable {
         this.board.setSquares(board.getSquares());
         this.board.setTiles(board.getTiles());
         this.board.setFirstPlay(board.isFirstPlay());
-
-        System.out.println(this.getHand().getHand().toString());
+        this.board.updateBoardPattern(board.getBoardPattern());
 
         if (board.boardIsEmpty())
         {
@@ -64,7 +63,6 @@ public class AIPlayer extends Player implements Serializable {
         else {
             this.playableCoordinates = this.board.getAIPlayableCoordinates();
         }
-        System.out.println(this.playableCoordinates.toString());
         ArrayList<Tile> hand = this.getHand().getHand();
 
         for (int i = 0; i < hand.size(); i++)
