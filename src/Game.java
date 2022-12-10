@@ -605,6 +605,7 @@ public class Game implements Serializable{
             changeCurrentGameState(stateHistory.get(stateHistory.size() - 1).getGame());
             GameState gameState = new GameState(stateHistory.remove(stateHistory.size() - 1).getGame(), true);
             popRedoStateStack(stateHistory);
+            this.initialReadUndo = false;
 
             if (stateHistory.size() == 0)
             {
