@@ -148,7 +148,7 @@ public class BoardDropTargetController extends DropTargetAdapter {
                     null, null );
             if (result == JOptionPane.OK_OPTION)
             {
-                input = answer.getText();
+                input = answer.getText().toUpperCase();
             }
             flag = (checkBlankTileInput(input.toUpperCase(Locale.ROOT))) ? true : false;
         }

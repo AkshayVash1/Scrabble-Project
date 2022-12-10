@@ -42,6 +42,7 @@ public class PlayMove implements Serializable {
         this.board.setSquares(board.getSquares());
         this.board.setTiles(board.getTiles());
         this.board.setFirstPlay(board.isFirstPlay());
+        this.board.updateBoardPattern(board.getBoardPattern());
 
         this.placementAttempt = placementAttempt;
         this.direction = direction ? Board.Direction.HORIZONTAL : Board.Direction.VERTICAL;

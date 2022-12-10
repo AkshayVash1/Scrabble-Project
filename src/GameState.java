@@ -1,6 +1,17 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * This class is part of the "Scrabble" application.
+ *
+ * Holds information of command that has been issued by the user. Holds them separately and handles if certain
+ * commands are null. Also parses the direction of the placement attempt. Command is used in Parser where
+ * the user input is individually passed into this class through the constructor to initialize the command.
+ *
+ * @author  Mohamed Kaddour
+ * @date 2022.12.09
+ */
+
 public class GameState implements Serializable{
 
     private Game game;
@@ -11,6 +22,9 @@ public class GameState implements Serializable{
     public final static String FILENAME_REDO = "src/redo.txt";
     public final static String FILENAME_SAVE = "src/save.txt";
 
+    /**
+     * Public constructor for class game.
+     */
     public GameState(Game game, boolean undo) {
         this.game = game;
         this.undoStateHistory = new ArrayList<>();
@@ -25,6 +39,9 @@ public class GameState implements Serializable{
         }
     }
 
+    /**
+     * Updates the Undo state history by reading the undo file
+     */
     private void updateCurrentGameHistoryUndo(){
         File newFile = new File(FILENAME_UNDO);
         FileInputStream inputStream;
@@ -47,6 +64,9 @@ public class GameState implements Serializable{
         saveCurrentGameStateUndo();
     }
 
+    /**
+     * Saves the current game state to the undo file
+     */
     private void saveCurrentGameStateUndo() {
         FileOutputStream outputStream = null;
         try {
@@ -68,6 +88,9 @@ public class GameState implements Serializable{
         }
     }
 
+    /**
+     * Updates the Redo state history by reading the redo file
+     */
     private void updateCurrentGameHistoryRedo()
     {
         File newFile = new File(FILENAME_REDO);
@@ -91,6 +114,9 @@ public class GameState implements Serializable{
         saveCurrentGameStateRedo();
     }
 
+    /**
+     * Saves the current game state to the redo file
+     */
     private void saveCurrentGameStateRedo() {
         FileOutputStream outputStream;
         try {
@@ -112,6 +138,9 @@ public class GameState implements Serializable{
         }
     }
 
+    /**
+     * Getter for game
+     */
     public Game getGame()
     {
         return this.game;

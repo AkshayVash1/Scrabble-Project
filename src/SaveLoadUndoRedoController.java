@@ -8,6 +8,11 @@ public class SaveLoadUndoRedoController implements Serializable, ActionListener 
 
     Game game;
 
+    /**
+     * Public constructor for SaveLoadUndoRedo controller
+     *
+     * @param game Instance of game
+     */
     public SaveLoadUndoRedoController(Game game){
         this.game = game;
     }
@@ -39,9 +44,7 @@ public class SaveLoadUndoRedoController implements Serializable, ActionListener 
                     break;
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
